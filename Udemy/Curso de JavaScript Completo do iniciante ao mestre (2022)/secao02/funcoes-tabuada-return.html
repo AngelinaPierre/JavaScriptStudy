@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabuada</title>
+</head>
+<body>
+
+    <h1>Funções - Tabuada</h1>
+
+    <button
+        type="button"
+        onclick="mostrarTabuada()"
+    >Mostrar Tabuada</button>
+    <button
+        type="button"
+        onclick="clearT()"
+    >Limpar tabuada</button>
+
+    <div id="output"></div>
+
+    <script>
+
+        const output = document.getElementById("output");
+
+        function mostrarTabuada(){
+
+            
+            let number = parseFloat(prompt('Digite um número: '));
+            console.log(typeof number);
+            
+            let msg = "";
+
+            for(let i = 0; i <= 1000; i++){
+                //if(i === 10){
+                //    break;
+                //}
+                if( i === 10){
+                    return "valor retornado";
+                }
+                msg += `${i} x ${number} = ${(i * number)} <br>`;
+            }
+            
+            output.innerHTML = msg;
+
+        }
+
+        function clearT(){
+            output.innerHTML = "";
+        }
+
+        console.log(mostrarTabuada());
+    </script>
+    
+</body>
+</html>
+
+<!-- 
+
+[1] Algumas palavras do javascript podem interromper o loop for()..
+
+[break] -> INTERROMPE O LOOP e terminará de executar a função
+[RETURN] -> Saíra do loop e da função, não executando o resto do codigo.
+
+ -->

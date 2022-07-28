@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funções</title>
+</head>
+<body>
+
+    <h1>Funções</h1>
+
+    <script>
+
+        function ola(){ // [1]
+            document.write('Olá Mundo');
+        }
+
+        ola();
+
+        // [2]
+
+        const ola2 = function(){
+            console.log('Function expression test');
+        }
+
+        ola2();
+
+        const ola3 = () => {
+            console.log('Arrow Function test');
+        }
+        ola3();
+
+        // [4]
+        function obtemDiaSemana(){
+            return 6;
+        }
+        let dia = obtemDiaSemana();
+        console.log(dia);
+
+        //[5]
+        function obtemDiaSemana1(){
+            return new Date().getDay();
+        }
+        let dia1 = obtemDiaSemana1();
+        console.log(dia1);
+
+        console.log(obtemDiaSemana);
+        console.log(obtemDiaSemana1);
+
+        // [6]
+
+        function somar(n1,n2){
+            return n1 + n2;
+        }
+        let soma = somar(3,5);
+        console.log(soma);
+        //[7]
+        function somar(n1,n2){
+            let _n1 = n1 || 0;
+            let _n2 = n2 || 0 
+            return _n1 + _n2;
+        }
+        console.log(soma);
+        
+        //[8]
+        function somar(n1 = 0, n2 = 0){
+            return n1 + n2;
+        }
+        console.log(soma);
+        console.log(somar(10,4));
+        alert(somar(2,3));
+
+
+    </script>
+    
+</body>
+</html>
+
+<!-- 
+
+    =========== FUNÇÕES =============
+
+- Temos algumas maneiras de criar funções no javascript
+
+[1] - Declaração de função
+
+    function nome_funcao(){ // [1]
+            document.write('Olá Mundo');
+        }
+
+[2] - Function Expressions: Criamos uma variavel constante e atribuimos a ela uma função.
+        const nome_funçao = function(){
+            console.log('Function expression test');
+        }
+
+[3] - ARROW FUNCTIONS
+        1) Não precisa da palavra function
+        
+        const nome_função = () => {
+            console.log('Arrow Function test');
+        }
+
+    =========== FUNÇÕES QUE RETORNAM VALORES =============
+
+[4] - FUNÇÃO QUE RETORNA O DIA DA SEMANA ATUAL
+
+[5] - Objeto do javascript (Date) chamando a função para pegar o dia (getDay).
+
+- Precisamos armazenar em algum lugar o valor que a função retorna, ou utilizar no console.log().
+
+
+
+
+ =========== FUNÇÕES QUE RECEBEM PARAMETROS(valores/ação) =============
+
+[6] - Vamos criar uma função que será responsabel por receber dois numero e retornar a soma dos mesmos!
+
+[7] - Curto-circuido: dando valor default.
+
+[8] - Outra maneira de fazer... Se não passarmos o valor, será considerado como zero.
+
+ -->

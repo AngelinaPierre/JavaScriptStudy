@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loops</title>
+</head>
+<body>
+
+    <script>
+
+        // [1]
+        let n = prompt("Digite um número: ");
+
+        // [2]
+        // document.write("Olá Mundo");
+        // document.write(`1 x ${n} = ${(1 * n)} <br>`);
+        // document.write(`2 x ${n} = ${(2 * n)} <br>`);
+        // document.write(`3 x ${n} = ${(3 * n)} <br>`);
+
+        // [3]
+        let indice = 0;
+        document.write('<br> Entrando no loop while! <br>');
+        while(indice <= 10){
+
+            indice++;
+            if(indice === 5){
+                continue;
+            }
+            document.write(`${n} x ${indice} = ${(indice * n)} <br>`);
+            
+        }
+        document.write('<br> Saiu do loop while! <br>');
+        document.write('<br> Entrando no loop do-while! <br>');
+
+        indice = 0;
+        do{
+            if(indice > 10){
+                // alert() comando do java script que irá mostrar uma janela no browser e trava o programa, so liberando depois que o usuario clicar no (ok).
+                alert('Indice maior que 10');
+                break; //[4]
+            }
+            document.write(`${n} x ${indice} = ${(indice * n)} <br>`);
+            indice++;
+        }while(indice <=10);
+
+        document.write('<br> Saiu do loop do-while! <br>');
+
+
+        document.write('<br> Usando o FOR() <br> <br>');
+        for(let i = 0; i <= 10; i++){
+            if( i ===5){
+                continue; //[5]
+            }
+            document.write(`${n} x ${i} = ${(i * n)} <br>`);
+        }
+        document.write('<br> Saiu do loop!');
+
+
+    </script>
+    
+</body>
+</html>
+
+<!-- 
+    
+[1] - Queremos fazer com que o usuario digite um numero. Vamos usar uma função do JS.
+    - COnseguimos ver no console o valor digitado.
+[2] - Vamos usar um metodo que escreve algo na tela so para vermos o codigo.
+[3] - LOOP WHILE (REPETIÇÃO)
+
+ ### BREAK vs CONTINUE
+
+ - Palavras utilizadas para manipulação de loops, interrupção ou pular
+
+ [4] - o break interrompe o loop não fazendo com que o codigo do do..while execute completamente.
+
+ [5] - Pulou o valor de n == 5, indo para a proxima interação.
+
+ NOTE: CUIDADO AO UTILIZAR O CONTINUE NO LOOP DO WHILE. SE COLOCARMOS O CONTINUE ANTES DO INCREMENTO DO LOOP, IREMOS CAIR EM UM LOOP INFINITO.
+
+ [6] - Usando continue no loop do while.
+
+-->
