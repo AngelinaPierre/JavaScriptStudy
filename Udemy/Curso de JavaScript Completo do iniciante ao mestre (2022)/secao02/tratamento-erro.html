@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>try-catch</title>
+</head>
+<body>
+    <!-- a ordem importa scrip carregado primeiro -->
+    <script src="tratamento-erro.js"></script>
+
+    <script>
+        //console.log(sum(3,5));
+        //alert(sum(3,"a"));
+        //document.write(sum(4,2));
+        let soma = "";
+        try{
+            soma = sum(3, "a");
+        } catch(err){
+            alert("Erro");
+            console.log(err.message);
+
+        } finally{
+            // ação que será executada sempre, seja gerando erro ou nao.
+            console.log("bloco finally");
+        }
+
+        console.log(soma);
+        console.log("fim do programa");
+
+    </script>
+
+</body>
+</html>
+
