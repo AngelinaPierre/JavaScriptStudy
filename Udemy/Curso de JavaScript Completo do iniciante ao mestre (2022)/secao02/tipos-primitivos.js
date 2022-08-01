@@ -13,7 +13,7 @@ console.log(minhaVar2);
 var minhaVar3 = 'minha template literal';
 console.log(minhaVar3);
 let idade = 40;
-let msg1 = "eu possuo"+ idade +" anos";
+let msg1 = "eu possuo" + idade + " anos";
 console.log(msg1);
 console.log("Hello" + " world");
 let msg2 = `eu possuo ${idade} anos`;
@@ -44,7 +44,7 @@ console.log(`isValid: ${isValid}`);
 
 // undefined e null
 
-let varTeste; 
+let varTeste;
 console.log(varTeste);
 console.log(typeof varTeste);
 varTeste = 10;
@@ -59,7 +59,7 @@ console.log(typeof varTeste1, varTeste1);
 
 
 
- 
+
 
 
 
