@@ -304,6 +304,46 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "secao05/README.md",
+			"bookmarks": [
+				{
+					"line": 5,
+					"column": 0,
+					"label": ""
+				},
+				{
+					"line": 35,
+					"column": 27,
+					"label": ""
+				},
+				{
+					"line": 141,
+					"column": 27,
+					"label": ""
+				},
+				{
+					"line": 219,
+					"column": 45,
+					"label": ""
+				},
+				{
+					"line": 332,
+					"column": 31,
+					"label": ""
+				},
+				{
+					"line": 388,
+					"column": 20,
+					"label": ""
+				},
+				{
+					"line": 412,
+					"column": 20,
+					"label": ""
+				}
+			]
 		}
 	]
 }
