@@ -859,6 +859,8 @@ console.log(txtEmail.value);
 
 - Ou seja, so recuperamos o valor que esta no `input` depois que clicarmos no botão e armazenamos na variavel `email`.
 
+> 1) Recuperar valores de formularios, usamos o `.value`
+> 2) Sempre recuperar os dados no momento certo.
 
 <br>
 <hr>
@@ -866,6 +868,80 @@ console.log(txtEmail.value);
 
 ## Habilitar ou desabilitar um input
 <br>
+
+O objetivo deste exercicio é o seguinte, temos um `input` do tipo `email` que possui um `disable` ou seja, não conseguimos editar o valor deste campo. Temos um botão chamado `editar` que ao clicar nele, queremos `habilitar` o `input de email`  para edição, e quando tirarmos o foco do input, queremos que o `desible` volte, ou seja, não poderemos mais editar.
+
+Ou seja, se quisermos editar o valor temos que obrigatoriamente clicar no botão de edição, e ao perder o foco, não conseguimos mais editar.
+
+Vamos usar um html mais enxuto da pagina que estamos utilizando.
+
+- A primeira coisa que queremos fazer, é acrescentar um evento de click no botão `editar`. Como ainda não vimos os eventos do javascript, vamos fazer eles pelo html com o `onClick = "editarEmail()`.
+
+~~~ 
+const txtEmail = document.getElementById("txtEmail");
+
+function editarEmail(){
+    console.log("btn wirking");
+}
+~~~ 
+
+- Apos criarmos a função, dentro dela, a primeira coisa que queremos fazer é remover o `atributo disable`. Se a gente tirar o atributo do `html` a edição será possivel sem apertar o botão, o que nao queremos. Ja temos uma variavel chamada `txtEmail` que faz referencia para o campo de `input`
+- Vamos acessar a referencia que criamos, ou seja, a variavel  `txtEmail`,  juntamente com um atributo chamado `.disable` que recebe `true` ou `false`.
+- Assim, ao clicar no botão de `editar` o campo do input irá poder ser editado.
+
+
+~~~ 
+const txtEmail = document.getElementById("txtEmail");
+
+function editarEmail(){
+
+    txtEmail.disabled = false;
+
+}
+~~~ 
+
+- Agora queremos fazer o `blur` ou seja, quando clicarmos fora da caixa de input, queremos que o `disable` volte.
+- No nosso `html` colocamos mais um evento chamado `onBlur= "disableEmail()"` que irá executar uma função que vamos programar quando perder o foco do campo.
+
+~~~ 
+[html]
+<input type="email" id="txtEmail" autocomplete="off" disabled value="daniel@server.com" onblur="disableEmail()" />
+~~~ 
+
+~~~ 
+const txtEmail = document.getElementById("txtEmail");
+
+function editarEmail(){
+
+    txtEmail.disabled = false;
+
+}
+
+function disableEmail(){
+    txtEmail.disabled = true;
+}
+~~~
+
+- Um outro problema que temos, eh q se clicarmos no editar e logo depois clicarmos fora da area de input, o mesmo ainda continuará habilitado.
+- Para fazer o fix disso, quando clicarmos no editar, vamos programar para que o foco vah pro campo de `input` diretamente usando a função `.focus()`.
+
+~~~
+const txtEmail = document.getElementById("txtEmail");
+
+function editarEmail(){
+
+    txtEmail.disabled = false;
+    txtEmail.focus();
+
+}
+
+function disableEmail(){
+    txtEmail.disabled = true;
+}
+~~~
+
+
+
 
 <br>
 <hr>
