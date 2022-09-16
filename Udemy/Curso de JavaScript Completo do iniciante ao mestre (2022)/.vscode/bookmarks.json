@@ -309,6 +309,11 @@
 			"path": "secao05/README.md",
 			"bookmarks": [
 				{
+					"line": 0,
+					"column": 40,
+					"label": ""
+				},
+				{
 					"line": 5,
 					"column": 0,
 					"label": ""
@@ -341,6 +346,11 @@
 				{
 					"line": 412,
 					"column": 20,
+					"label": ""
+				},
+				{
+					"line": 509,
+					"column": 19,
 					"label": ""
 				}
 			]

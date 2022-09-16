@@ -300,7 +300,7 @@ A ideia é mostrar onde esta escrito `bemvindo(A)` o nome do usuario. Digamos qu
 
 - Nesta pagina iremos criar uma `variavel` onde iremos colocar o nome do usuario simulando como se tivesse vindo de um banco de dados ou algo do tipo.
 - A primeira coisa será a criação de uma arquivo `javascript` e vamos fazer a importação dele no nosso arquivo `html`, antes de fecharmos a tag `body` pois queremos manipular o `DOM`.
-- Vamos pensar em nosso arquivo `javascrip` como se fosse um modulo, logo se colocarmos  `functions, variaveis` tudo entrará no `modo global` o que não seria uma boa pratica. Devemos evitar variaveis e funções globais a todo custo.
+- Vamos pensar em nosso arquivo `javascrip` como se fosse um modulo, logo se colocarmos  `functions, variaveis` tudo entrará no `modo global` o que não seria uma boa pratica. `Devemos evitar variaveis e funções globais a todo custo`.
 - Logo a primeira coisa que iremos criar no nosso arquivo `javascrip` é uma `função autoinvocavel / anonymous`. Pois estamos trabalhando com o browser e nao estamos utilizando nenhuma ferramenta de `build`. Se tivessemos trabalhando com `web pack` por exemplo, ou criando para o `NodeJS` não iriamos precisar criar uma função anonima.
 
 ~~~
@@ -351,7 +351,7 @@ Podemos tambem fazer de uma forma diferente. Queremos guardar uma `referencia` d
 (function(){
     const userName = "Angelina(Daniel)";
     // document.querySelector(".top-bar p").textContent = "Bem-vinda(o), " + userName;
-    const element = document.querySelector(".top-bar p")
+    const element = document.querySelector(".top-bar p");
 
     element.textContent = "Bem-vinda(o), " + userName;
 })()
@@ -363,7 +363,7 @@ Podemos tambem fazer de uma forma diferente. Queremos guardar uma `referencia` d
 Outra coisa que podemos observar é, temos o `Bem-vindo,` no nosso HTML e no nosso javascrip, porem, se alterarmos no `HTML` o `Bem-vindo` para `Olá` a alteração não será feita pois o nosso codigo no `javascript` irá prevalecer.
 
 - Gostariamos de poder deixar o texto `Bem-vindo/olá` que é apresentado, somente no `html` e somente ter no `javascript` a concatenação com o nome de usuario.
-- A propriedade `textContent` serve tanto para definirmos um valor como para recuperar um valor.
+- A propriedade `textContent` serve tanto para definirmos um valor como para `recuperar um valor`.
 - Se colocarmos no `console.log(elemento.textContent)`,irá nos mostrar o texto original.
 - Logo podemos fazer o seguinte:
 
@@ -509,6 +509,44 @@ HTMLCollection(3) [div#principal, script, script, principal: div#principal]
 
 ## Remover elemento
 <br>
+
+A abordagem de colocar o `display=none` resolve para o usuario, que não irá mais ver a barra escuro no topo da barra, porem ela ainda esta no `html`. Podemos mudar um pouco essa abordagem, ao inves de dar um `display=none` queremos `remover` o elemento do `DOM`. 
+
+O jeito mais facil de fazer isso é assim: 
+
+- Caso o nome do usuario nao exista, vamos cair no bloco `else{}`, precisamos pegar o elemento `pai` pois é ele que vamos remover.
+- Para demonstração vamos primeiro remover o paragrafo
+~~~
+elemento.remove();
+~~~
+
+- Agora quando inspecionamos no `DOM` temos a `div = top-bar` porem o elemento html do paragrafo foi removido da arvore do DOM.
+- O problema do `.remove()` é que não irá funcionar em nenhuma versão do `Internet Explorer`.
+
+Vamos agora ver uma outra forma. Para remover um elemento de uma forma que funcione no `IE11`:
+
+- Primeiro precisamos acessar a `Mae` do elemento que queremos remover, por exemplo queremos remover o `top-bar`, para isso temos que acessar a `Mae` do `top-bar` no caso o `hero` e a partir dele pedir que remova o elemento `filho` que é o `top-bar` usando o `.removeChild`.
+- Criamos uma constante e damos o valor a ele de `element.parentElement`
+
+~~~ 
+const elementForRemove = element.parentElement;
+~~~
+
+- A partir dessa constante que criamos vamos acessar a `MAe` dele, ou seja:
+
+
+~~~
+elementForRemove.parentElement .removeChild(elementForRemove);
+~~~
+
+- Percebam que agora não existe mais o elemento [`top-bar`].
+
+Percebam que ao fazer constantes atualizações da pagina, o elemento é mostrado rapidamente e depois removido, mostrando que essa abordagem ainda possui falhas, ou seja, ao inves de criar o elemento no hmtl, e no javascript esconder esse elemento temos que fazer o contrario.
+
+Verificar se temos o nome do usuario, vamos `criar dinamicamente` esse elemento de `top-bar` e `inserir` no DOM, e nao fazer a remoção do que foi incluido no HTML. Vamos fazer o oposto:
+
+- `criar o elemento (JS)`
+- Se tiver o nome do usuario `incluir um elemento no dom`.
 
 <br>
 <hr>

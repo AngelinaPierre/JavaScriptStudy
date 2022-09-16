@@ -14,6 +14,7 @@
     
     
     // checagem para ver se esta logado.
+    // const username = "Angelina";
     const username = null;
     const element = document.querySelector(".top-bar p");
     if(username){
@@ -21,8 +22,14 @@
         element.innerHTML += "<b>" + username + "</b>";
     }else{
         // escondedo tag p especifica
-        element.style.display = "none";
+        // element.style.display = "none";
         // escondendo todo o elemento pai
-        element.parentElement.style.display = "none";
+        // element.parentElement.style.display = "none";
+
+        // removendo elemento em vez de display=none
+        // element.remove();
+
+        const elementForRemove = element.parentElement; // elemento mae do [top-bar p] = [hero]
+        elementForRemove.parentElement.removeChild(elementForRemove);
     }
 })()
