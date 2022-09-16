@@ -555,12 +555,310 @@ Verificar se temos o nome do usuario, vamos `criar dinamicamente` esse elemento 
 ## Criar elemento
 <br>
 
+Vamos mudar a abordagem, para isso, vamos fazer uma copia do diretorio inteiro para começarmos a exemplificar do zero.
+
+- No `index.html`  vamos remover/comentar a `div=top-bar` e no javascript vamos deixar somente o trecho de codigo abaixo:
+
+~~~ 
+(function() {
+
+    const username = null;
+
+})
+~~~ 
+
+- A primeira coisa que iremos fazer para `criar um elemento` é fazer uma verificação, no caso, se o nome de usuario existe. Caso exista, vamos incluir o elemento html que tinhamos antes.
+- Poderiamos até pensar em utilizar o `innerHTML` porem ele possui alguns problemas. Mais para frente veremos em detalhes o pq dele não ser uma boa opção.
+- Precisamos criar um elemento do DOM `dinamicamente` e acrescentar esse elemento no DOM. OU seja, vamos criar um novo `nó`, vamos trabalhar em cima desse novo nó e no final vamos pegar esse `no` e acrescentar na `arvore do DOM`, fazendo com que esse elemento seja refletido no browser.
+- Criamos uma consatnte com o nome do elemento que vamos criar e atribuimos a ela o `document.createElement()`. Passamos dentro do `()` o tipo de elemento que estamos criando.
+
+
+~~~
+if(username){
+    const topBarElement = document.createElement("div");
+}
+~~~ 
+
+- Como essa `div` possui uma classe chamada `top-bar`, vamos colocar dentro da `div`[topBarElement] que acabamos de criar o nome dessa classe usando o `.className`
+- `.className` é um metodo que da um nome de classe para o elemento criado com `.createElement`.
+
+~~~ 
+if(username){
+    const topBarElement = document.createElement("div");
+    topBarElement.className = "top-bar";
+}
+~~~
+
+- Por enquanto nada acontece no browser, pois esse elemento so foi ate o momento incluido na memoria, ele ainda não foi incluido na arvore principal do DOM.
+- Se quisermos visualizar o elemento criado na pagina, temos acrescentar esse elemento na arvore do DOM.
+- Ainda precisamos colocar o texto do  `olá`  que comentamos no `html`.
+
+~~~
+<!-- <div class="top-bar">
+        <p>Olá, </p>
+    </div> -->
+
+~~~
+
+- Vamos por hora, usar o `innerHTML` para ganharmos tempo.
+
+~~~
+if(username){
+    const topBarElement = document.createElement("div");
+    topBarElement.className = "top-bar";
+    topBarElement.innerHTML = `<p>Olá, <b>${username}</b></p>`
+}
+~~~
+
+- Agora precisamos acrescentar esse `topBarElement` em algum lugar, temos varias formas de fazer isso.
+- A inserção será feita, depois do elemento que possui a classe `hero` e antes do elemento que possui a classe `hero-content`. No caso, iremos usar o metodo `.insertBefore()` antes do `hero-content`
+
+~~~
+[sintaxe para a inserção]
+
+elementoMae.insertBefore(novoElemento, elementoReferencia);
+
+~~~
+
+- A partir do elemento mae, vamos inserir um novo elemento antes do elemento de referencia.
+- Elemento mae = `hero`, elemento referencia = `hero-content`.
+- Vamos criar uma constante para guardar o elemento MAE
+~~~ 
+if(username){
+    const topBarElement = document.createElement("div");
+    topBarElement.className = "top-bar";
+    topBarElement.innerHTML = `<p>Olá, <b>${username}</b></p>`
+
+    const elementMae = document.querySelector(".hero"); // elemento mae
+}
+~~~
+
+- Como podemos observar no `console.log()`, observamos o `hero-content`. Porem não precisamos usar novamente o `querySelector` pois dentro da constante `elementoMae` temos um metodo que aponta para o primeiro filho do elemento, puxando assim a referencia.
+
+~~~ 
+if(username){
+    const topBarElement = document.createElement("div");
+    topBarElement.className = "top-bar";
+    topBarElement.innerHTML = `<p>Olá, <b>${username}</b></p>`
+
+    const elementMae = document.querySelector(".hero"); // elemento mae
+    console.log(elementMae.firstChild);
+}
+~~~
+- Como temos um comentario no nosso `html` ele tbm serve como um `no` do DOM, logo ele irá aparecer como o primeiro elemento de `.hero`. Temos que apagar esse comentario ou usar a propriedade `.ferstElementChild` para ele o DOM não levar o comentario em consideração.
+
+~~~ 
+if(username){
+    const topBarElement = document.createElement("div");
+    topBarElement.className = "top-bar";
+    topBarElement.innerHTML = `<p>Olá, <b>${username}</b></p>`
+
+    const elementMae = document.querySelector(".hero"); // elemento mae
+    console.log(elementMae.firstChild);
+    console.log(elementMae.firstElementChild);
+}
+~~~
+
+- Logo nosso codigo de inserção de um elemento no DOM ficará da seguinte maneira:
+
+~~~ 
+if(username){
+    const topBarElement = document.createElement("div");
+    topBarElement.className = "top-bar";
+    topBarElement.innerHTML = `<p> Olá, <b> ${username} </b></p>`;
+
+    const elementMae = document.querySelector(".hero"); // elemento mae
+    console.log(elementMae.firstChild);
+    console.log(elementMae.firstElementChild);
+    elementMae.insertBefore(topBarElement, elementMae.firstElementChild);
+
+}
+~~~
+
+
 <br>
 <hr>
 <br>
 
 ## Simular o cadastro de e-mail
 <br>
+
+Vamos agora fazer uma simulçao de cadastro de `newsletter`. A ideia é que a pessoa digite um email (não vamos fazer nenhum tipo de validação por enquanto), a pessoa irá clickar no botão de enviar, que será um evento de click no botão, e ao clickar, iremos mostrar uma mensagem.
+
+Para isso vamos precisar fazer, primeiro precisamos vazer acesso ao valor que o usuario digitou no campo. Vimos que para pegarmos o texto que esta salvo dentro deste h1, basta utilizar a propriedade `.textContent`, que é uma propriedade que serve tanto para `setar`  um novo valor quanto para pegar o `valor` existente. 
+
+~~~
+[console]
+
+let h1 = document.querySelector("h1"); // variavel chamada h1 que acessa o h1 do html
+h1
+h1.textContent
+h1.textContent = "lalalal";
+~~~
+ 
+O que temos no nosso `html`:
+- Uma div com com `id=newsletterForm` onde dentro dela temos os elementos `label`, um `inpu` e um `button`.
+- Abaixo dessa div, temos uma outra `div` com `id=newsletterFeedback` que será o lugar onde irá aparecer um paragrafo quando clickarmos no `button`.
+  
+
+Usando o javascrip:
+- A primeira coisa que iremos fazer será selecionar o elemento do DOM que queremos recuperar o valor. Ou seja, o `input` que possui o tipo `email` e o id `txtEmail`.
+- Vamos criar uma constante para receber o valor digitado no `browser`. Estamos armazenando dentro desta constante uma referencia do DOM. 
+
+~~~ 
+(function(){
+
+    // recebendo valor do input em uma constante
+    const txtEmail = document.getElementById("txtEmail");
+})();
+~~~
+
+- Se quisermos saber qual o valor que esta sendo digitado no input? Vamos fazer alguns experimentos no console.
+- As propriedades `textContent` ou `innerHTML` não servem para acessar `campos de formulario`.
+- Para acessarmos o valor de um campo de formulario usamos uma outra propriedade chamada `value`
+
+~~~
+[console]
+
+const txtEmail = document.getElementById("txtEmail"); // saida: undefined
+txtEmail // saida: <input...>
+txtEmail.textContent // "" 
+txtEmail.value // saida: "halsiudfhasd";
+~~~
+
+> Uma coisa que temos que tomar cuidado, é quando estamos tratando de interação com o usuario, por exemplo, preenchimento de um formulario, a `ordem` com que as coisas acontecem é muito importante.
+
+- Se colocarmos um console.log(txtEmail.value) no codigo abaixo, a constante txtEmail virá com o resultado de vazia.
+
+~~~
+(function(){
+
+    // recebendo valor do input em uma constante
+    const txtEmail = document.getElementById("txtEmail");
+    console.log(txtEmail.value);
+
+})();
+~~~ 
+
+- Se colocarmos no nosso input a propriedade `value="email valido", o console.log() irá mostrar a string que colocamos nesse atributo do input.
+- COm o codigo assim, se digitarmos o email, ele não irá funcionar no console.
+
+~~~
+<input type="email" id="txtEmail" autocomplete="off" value="email valido" /> // saida: email valido
+~~~
+
+- O momento que queremos recuperar o valor é apos o click do botão, se recuperarmos o valor antes do usuairo digitar, nao teremos a informação que queremos do usario.
+- Para recuperar o valor que o usuario digitou, temos que colocar um `evento de click` no botão que criamos no html. 
+- Vamos criar no elemento de `input` um evento chamado `onClick` que recebe uma `função` chamada `cadastrarEmail`.
+
+~~~ 
+<button id="btn" onclick="cadastrarEmail()">Enviar</button>
+~~~
+
+- Agora, para criarmos essa função, temos que coloca-la fora da nossa função `anonima`. Pois a função anonima não existe no escopo global.
+- Provando que a função anonima não existe no escopo global.. erro de referencia.
+
+~~~ 
+(function(){
+
+    // recebendo valor do input em uma constante
+    const txtEmail = document.getElementById("txtEmail");
+    console.log(txtEmail.value);
+
+    function cadastrarEmail(){
+        console.log("CadastrarEmail");
+    }
+
+})();
+~~~
+
+- Para a função começar a funcionar, temos que parar de usar a função anonima (somente nesse exercio).
+- Vejam agora que ao clicar no botão, naoa recebemos mais o `erro de referencia`.
+~~~
+
+// recebendo valor do input em uma constante
+const txtEmail = document.getElementById("txtEmail");
+console.log(txtEmail.value);
+
+function cadastrarEmail(){
+    console.log("CadastrarEmail");
+}
+~~~
+
+- Vamos criar uma variavel usando o `let` que irá receber o `txtEmail.value`. Logo essa variavel, teoricamente terá o valor que foi digitado no campo de input.
+
+~~~
+
+// recebendo valor do input em uma constante
+const txtEmail = document.getElementById("txtEmail");
+console.log(txtEmail.value);
+let email = txtEmail.value;
+
+function cadastrarEmail(){
+    console.log("CadastrarEmail");
+}
+
+~~~
+
+- Quando a gente cadastra o email, queremos mostrar uma mensagem de feedback, logo vamos no nosso html, pegar o `id`  do local onde queremos mostrar a mensagem.
+- Vamos criar uma nova constante para referenciar o elemento onde vamos colocar a mensagem:
+
+~~~ 
+
+// recebendo valor do input em uma constante
+const txtEmail = document.getElementById("txtEmail");
+const msgFeedback = document.getElementById("newsletterFeedback"); // elemento onde vamos mostrar a mensagem
+let email = txtEmail.value;
+
+function cadastrarEmail(){
+    console.log("CadastrarEmail");
+}
+
+console.log(txtEmail.value);
+
+~~~
+
+- Agora na função que criamos `cadastrarEmail` , vamos criar usando o `.innerHTML`  o paragrafo e colcoar a mensagem que queremos que seja mostrada.
+
+~~~
+
+// recebendo valor do input em uma constante
+const txtEmail = document.getElementById("txtEmail");
+const msgFeedback = document.getElementById("newsletterFeedback"); // elemento onde vamos mostrar a mensagem
+let email = txtEmail.value;
+
+function cadastrarEmail(){
+    console.log("CadastrarEmail");
+    msgFeedback.innerHTML = `O email lalalala foi cadastrado com sucesso!`;
+}
+
+console.log(txtEmail.value);
+
+~~~
+
+- Da maneira acima como o codigo se encontra, a variavel `email` esta como uma string vazia, pois no momento que essa linha esta sendo lida, não digitamos nada no input.
+- Para resolver isso, colocamos essa variavel que criamos dentro da `função cadastrarEmail()`, para assim que o botão for clicado (o usuario ja digitou o email), o javascript pegar esse valor e colocar dentro da variavel.
+
+~~~
+
+// recebendo valor do input em uma constante
+const txtEmail = document.getElementById("txtEmail");
+const msgFeedback = document.getElementById("newsletterFeedback"); // elemento onde vamos mostrar a mensagem
+console.log("CL1:" + txtEmail.value);
+
+function cadastrarEmail(){
+    let email = txtEmail.value;
+    console.log("CL3: " + email);
+    msgFeedback.innerHTML = `O email ${email} foi cadastrado com sucesso!`;
+
+}
+
+console.log(txtEmail.value);
+
+~~~
+
+- Ou seja, so recuperamos o valor que esta no `input` depois que clicarmos no botão e armazenamos na variavel `email`.
+
 
 <br>
 <hr>
