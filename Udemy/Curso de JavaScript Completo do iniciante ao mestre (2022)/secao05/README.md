@@ -940,15 +940,238 @@ function disableEmail(){
 }
 ~~~
 
-
-
-
 <br>
 <hr>
 <br>
 
 ## Propriedades
 <br>
+
+Vamos agora ver algumas outras propriedaes que podemos acessar no mundo do javascrip. Vamos criar um novo documento `exemplo_props.html` para exemplificarmos melhor essas propriedades.
+
+~~~
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="title1">Curso Javascript Completo 2018</h1>
+
+    <main class="cmain" id="idmain">
+        <h2>Subtitulo</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero nemo aliquam sed delectus mollitia dolorum natus maxime architecto corporis ea, ut ipsam aliquid accusamus. Tenetur dolor itaque facere animi libero?</p>
+    </main>
+
+    <form action="#">
+        <input type="text" id="txtNome" placeholder="nome" /><br>
+        <input type="text" id="txtEmail" placeholder="email" />
+    </form>
+
+    <script>
+        
+    </script>
+
+</body>
+</html>
+
+~~~ 
+
+- A primeira coisa que vamos fazer no javascript é criar uma constante para referenciar os inputs.
+
+~~~
+<script>
+    const txtNome = document.querySelector("#txtNome");
+    const txtEmail = document.querySelector("#txtEmail");
+
+</script>
+~~~ 
+
+- Ja vimos que se dermos um `console.log(txtNome)` iremos receber uma string vazia.
+
+~~~ 
+<script>
+    const txtNome = document.querySelector("#txtNome");
+    const txtEmail = document.querySelector("#txtEmail");
+
+    console.log(txtNome.value);
+</script>
+~~~
+
+- Podemos usando a mesma propriedade `.value`, tanto recuperar um valor, quanto `setar` um valor, assim como fizemos com o `textContent` ou `innerHTML`
+
+~~~ 
+<script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+
+        txtNome.value = "Angelina";
+
+        console.log(txtNome.value);
+    </script>
+~~~ 
+
+- Repare que a propriedade `.value` possui o mesmo nome tanto no Javascript quanto no HTML. A mesma coisa acontece com a propriedade `.disable`.
+- Agora não podemos mais editar o campo.
+
+~~~
+<script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+
+        txtNome.value = "Angelina";
+        txtNome.disabled = true; // desativando o campo
+
+        console.log(txtNome.value);
+    </script>
+~~~
+
+-  Agora no email, queremos colocar a propriedade no html do mesmo chamada `readonly`. Vamos ver a diferença de um para o outro...
+-  Ambos não irao permitir a edição do campo, porem existe uma diferença visual entre eles.
+
+~~~ 
+<form action="#">
+        <input type="text" id="txtNome" placeholder="nome" /><br>
+        <input type="text" id="txtEmail" placeholder="email" readonly/>
+    </form>
+
+    <script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+
+        txtNome.value = "Angelina";
+        txtNome.disabled = true; // desativando o campo
+
+        console.log(txtNome.value);
+    </script>
+~~~ 
+
+- Se quisermos agora, colocar o `readonly`  atraves do javascript, não iremos conseguir fazer da mesma forma que fizemos com o `disable` .
+- Algumas propriedades são escritas de formas diferentes no `html` e no `javascript`.
+- No caso do `readonly`  como são duas palavras, precisamos usar o `camelCase` ou seja, o nome da propriedade no javascript é `readOnly`.
+
+~~~
+ <script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+
+        txtNome.value = "Angelina";
+        txtNome.disabled = true; // desativando o campo
+
+        txtEmail.readOnly = true;
+
+        console.log(txtNome.value);
+    </script>
+~~~
+
+- Outro atributo que acontece a mesma situação seria o atributo `for` que é uma palavra reservada no javascript, logo não podemos simplesmente usar a propriedade `for` com a sintaxe do `disable` por exemplo.
+- Vamos criar uma `label` no html para colocar o `for="contrato"`. E embaixo da label, vamos colocar um `input checkbox` com `id="contrato"`.
+- Vamos tambem colocar uma `textarea` com o atributo de `readonly`, onde vamos colocar o contrato.
+
+~~~
+<form action="#">
+    <input type="text" id="txtNome" placeholder="nome" /><br><br>
+    <input type="text" id="txtEmail" placeholder="email" /><br><br>
+        
+    <input type="checkbox" id="contrato"/>
+    <label for="contrato">Li e aceito o contrato</label><br><br>
+    <textarea name="" id="" cols="30" rows="10" readonly>
+        Este contrato....
+    </textarea>
+</form>
+~~~
+
+- Como o `label` possui o atributo `for="contrato"`  quando clicarmos na label, irá habilitar e desabilitar o checkbox.
+- Logo se quisermos alterar o atributo `for` não podemos simplesmente utilizar a a palavra ` for`.
+- Vamos criar uma constante no javascript para receber o elemento `label`, para isso, usamos o `querySelector` passando o nome do elemento `label` juntamente com o atributo `for="contrato"` para selecionar a label que possui esse atributo.
+
+~~~
+<script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+        const labelContrato = document.querySelector("label[for='contrato']");
+
+        txtNome.value = "Angelina";
+        txtNome.disabled = true; // desativando o campo
+
+        txtEmail.readOnly = true;
+        console.log(labelContrato);
+        console.log(txtNome.value);
+    </script>
+
+~~~ 
+
+- Se quisermos mostrar no console o atributo `for` não podemos simplesmente fazer `console.log(labelCOntrato.for)`, pois irá nos retornar `undefined`.
+- Se quisermos pegar o valor do atributo `for` no javascript, usamos o `htmlFor`.
+
+~~~ 
+<script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+        const labelContrato = document.querySelector("label[for='contrato']");
+
+        txtNome.value = "Angelina";
+        txtNome.disabled = true; // desativando o campo
+
+        txtEmail.readOnly = true;
+        console.log(labelContrato);
+        console.log(labelContrato.for);
+        console.log(labelContrato.htmlFor);
+        console.log(txtNome.value);
+    </script>
+~~~
+
+- Outro exemplo de utilização dessa sintaxe seria o `maxlength=""` que vamos colocar no `input` do nosso email.
+
+~~~
+ <input type="text" id="txtEmail" placeholder="email" maxlength="10" /><br><br> 
+~~~
+
+- No javascript essa propriedade precisa ser escrita com camelCase `maxLength`
+
+~~~ 
+<script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+        const labelContrato = document.querySelector("label[for='contrato']");
+
+        txtNome.value = "Angelina";
+        txtNome.disabled = true; // desativando o campo
+
+        txtEmail.readOnly = true;
+        console.log(labelContrato);
+        console.log(labelContrato.for);
+        console.log(labelContrato.htmlFor);
+        console.log(txtEmail.maxLength);
+        console.log(txtNome.value);
+</script>
+~~~
+
+- O que mais usamos, eh ter acesso a uma classe de uma elemento, por exemplo, vamos colocar uma classe qualquer no `input de email` 
+
+~~~
+<script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+        const labelContrato = document.querySelector("label[for='contrato']");
+
+        txtNome.value = "Angelina";
+        txtNome.disabled = true; // desativando o campo
+
+        txtEmail.readOnly = true;
+        console.log(labelContrato);
+        console.log(labelContrato.for);
+        console.log(labelContrato.htmlFor);
+        console.log(txtEmail.maxLength);
+        console.log(txtEmail.className);
+        console.log(txtNome.value);
+    </script>
+~~~ 
+
+- 
 
 <br>
 <hr>
@@ -957,12 +1180,79 @@ function disableEmail(){
 ## Desafio: checkbox
 <br>
 
+Vamos criar um `html` chamado `desafio_checkbox_disabled`. A ideia é que quando clicarmos no `checkbox` , ou seja, o checkbox habilitado, queremos que o botão de cadastrar seja habilitado, pois, se os termos não forem aceitos, ela não pode cadastrar, logo o botão de cadsatro fica desativado.
+
+- O checkbox tem uma `id="contratp`, logo podemos seleciona-lo, se usarmos o `.checked` teremos o valor do checkbox, true or false 
+
 <br>
 <hr>
 <br>
 
 ## Resolução: checkbox
 <br>
+
+- A primeira coisa que temos que fazer é criar um evento no elemento que queremos selecionar para fazer a verificação se ele esta ativo ou nao. Podemos usar o `onClick` ou o `onChange`. O nome do nosso evento será `enableOrDisableButton().
+
+~~~
+<input type="checkbox" id="contrato" onclick="enableOrDisableButton()">
+~~~
+
+
+- Vamos colocar um console.log() dentro do evento para ver se esta funcionando.
+- Dentro da função queremos verificar se o `input type` esta habilitado ou nao. Criamos uma constante chamada `contrato` que irá receber a referencia para o `input checkbox`.
+- Dentro da funçao fazemos uma verificação para ver se o `checkbox` esta habilitado ou nao.
+- Poderiamos criar uma `id` para o input, mas como so temos um tipo de `submit button` na pagina, podemos fazer o querySelector da seguinte maneira: `.querySelector('form input[type="submit"]')` 
+~~~ 
+<script>
+    function enableOrDisableButton(){
+        const contrato = document.querySelector("#contrato");
+        const btn = document.querySelector('form input[type="submit"]');
+        let checked = contrato.checked;
+        console.log(checked);
+
+        if(checked){
+            btn.disabled = false;
+        }else{
+            btn.disabled = true;
+        }
+    }
+</script>
+~~~ 
+
+- Vejam que podemos fazer uma simplificação nesse if(), escrevendo ele em uma unica linha:
+
+~~~
+<script>
+    function enableOrDisableButton(){
+        const contrato = document.querySelector("#contrato");
+        const btn = document.querySelector('form input[type="submit"]');
+        let checked = contrato.checked;
+        console.log(checked);
+
+        btn.disable = !checked;
+    }
+</script>
+~~~ 
+
+- Podemos melhorar ainda mais o codigo, veja que o nosso `input type submit` esta com disabled por padrão no nosso `html`.
+- Porem, se tivermos algum problema com o `javascript` o usuario nunca irá poder cadastrar esse formulario, pois nosso botão esta disabled. Logo estamos impedindo a usabilidade da nossa pagina caso o javasccript nao funcione.
+- Vamos tirar o `disabled` do input no nosso `html` e vamos coloca-lo via `javascript`. Vamos colocar nosso btn no escopo global e ativar o `disabled` dele atraves do javascript.
+
+
+~~~ 
+        <input type="submit" value="cadastrar"  />
+<script>
+    const btn = document.querySelector('form input[type="submit"]');
+    btn.disabled = true;
+    function enableOrDisableButton(){
+        const contrato = document.querySelector("#contrato");
+        let checked = contrato.checked;
+        console.log(checked);
+
+        btn.disable = !checked;
+    }
+</script>
+~~~
 
 <br>
 <hr>

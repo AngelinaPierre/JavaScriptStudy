@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="title1">Curso Javascript Completo</h1>
+    <main class="cmain" id="idmain">
+        <h2>Subtitulo</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates voluptate maiores nostrum ratione exercitationem, dolorem animi sit eaque ipsam! Similique cum deserunt doloremque quibusdam error, obcaecati fuga debitis maxime. Enim?</p>
+    </main>
+    <form action="#">
+        <input type="text" id="txtNome" placeholder="nome"><br><br>
+        <input type="text" id="txtEmail" placeholder="email"><br><br>
+
+        <input type="checkbox" id="contrato" onclick="enableOrDisableButton()">
+        <label for="contrato">Li e aceito o seguinte contrato</label><br><br>
+        <textarea name="" id="" cols="30" rows="10" readonly>Este Contrato nos da direito á...</textarea>
+        <!-- <input type="submit" value="cadastrar" disabled /> -->
+        <input type="submit" value="cadastrar"  />
+
+
+    </form>
+
+    <script>
+        const btn = document.querySelector('form input[type="submit"');
+        btn.disabled = true;
+        function enableOrDisableButton(){
+            const contrato = document.querySelector("#contrato");
+            let checked = contrato.checked;
+            console.log(checked);
+
+            // verfiicação
+            //if(checked){
+                //btn.disabled = false;
+            //}else{
+                //btn.disabled = true;
+            //}
+
+            // VERIFICAÇÃO SIMPLIFICADA
+            btn.disabled = !checked;
+
+        }
+    </script>
+</body>
+</html>

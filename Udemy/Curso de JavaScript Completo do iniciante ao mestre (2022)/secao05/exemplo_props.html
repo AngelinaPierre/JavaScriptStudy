@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="title1">Curso Javascript Completo 2018</h1>
+
+    <main class="cmain" id="idmain">
+        <h2>Subtitulo</h2>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero nemo aliquam sed delectus mollitia dolorum natus maxime architecto corporis ea, ut ipsam aliquid accusamus. Tenetur dolor itaque facere animi libero?</p>
+    </main>
+
+    <form action="#">
+        <input type="text" id="txtNome" placeholder="nome" /><br><br>
+        <input type="text" id="txtEmail" placeholder="email" maxlength="10" class="input input-email"/><br><br>
+        
+        <input type="checkbox" id="contrato"/>
+        <label for="contrato">Li e aceito o contrato</label><br><br>
+        <textarea name="" id="" cols="30" rows="10" readonly>
+            Este contrato....
+        </textarea>
+    </form>
+
+    <script>
+        const txtNome = document.querySelector("#txtNome");
+        const txtEmail = document.querySelector("#txtEmail");
+        const labelContrato = document.querySelector("label[for='contrato']");
+
+        txtNome.value = "Angelina";
+        txtNome.disabled = true; // desativando o campo
+
+        txtEmail.readOnly = true;
+        console.log(labelContrato);
+        console.log(labelContrato.for);
+        console.log(labelContrato.htmlFor);
+        console.log(txtEmail.maxLength);
+        console.log(txtEmail.className);
+        console.log(txtNome.value);
+    </script>
+
+</body>
+</html>
