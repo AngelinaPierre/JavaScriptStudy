@@ -2387,7 +2387,299 @@ console.log(media);
 ## Introdução ao prototype, call() e apply() 
 <br>
 
+Vamos agora ver como era feito antigamente, sem as facilidades que o ES6 nos proporciona. Quando não tinhamos `spread operator`, `Array.from()`, entre outras coisas.
 
+~~~
+[Antigamente: ES5]
+
+Array.prototype.<<Metodo>>.call();
+Array.prototype.<<Metodo>>.apply();
+~~~
+
+Vamos criar um novo documento chamado `desafio_ES5.js` para podermos exemplificar como seria feito antigamente o mesmo desafio passado.
+
+- Criamos na função `sum()` do exercicio passado, um array a partir do objeto `arguments` utilizando o `spread operator`, como fariamos isso sem usa-lo?
+- Poderiamos criar um loop por exmeplo...
+
+~~~ 
+function sum(){
+    const arr = [];
+
+    for(let i = 0; i < arguments.length; i++){
+        arr.push(arguments[i]);
+    }
+    console.log(arr);
+}
+
+sum(1,2,3,4,5);
+
+// SAIDA:
+
+❯ node desafio_ES5.js
+[ 1, 2, 3, 4, 5 ]
+~~~
+
+- Uma outra forma seria usar o metodo `.forEach()`, porem o objeto `arguments`, não possui esse metodo por padrão, pois ele não é um array de verdade.
+- Logo precisamos "pegar emprestado" a função `.forEach()`, la do array e passar pelo `arguments`.
+- Temos uma propriedade chamada `prototype`, que é um lugar onde fica todas as funções compartilhadas entre os objetos.
+- Logo se fizermos `Array.prototype.forEach()` estamos acessando a função `.forEach()` do array, permitindo que a gente a utilize.
+- Porem isso ainda não fará o codigo funcionar, pois na pratica temos 3 maneiras de acessar uma função:
+
+~~~
+sum(); // estamos executando a função chamando seu nome.
+sum.call(); //
+sum.apply(); //
+~~~
+
+- Basicamente, quando executamos essa maneira, estamos executando a função mudando o `escopo do this` desta função.
+- Para executar a função com `.call()` o primeira parametro colocariamos `null` e como segundo parametro, passamos os argumentos que queremos.
+
+~~~
+function sum(){
+    // usando o loop for
+    const numbers = [];
+
+    for(let i = 0; i < arguments.length; i++){
+        numbers.push(arguments[i]);
+    }
+    console.log(numbers);
+
+
+}
+sum.call(null, 1,2,3,4,5);
+
+// SAIDA:
+
+❯ node desafio_ES5.js
+[ 1, 2, 3, 4, 5 ]
+~~~
+
+- Com o metodo `.apply()` em vez de passar os argumentos de forma separada, passamos uma array com os argumentos onde internamente o metodo irá "quebrar" esse array e passar como elementos individuais.
+
+~~~
+function sum(){
+    // usando o loop for
+    const numbers = [];
+
+    for(let i = 0; i < arguments.length; i++){
+        numbers.push(arguments[i]);
+    }
+    console.log(numbers);
+}
+
+sum.apply(null, [1,2,3]);
+
+// SAIDA:
+
+❯ node desafio_ES5.js
+[ 1, 2, 3 ]
+~~~
+
+> Lembre que para a execução de uma função temos 3 possibilidades:
+> >
+>  1) Chamada direta `função();`
+>  2) Metodo call `função.call();` - 1P = `null`, 2P = argumentos
+>  3) Metodo apply `função.apply();` - 1P = `null`, 2P = array
+
+- Voltando para o `prototype` vamos pegar a função `forEach()` que existe dentro do objeto `Array`, chamando a execução da mesma com o metodo `.call()`.
+- Agora, no `primeira parametro` do metodo, iremos passar o objeto `arguments` pois é ele o objeto que irá tomar "emprestado" o metodo `.forEach()`.
+- Como `segundo parametro` seria o parametro normal que passariamos para o `.forEach()`, que recebe como parametro uma função de callback.
+- Essa função recebe como argumento dentro dela, os proprios argumentos , vamos colocar `argument` no singular para entendermos melhor. Se quisermos tbm poderiamos colocar o indice, e outros parametros. 
+- Dentro da função basta usar agora o metodo `.push()`
+
+~~~
+function sum(){
+    const numbers = [];
+
+    // usando o forEach();
+    Array.prototype.forEach.call(arguments, function(argument, i){
+        console.log("i: " + i + " argument: " + argument + "\n");
+        numbers.push(argument);
+    })
+    console.log(numbers);
+}
+
+sum(1,2,3,4,5);
+
+// SAIDA:
+
+❯ node desafio_ES5.js
+i: 0 argument: 1
+
+i: 1 argument: 2
+
+i: 2 argument: 3
+
+i: 3 argument: 4
+
+i: 4 argument: 5
+
+[ 1, 2, 3, 4, 5 ]
+
+~~~
+
+- Basicamente seria como se tivessemos fazendo a seguinte linha de codigo (`obs: não é valido`).
+
+~~~
+arguments.forEach()(function(arg){
+    numbers.push(arg);
+}) 
+~~~
+
+- `arguments` é um objeto que não possui o metodo `.foreach()`, quando usamos o `Array.prototype.foreach.call()`, e passamos o objeto `arguments` como primeiro parametro, estamos meio que transformando esse objeto em um array para poder o mesmo acessar os `metodos de array`.
+- O mesmo poderia ser utilizando para o metodo `.map()`.
+- Voltando para o desafio, vamos ver como seria com o metodo `.reduce()`
+
+~~~
+function sum(){
+    const numbers = [];
+    
+    // usando o forEach();
+    Array.prototype.forEach.call(arguments, function(argument, i){
+        console.log("i: " + i + " argument: " + argument + "\n");
+        numbers.push(argument);
+    })
+    return numbers.reduce(function(sum,atual){
+        return sum + atual;
+    }, 0);
+}
+
+console.log(sum(1,2,3,4,5));
+
+// SAIDA:
+
+❯ node desafio_ES5.js
+i: 0 argument: 1
+
+i: 1 argument: 2
+
+i: 2 argument: 3
+
+i: 3 argument: 4
+
+i: 4 argument: 5
+
+[ 1, 2, 3, 4, 5 ]
+15
+~~~
+
+- Vamos agora fazer a função `avarege()`. Para pegarmos os argumentos recebidos do avarege e passar para o `sum()` podemos utilizar o metodo `apply()` para enviar os valores separados.
+- Usamos como `primeiro parametro` do metodo o  `null`, pois não iremos precisar passar uma referencia dele dentro do `.apply()`, e como `segundo parametro` passamos o objeto `arguments`.
+- Não chamamos a função de soma diretamente `sum()` pois usando o metodo `.apply()` podemos passar como segundo parametro um array que será mandado para a função `.sum()`.
+
+~~~
+function sum(){
+
+    const numbers = [];
+
+    // usando o forEach();
+    Array.prototype.forEach.call(arguments, function(argument, i){
+        console.log("i: " + i + " argument: " + argument + "\n");
+        numbers.push(argument);
+    })
+    console.log(numbers);
+
+    return numbers.reduce(function(sum,atual){
+        return sum + atual;
+    }, 0);
+}
+
+console.log(sum(1,2,3,4,5));
+
+function avarege(){
+    const soma = sum.apply(null, arguments);
+    console.log(soma);
+}
+
+console.log(avarege(1,2,3,4,5));
+
+// SAIDA:
+
+❯ node desafio_ES5.js
+i: 0 argument: 1
+
+i: 1 argument: 2
+
+i: 2 argument: 3
+
+i: 3 argument: 4
+
+i: 4 argument: 5
+
+[ 1, 2, 3, 4, 5 ]
+15
+i: 0 argument: 1
+
+i: 1 argument: 2
+
+i: 2 argument: 3
+
+i: 3 argument: 4
+
+i: 4 argument: 5
+
+[ 1, 2, 3, 4, 5 ]
+15
+undefined
+
+~~~
+
+- Como agora ja conseguimos o valor da soma dos numeros, basta colocar como retorno da função `avarege()` a variavel `soma` dividida pelo `arguments.length`
+
+~~~ 
+function sum(){
+    const numbers = [];
+    
+    // usando o forEach();
+    Array.prototype.forEach.call(arguments, function(argument, i){
+        console.log("i: " + i + " argument: " + argument + "\n");
+        numbers.push(argument);
+    })
+    console.log(numbers);
+
+    return numbers.reduce(function(sum,atual){
+        return sum + atual;
+    }, 0);
+}
+
+console.log(sum(1,2,3,4,5));
+
+function avarege(){
+    const soma = sum.apply(null, arguments);
+    return soma / arguments.length;
+}
+
+console.log(avarege(1,2,3,4,5));
+
+// SAIDA:
+
+❯ node desafio_ES5.js
+i: 0 argument: 1
+
+i: 1 argument: 2
+
+i: 2 argument: 3
+
+i: 3 argument: 4
+
+i: 4 argument: 5
+
+[ 1, 2, 3, 4, 5 ]
+15
+i: 0 argument: 1
+
+i: 1 argument: 2
+
+i: 2 argument: 3
+
+i: 3 argument: 4
+
+i: 4 argument: 5
+
+[ 1, 2, 3, 4, 5 ]
+3
+
+~~~
 
 <br>
 <hr>
