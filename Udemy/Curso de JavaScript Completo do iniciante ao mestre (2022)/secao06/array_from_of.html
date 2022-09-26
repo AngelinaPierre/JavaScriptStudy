@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit tempore ut, vero voluptatibus cum dignissimos maiores, consequatur ipsam temporibus consectetur sunt rem amet accusamus quia maxime nemo ullam! Doloremque, voluptatibus.</p>
+
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque, voluptatibus.</p>
+
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit tempore ut, vero voluptatibus cum dignissimos maiores</p>
+
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit tempore ut, vero voluptatibus cum dignissimos maiores blablabalb</p>
+
+    <script>
+        const arr1 = new Array(1,2,3);
+        // console.log(arr1);
+
+
+        const arr2 = Array.from(arr1);
+        arr2.push(4,5);
+        // console.log(arr2);
+
+        const arr3 = new Array(3);
+        //console.log(arr3);
+        //console.log(arr3.length);
+
+
+        const arr4 = Array.of(3);
+        //console.log(arr4);
+        //console.log(arr4.length);
+
+        let paragrafos = document.querySelectorAll('p');
+        console.log(paragrafos);
+        console.log(paragrafos.length);
+
+        //paragrafos.forEach(function(p, i){
+            //p.textContent = `${i} = ${p.textContent}0`;
+            //console.log(p.textContent);
+        //})
+
+        paragrafos = Array.from(paragrafos);
+        paragrafos.map(function(p, i){
+            p.textContent = `${i} = ${p.textContent}0`;
+            console.log(p.textContent);
+        })
+    </script>
+</body>
+</html>
