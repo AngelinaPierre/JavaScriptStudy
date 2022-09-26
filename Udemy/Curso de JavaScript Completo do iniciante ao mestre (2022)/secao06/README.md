@@ -2240,6 +2240,13 @@ maria@server.com
 ## Desafio
 <br>
 
+A ideia é criar duas funções: `sum()` e `avarege()` que irão respectivamente retornar um numero, que seria a soma dos argumentos passados e o `avarege()` que seria a media da soma desses argumentos passados.
+
+- As funções podem receber 1 ou + parametros
+- Use e abuse das facilidades do ES6.
+
+
+
 <br>
 <hr>
 <br>
@@ -2247,12 +2254,140 @@ maria@server.com
 ## Resolução: Desafio
 <br>
 
+Vamos criar um novo documento e chama-lo de `desafio.js`. Temos duas funções, `sum()` que noa irá receber parametro nenhum e irá retornar um numero, e temos a função `avarage()` que tbm nao irá receber parametro e irá retornar um numero.
+
+~~~
+function sum(){
+
+}
+
+function avarege(){
+    
+} 
+~~~
+
+- A primeira coisa que iremos fazer será criar uma array na função sum(), a partir do objeto `arguments`.
+- Iremos fazer isso pois a partir desse objeto `arguments` vamos utilizar o metodo `.reduce()`, so que `arguments` não possui por padrão o metodo `.reduce()`, logo temos que transformar esse objeto em um array de verdade. 
+
+~~~ 
+function sum(){
+    const numbers = Array.from(arguments); // criando array a partir de parametros passados para a função.
+    console.log(numbers);
+    console.log(numbers.reduce);
+}
+
+function avarege(){
+    return 0; // retornando qualquer coisa so para testar a função acima
+}
+
+sum(1,2,3,4,5);
+
+// SAIDA:
+
+❯ node desafio.js
+[ 1, 2, 3, 4, 5 ]
+[Function: reduce]
+~~~
+
+- A partir do objeto `arguments`criamos um array com os numeros passados para a função.
+- Uma outra maneira de termos o mesmo efeito seria utilizando o `spread operator`.
+
+~~~
+function sum(){
+    const numbers = [...arguments];
+    console.log(numbers);
+    console.log(numbers.reduce);
+}
+
+function avarege(){
+    return 0; // retornando qualquer coisa so para testar a função acima
+}
+
+sum(1,2,3,4,5);
+
+// SAIDA: 
+
+❯ node desafio.js
+[ 1, 2, 3, 4, 5 ]
+[Function: reduce]
+~~~
+
+- Agora como iremos fazer para retornar a soma desses numeros? 
+- Chamamos o `numbers.reduce()` passando como parametro do reduce uma `função de callback` e um valor inicial para o acumulador de `0`.
+
+~~~
+function sum(){
+    const numbers = [...arguments];
+    
+    return numbers.reduce(function(sum, atual){
+        return sum + atual;
+    }, 0);
+}
+
+function avarege(){
+    return 0; // retornando qualquer coisa so para testar a função acima
+}
+
+let soma = sum(1,2,3,4,5);
+console.log(soma);
+console.log(sum(1,2,3,4,5));
+
+
+// SAIDA:
+
+❯ node desafio.js
+[ 1, 2, 3, 4, 5 ]
+[Function: reduce]
+15
+[ 1, 2, 3, 4, 5 ]
+[Function: reduce]
+15
+
+~~~
+
+- Assim finalizamos a primeira parte do exercicio que seria criar a função de soma sem parametros.
+- Agora iremos criar nossa função de `avarege()` utilizando a função `sum()` que criamos.
+- Essa função `avarege()` seria uma função que pega a soma dos numeros passados a ela e divide pela quantidade de numeros que foram passados.
+- Vamos passar a função `sum()` com o spread operator para o `arguments`, pois o `arguments` que iremos passar é como se fosse um array, porem não é um array de verdade. Como estamos usando o `spread` os parametros irão ser passados para a função `sum()` individualmente.
+- Para tirar a media, basta agora usarmos o `.length` em cima do `arguments`.
+
+~~~
+function sum(){
+    // const numbers = Array.from(arguments); // criando array a partir de parametros passados para a função.
+    const numbers = [...arguments];
+    // console.log(numbers);
+    // console.log(numbers.reduce);
+
+    return numbers.reduce(function(sum, atual){
+        return sum + atual;
+    }, 0);
+}
+
+function avarege(){
+    return sum(...arguments) / arguments.length
+}
+
+let soma = sum(1,2,3,4,5);
+// console.log(sum(1,2,3,4,5));
+console.log(soma);
+
+let media = avarege(1,2,3,4,5);
+console.log(media);
+
+// SAIDA:
+
+❯ node desafio.js
+15
+3
+~~~
 <br>
 <hr>
 <br>
 
-## Introdução ao prototype, call() e apply()
+## Introdução ao prototype, call() e apply() 
 <br>
+
+
 
 <br>
 <hr>
