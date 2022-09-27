@@ -647,6 +647,267 @@ Na proxima aula, faremos uma variação desse mesmo exercio, onde teremos um `ar
 
 <br>
 
+Até agora esse exemplo foi importante para evoluir o nosso conhecimento sobre o que vimos ate agora. Porem em 99% das vezes o que faremos de verdade é:
+
+1) Fazer uma requisição para um servidor
+2) Recuperar um `JSON`, que seria tipo um `array de objetos` podendo tbm ser um objeto ou um array.
+3) A partir do `JSON` mostramos as informações na tela.
+
+- A primeira coisa que iremos fazer será apagar todas as `trs` que temos no nosso `tbody`.
+
+~~~
+<table class="striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th aluno-nota="n1">Nota 1</th>
+            <th aluno-nota="n2">Nota 2</th>
+            <th aluno-nota="n3">Nota 3</th>
+            <th aluno-nota="n4">Nota 4</th>
+            <th aluno-nota="media">Média</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        </tbody>
+</table>
+~~~
+
+- No nosso javascript, vamos apagar toda a logica para o indice, pois iremos montar dinamicamente todas as nossas `trs`do `tbody`.
+- Melhor ainda, vamos construir nossa logica do zero, apagando assim todo o nosso javascript, deixando somente a função anonima.
+
+~~~
+<script> 
+    (function(){
+
+    })()
+</script>
+~~~
+
+- Vamos agora construir o nosso `array de objetos` com as informações que irão popular dinamicamente a nossa tabela.
+- Relembrando, temos um array `[]` e dentro deste array temos objetos `[{}]`, com suas propriedades e valores.
+
+~~~ 
+const alunos = [
+    { nome: "Daniel", n1: 10, n2: 3, n3: 7.5, n4: 3 },
+    { nome: "Maria", n1: 10, n2: 9, n3: 3, n4: 9.5 },
+    { nome: "João", n1: 10, n2: 4.5, n3: 1, n4: 3.5 },
+    { nome: "Joana", n1: 1, n2: 3, n3: 9, n4: 1.5 },
+    { nome: "José", n1: 10, n2: 4.5, n3: 7, n4: 3 },
+    { nome: "Arnaldo", n1: 10, n2: 4.5, n3: 7, n4: 3 },
+    { nome: "Lucas", n1: 4.5, n2: 9, n3: 8, n4: 3 },
+    { nome: "Luana", n1: 3, n2: 7, n3: 9, n4: 3 },
+    { nome: "Beatriz", n1: 10, n2: 4, n3: 7, n4: 9 },
+    { nome: "Sergio", n1: 4.5, n2: 9.5, n3: 10, n4: 2 }
+];
+~~~
+
+- Agora, como fazemos para a partir deste `array de objetos` a gente gere arquivos do `DOM/HTML`?
+- Por exemplo, para esse primeiro objeto `{ nome: "Daniel", n1: 10, n2: 3, n3: 7.5, n4: 3 },` vamos ter uma `string` que seria a representação de um `html`.
+
+~~~
+const alunos = [
+    { nome: "Daniel", n1: 10, n2: 3, n3: 7.5, n4: 3 },
+];
+
+<tr>
+    <td>Daniel</td>
+    <td>10</td>
+    <td>3</td>
+    <td>7.5</td>
+    <td>3</td>
+    <td></td>
+</tr>
+~~~
+
+- Ou seja, a partir do objeto, queremos recuperar uma `string` com o formato acima.
+- Agora a primeira coisa que iremos fazer será percorrer esse `array` de alunos, agora sim ele é um array de verdade, `array de objetos` porem um `array`.
+- Para isso vamos utilizar o metodo `.forEach()` e vamos ver tbm o conceito de `arrow funtion =>` que passaremos como função para o `.forEach()`.
+- A `arrow function` é uma forma um pouco mais abreviada de escrevermos funções. 
+
+~~~ 
+[FUNÇÃO SEM ARROW FUNCTION]
+alunos.forEach(function(aluno){}); // passamos o aluno no singular pq queremos recuperar um de cada
+
+[ARROW FUNCTION]
+alunos.forEach((aluno) => {}); 
+
+[ARROW FUNCTION 1 PARAMETRO]
+alunos.forEach(aluno => {});
+
+[ARROW FUNCTION COM + PARAMETROS]
+alunos.forEach((aluno, param2) => {}); 
+
+~~~
+ 
+- Agora dentro da função de callback do `.forEach()` vamos colocar uma propriedade `media` que irá receber o valor da `media`. 
+- Ou seja, vamos percorrer cada `aluno` no nosso objeto, e adicionar a esse objeto, uma propriedade chamada `media` dinamicamente.
+- Selecionamos cada objeto e colocamos a propriedade da seguinte maneira `aluno.media=`, logo, para cada aluno que o `.forEach()` selecionar, ele irá criar essa propriedade `media` que recebe o retorno da função que criamos para calcular a media dos alunos.
+- Por enquanto, iremos passar os  para nossa função `avarege()` da maneira mais facil...
+- Vamos ver o que teremos no console.log(), a propriedade `media` adicionada a todos os nossos objetos.
+~~~
+alunos.forEach(aluno => {
+    aluno.media = avarege(aluno.n1, aluno.n2, aluno.n3, aluno.n4);
+});
+console.log(alunos);
+
+// SAIDA:
+
+(10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+0: {media: 5.875, n1:10,n2:3,n3:7.5,n4:3,nome:"Daniel"}
+1: {nome: 'Maria', n1: 10, n2: 9, n3: 3, n4: 9.5, …}
+2: {nome: 'João', n1: 10, n2: 4.5, n3: 1, n4: 3.5, …}
+3: {nome: 'Joana', n1: 1, n2: 3, n3: 9, n4: 1.5, …}
+4: {nome: 'José', n1: 10, n2: 4.5, n3: 7, n4: 3, …}
+5: {nome: 'Arnaldo', n1: 10, n2: 4.5, n3: 7, n4: 3, …}
+6: {nome: 'Lucas', n1: 4.5, n2: 9, n3: 8, n4: 3, …}
+7: {nome: 'Luana', n1: 3, n2: 7, n3: 9, n4: 3, …}
+8: {nome: 'Beatriz', n1: 10, n2: 4, n3: 7, n4: 9, …}
+9: {nome: 'Sergio', n1: 4.5, n2: 9.5, n3: 10, n4: 2, …}
+~~~
+
+- Agora iremos fazer com que cada objetos de `alunos` nos retorne uma string. Podemos utilizar para isso o metodo `.map()`.
+- Vamos criar uma constante chamada `html` que irá ser o codigo `html` que queremos converter nosso objeto `alunos` para.
+- Dentro do `.map()` tbm iremos usar uma arrow function para simplificar o codigo e dentro desta função vamos retornar uma string equivalente ao nosso codigo html. Vamos fazer um experimento com esse retorno usando o console.log().
+
+~~~ 
+alunos.forEach(aluno => {
+    aluno.media = avarege(aluno.n1, aluno.n2, aluno.n3, aluno.n4);
+});
+console.log(alunos);
+
+const html = alunos.map(aluno => {
+    return " - oi - ";
+})
+
+// SAIDA:
+
+(10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+[' - oi - ', ' - oi - ', ' - oi - ', ' - oi - ', ' - oi - ', ' - oi - ', ' - oi - ', ' - oi - ', ' - oi - ', ' - oi - ']
+~~~
+
+- Vejam que estamos recebendo um `array de strings` e não de objetos mais.
+
+> Observação, quando utilizamos o `.map()` se tivermos somente um valor de retorno, não precisamos utilizar os chaves `{}` da função e nem do `return`
+> >
+> Basicamente podemos escrever da seguinte maneira:
+> ~~~
+> const html = alunos.map(aluno => " - oi - ");
+> ~~~ 
+
+- Agora, se queremos retonar uma string e queremos que essa string tenha `linhas quebras`, temos que usar a sintaxe do `template string`.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+
+    `;
+});
+
+[ou]
+
+const html = alunos.map(aluno => ``);
+
+~~~
+
+- Agora dentro desta `template literal` colocamos o codigo html que queremos que seja colocado dentro do nosso `array de objetos` que agora eh um `array de string`.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+        <td>Daniel</td>
+        <td>10</td>
+        <td>3</td>
+        <td>7.5</td>
+        <td>3</td>
+        <td></td>
+        </tr>
+    `;
+});
+console.log(html);
+
+// SAIDA:
+
+(10) ['\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ', '\n          <tr>\n            <td>Daniel</td>\n      …d>\n            <td></td>\n          </tr>\n        ']
+~~~
+
+- Agora nossa constante `html` é um `array` que contem a `tr` e as `tds`.
+- Temos agora uma constante chamada `html` que é basicamente uma string.
+- Agora, para inserir esse codigo html que colocamos dentro da nossa constante `html`, usamos o metodo que ja vimos chamado `.innerHTML` atribuindo o valor da nossa constante a ele.
+
+~~~
+const html = alunos.map(aluno => {
+        return `
+          <tr>
+            <td>Daniel</td>
+            <td>10</td>
+            <td>3</td>
+            <td>7.5</td>
+            <td>3</td>
+            <td></td>
+          </tr>
+        `;
+      });
+
+      document.querySelector("tbody").innerHTML = html;
+~~~
+
+- No browser agora podemos ver que nossa tabela foi preenchida exatamente com os elementos da constante `html`.
+
+![](../assets/cap2.png)
+<br>
+
+- Porem se observamos nossa pagina, o DOM colocou uma virgula `,` abaixo de cada linha. Isso aconteceu pq o `.innerHTML` espera receber uma `string` e como ele recebeu um `array de string`, por debaixo dos panos ele tentou fazer a conversão desse `array` para `string` trazendo consigo a virgula que utilizamos para separar os arrays.
+- Logo podemos utilizar o metodo `.join()` que retorna uma string e  onde podemos selecionar o tipo de caractere que queremos que separe os elementos do array/string.
+- Passando uma string vazia para o metodo `.join("")`, ele irá concatenar nosso array com essa string vazia e assim a virgula irá sumir.
+- Podemos colocar esse metodo em dois lugares
+
+~~~
+[LUGAR 1]
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+        <td>Daniel</td>
+        <td>10</td>
+        <td>3</td>
+        <td>7.5</td>
+        <td>3</td>
+        <td></td>
+        </tr>
+    `;
+}).join("");
+
+[LUGAR 2]
+document.querySelector("tbody").innerHTML = html.join("");
+~~~
+
+- Agora para terminar, basta colocarmos os dados corretos dos alunos usando o nome de suas propriedades.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+        <td>${aluno.nome}</td>
+        <td>${aluno.n1}</td>
+        <td>${aluno.n2}</td>
+        <td>${aluno.n3}</td>
+        <td>${aluno.n4}</td>
+        <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join("");
+
+document.querySelector("tbody").innerHTML = html;
+~~~
+
+Vemos agora nossa pagina funcionando corretamente com seus valores passados para a tabela dinamicamente.
+
+![](./assets/cap3.png);
+
+<br>
+
+
 <br>
 <hr>
 <br>
@@ -654,6 +915,28 @@ Na proxima aula, faremos uma variação desse mesmo exercio, onde teremos um `ar
 ## Resolução: Desafio
 
 <br>
+
+Temos dois desafios agora, basicamente queremos mudar a estrutura de dados, ao invez de termos um objeto com propriedades `n1,n2,n3...`, queremos ter um `array de notas`.
+
+- Para fazermos isso, selecionamos todos os `n1` primeiramente e substituimos por `notas` e depois apagamos os nomes das propriedades `n2,n3,n4` deixando somente seus valores separados por virgula `,` e entre `colchetes []`
+
+~~~ 
+const alunos = [
+    { nome: "Daniel", notas: [10, 3, 7.5, 3] },
+    { nome: "Maria", notas: [10, 9, 3, 9.5] },
+    { nome: "João", notas: [10, 4.5,1, 3.5] },
+    { nome: "Joana", notas: [1, 3, 9, 1.5] },
+    { nome: "José", notas: [10, 4.5, 7, 3] },
+    { nome: "Arnaldo", notas: [10, 4.5, 7, 3] },
+    { nome: "Lucas", notas: [4.5, 9, 8, 3] },
+    { nome: "Luana", notas: [3, 7, 9, 3] },
+    { nome: "Beatriz", notas: [10, 4, 7, 9] },
+    { nome: "Sergio", notas: [4.5, 9.5, 10, 2] }
+];
+~~~
+
+- Temos agora que alterar a programação para nossa tabela voltar a funcionar pois a propriedade `aluno.n1, aluno.n2...` não existe mais, resultando no `undefined`.
+- O objetivo agora do desafio eh modificar o codigo para que a gente pegue cadas uma dessas notas que estão vindo em um `array` e coloca-las nos seus respectivos lugares.
 
 <br>
 <hr>
@@ -663,6 +946,213 @@ Na proxima aula, faremos uma variação desse mesmo exercio, onde teremos um `ar
 
 <br>
 
+Agora que temos um `array de notas` , temos que passar para a função `.avarage()`, as notas individualmente.
+
+- Poderiamos fazer algo parecido com a forma anterior `aluno.notas[0],aluno.notas[1]...`
+
+~~~
+const alunos = [
+    { nome: "Daniel", notas: [10, 3, 7.5, 3] },
+    { nome: "Maria", notas: [10, 9, 3, 9.5] },
+    { nome: "João", notas: [10, 4.5,1, 3.5] },
+    { nome: "Joana", notas: [1, 3, 9, 1.5] },
+    { nome: "José", notas: [10, 4.5, 7, 3] },
+    { nome: "Arnaldo", notas: [10, 4.5, 7, 3] },
+    { nome: "Lucas", notas: [4.5, 9, 8, 3] },
+    { nome: "Luana", notas: [3, 7, 9, 3] },
+    { nome: "Beatriz", notas: [10, 4, 7, 9] },
+    { nome: "Sergio", notas: [4.5, 9.5, 10, 2] }
+];
+alunos.forEach(aluno => {
+    aluno.media = avarege(aluno.notas[0],aluno.notas[1],aluno.notas[2],aluno.notas[3]);
+});
+console.log(alunos);
+
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+        <td>${aluno.nome}</td>
+        <td>${aluno.notas[0]}</td>
+        <td>${aluno.notas[1]}</td>
+        <td>${aluno.notas[2]}</td>
+        <td>${aluno.notas[3]}</td>
+        <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join(""); 
+~~~
+
+- Vemos agora que nosso codigo voltou a funcionar, porem existem maneiras melhores de se obter o mesmo resultado.
+- Poderiamos por exemplo, usar o `rest operator` que ira quebrar esse `array de notas` em valores individuais.
+
+~~~
+const alunos = [
+    { nome: "Daniel", notas: [10, 3, 7.5, 3] },
+    { nome: "Maria", notas: [10, 9, 3, 9.5] },
+    { nome: "João", notas: [10, 4.5,1, 3.5] },
+    { nome: "Joana", notas: [1, 3, 9, 1.5] },
+    { nome: "José", notas: [10, 4.5, 7, 3] },
+    { nome: "Arnaldo", notas: [10, 4.5, 7, 3] },
+    { nome: "Lucas", notas: [4.5, 9, 8, 3] },
+    { nome: "Luana", notas: [3, 7, 9, 3] },
+    { nome: "Beatriz", notas: [10, 4, 7, 9] },
+    { nome: "Sergio", notas: [4.5, 9.5, 10, 2] }
+];
+alunos.forEach(aluno => {
+    aluno.media = avarege(...aluno.notas);
+});
+console.log(alunos);
+
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+        <td>${aluno.nome}</td>
+        <td>${aluno.notas[0]}</td>
+        <td>${aluno.notas[1]}</td>
+        <td>${aluno.notas[2]}</td>
+        <td>${aluno.notas[3]}</td>
+        <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join(""); 
+~~~
+
+- Poderiamos tambem utilizar o metodo `.apply()` para browsers caso estejamos utilizando browsers mais antigos.
+
+~~~
+alunos.forEach(aluno => {
+    // aluno.media = avarege(...aluno.notas);
+    // usando metodo .apply()
+    aluno.media = avarege.apply(aluno.notas);
+});
+~~~
+
+- Dessa maneira que esta, o nosso codigo não irá funcionar pq no metodo `.apply()` precisamos passar um valor que será o `this` dentro do `.apply()` como nesse caso não fará diferença, podemos colocar o `this = null`.
+- Agora podemos ver que nosso codigo voltou a funcionar.
+- Como não faz diferença, no lugar do `null` podemos tbm passar `this`ou ate mesmo `aluno`.
+- Deixamos como `null` para que fique explicito que não estamos utilizando aquele parametro.
+
+~~~
+[NULL]
+alunos.forEach(aluno => {
+    // aluno.media = avarege(...aluno.notas);
+    // usando metodo .apply()
+    aluno.media = avarege.apply(null,aluno.notas);
+}); 
+
+[THIS]
+alunos.forEach(aluno => {
+    // aluno.media = avarege(...aluno.notas);
+    // usando metodo .apply()
+    aluno.media = avarege.apply(this,aluno.notas);
+}); 
+
+[ALUNO]
+alunos.forEach(aluno => {
+    // aluno.media = avarege(...aluno.notas);
+    // usando metodo .apply()
+    aluno.media = avarege.apply(aluno,aluno.notas);
+}); 
+~~~
+
+- Agora vamos melhorar a forma como fizemos o nosso `html`.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+        <td>${aluno.nome}</td>
+        <td>${aluno.notas[0]}</td>
+        <td>${aluno.notas[1]}</td>
+        <td>${aluno.notas[2]}</td>
+        <td>${aluno.notas[3]}</td>
+        <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join("");
+~~~
+
+- Apesar de não ser muito obvio o que vamos fazer, podemos no caso, remover todas essas `tds` com as notas, e fazer criar uma função que que retorne esses `tds`.
+- Ou seja, uma função que irá percorrer o `notas` e irá retornar todo esse trecho de codigo.
+- No lugar dessas `tds` vamos retornar uma outra string a partir do array de notas. Se precisamos ter uma outra expressão que será calculada, executada pelo javascript, precisamos utilizar a sintaxe `${}`.
+- Dentro dessa sintaxe, chamamos o `aluno.nota` usando o metodo `.map()`.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+        <td>${aluno.nome}</td>
+        ${aluno.notas.map()}
+        <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join("");
+~~~
+
+- Dentro do `.map()`, teremos uma função que irá percorrer cada uma das notas e retorna-las individualmente, logo usamos a arrow function passando somente uma `propriedade = n` para representar essas notas individuais.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+            <td>${aluno.nome}</td>
+            ${aluno.notas.map(n => {
+                
+            })}
+            <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join("");
+~~~
+
+- Agora o retorno da arrow function, precisa ser uma string, logo usamos o `template litera`, e dentro desta string, teremos a nossa `td` para cada nota.
+- Dentro da nossa `td` iremos colocar cada uma das notas que esta sendo recuperada pelo `.map()` e colocadas no `n`.
+
+~~~
+[SINTAXE COMPLETA]
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+            <td>${aluno.nome}</td>
+            ${aluno.notas.map(n => {
+              return `<td> ${n} </td>`
+            })}
+            <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join("");
+
+[SINTAXE SIMPLIFICADA]
+
+const html = alunos.map(aluno => `
+    <tr>
+        <td>${aluno.nome}</td>
+        ${aluno.notas.map(n => `<td>${n}</td>`)};
+        <td>${aluno.media}</td>
+    </tr>
+`)
+
+~~~
+
+- Agora vemos que nosso codigo esta funcionando, porem, podemos ver no nosso browser, que esta sendo colocado 3 virgulas depois de cada linha devido ao retorno do `.map()`, representando as virgulas das tres notas, para fazer o fix desse "bug", basta utilizarmos o `.join("")`, passando uma string vazia como fizemos mais cedo.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+        <tr>
+            <td>${aluno.nome}</td>
+            ${aluno.notas.map(n => {
+                return `<td> ${n} </td>`
+            }).join("")}
+            <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join("");
+~~~
+
+Vamos agora ver outro pequeno desafio, somente visual mesmo, temos que colocar uma cor, na `tr` para os alunos `aprovados` e outra cor para os alunos `reprovados`.
+
+
 <br>
 <hr>
 <br>
@@ -670,6 +1160,57 @@ Na proxima aula, faremos uma variação desse mesmo exercio, onde teremos um `ar
 ## Finalizar a seção.
 
 <br>
+
+Para realizar o desafio de mudar a cor da linha onde os alunos foram reprovados e aprovados, vamos primeiramente criar umas classes `css` que irão alterar a cor baseado no indice de aprovação.
+
+~~~
+<style type="text/css">
+    .underlined {
+      border-bottom: 3px solid currentColor;
+    }
+    .reproved {
+      background-color: red;
+    }
+    .aproved{
+      background-color: green;
+    }
+</style>
+~~~
+
+- Agora iremos colocar dentro da `tr` da constante que representa o `html`, uma classe, como o valor irá depender da media do aluno, vamos utilizar a sintaxe de acesso ao javascript `${}` para dentro dela conseguirmos colocar uma expressão.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+        <tr class="${}">
+            <td>${aluno.nome}</td>
+            ${aluno.notas.map(n => {
+              return `<td> ${n} </td>`
+            }).join("")}
+            <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join("");
+~~~
+
+- Vamos utilizar o `operador ternario (expressao? v1 : v2)`, para fazer a seleção com base no valor da media.
+
+~~~
+const html = alunos.map(aluno => {
+    return `
+        <tr class="${aluno.media < 7 ? "reproved" : "aproved"}">
+            <td>${aluno.nome}</td>
+            ${aluno.notas.map(n => {
+              return `<td> ${n} </td>`
+            }).join("")}
+            <td>${aluno.media}</td>
+        </tr>
+    `;
+}).join("");
+~~~
+
+- Podemos ver agora as linhas com cores verdes e vermelhas. Mas ainda sim, existem algumas linhas que estão com a cor diferente por conta da class `striped` que colocamos na `table` usando o `materialize.css`.
+- Para resolver isso, basta remover essa classe do `table`.
 
 <br>
 <hr>
