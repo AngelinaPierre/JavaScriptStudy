@@ -374,6 +374,166 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "secao06/README.md",
+			"bookmarks": [
+				{
+					"line": 0,
+					"column": 20,
+					"label": ""
+				},
+				{
+					"line": 3,
+					"column": 20,
+					"label": ""
+				},
+				{
+					"line": 327,
+					"column": 60,
+					"label": ""
+				},
+				{
+					"line": 415,
+					"column": 31,
+					"label": ""
+				},
+				{
+					"line": 621,
+					"column": 55,
+					"label": ""
+				},
+				{
+					"line": 1093,
+					"column": 32,
+					"label": ""
+				},
+				{
+					"line": 1345,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 1361,
+					"column": 21,
+					"label": ""
+				},
+				{
+					"line": 1884,
+					"column": 18,
+					"label": ""
+				},
+				{
+					"line": 2046,
+					"column": 16,
+					"label": ""
+				},
+				{
+					"line": 2129,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 2239,
+					"column": 10,
+					"label": ""
+				},
+				{
+					"line": 2386,
+					"column": 45,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "secao07/README.md",
+			"bookmarks": [
+				{
+					"line": 4,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 299,
+					"column": 42,
+					"label": ""
+				},
+				{
+					"line": 316,
+					"column": 59,
+					"label": ""
+				},
+				{
+					"line": 483,
+					"column": 60,
+					"label": ""
+				},
+				{
+					"line": 645,
+					"column": 57,
+					"label": ""
+				},
+				{
+					"line": 914,
+					"column": 21,
+					"label": ""
+				},
+				{
+					"line": 944,
+					"column": 23,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "secao08/README.md",
+			"bookmarks": [
+				{
+					"line": 0,
+					"column": 25,
+					"label": ""
+				},
+				{
+					"line": 4,
+					"column": 29,
+					"label": ""
+				},
+				{
+					"line": 186,
+					"column": 18,
+					"label": ""
+				},
+				{
+					"line": 228,
+					"column": 4,
+					"label": ""
+				},
+				{
+					"line": 249,
+					"column": 19,
+					"label": ""
+				},
+				{
+					"line": 272,
+					"column": 0,
+					"label": ""
+				},
+				{
+					"line": 284,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 300,
+					"column": 27,
+					"label": ""
+				},
+				{
+					"line": 517,
+					"column": 24,
+					"label": ""
+				}
+			]
 		}
 	]
 }

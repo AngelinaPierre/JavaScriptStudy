@@ -294,17 +294,222 @@ document.createElement()
 - Quando criamos um elemento, estamos tecnicamente criando um elemento `fora da arvore do DOM HTML`, ou seja, ele so foi criado na `memoria` não esta em lugar nenhum da tela.
 - Esse elemento so irá ficar visivel para o usuario, quando a gente adicionar ele a `arvore do DOM HTML` ou seja, dentro do `document`, usando os metodos ja mencionados `.appendChild()`. Ou seja, quando usarmos um metodo para adicionar esse `novo nó` dentro de um `nó existente`.
 
-
-
-
-
-
 <br>
 <hr>
 <br>
 
 ## Navegar na árvore do DOM
 <br>
+
+Vamos exemplificar agora os seguintes metodos de navagação do DOM HTML, para isso vamos criar um novo documento e chama-lo de `navigate_dom.html`.
+
+
+~~~
+Node.parentNode
+    .parentElement
+    .nextSibling
+    .previousSibling
+~~~
+
+- Nesse documento iremos criar uma estrutura basica de `html` para vermos como fazer essa navegação entre `nós`.
+
+~~~
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Teste DOM</h1>
+    <div class="container">
+        <p>Teste 1</p>
+        <p>Lorem <a href="#"> Link </a> .</p>
+        <p>Teste 2</p>
+
+        <h2>Lista</h2>
+        <ul>
+            <li>Item 1</li>
+            <li>
+                Item 2
+                <ul>
+                    <li>Item 2.a</li>
+                    <li>Item 2.b</li>
+                    <li>Item 2.c</li>
+                </ul>
+            </li>
+            <li>Item <a href="#">link</a></li>
+        </ul>
+    </div>
+</body>
+</html>
+~~~
+
+- A primeira coisa que iremos ver será `parentNode` e `parentElement`, na maior parte das vezes, ambos serão a mesma coisa. Existem cenários muito especificos onde eles não irão retratar a mesma coisa, na duvida, provavelmente vamos sempre querer utilizar o `parentElement`.
+- O objeto `document` tem um "atalho" para a gente acessar o body, para não termos que fazer o `getElementByTag`, podemos acessar de maneira mais facil da seguinte maneira:
+
+~~~ 
+<script>
+    console.log(document.body);
+</script>
+~~~
+
+- Vamos ver a diferença entre ambos usando o console.
+
+~~~
+<script>
+    console.log(document.body);
+    console.log(document.body.parentElement);
+    console.log(document.body.parentNode);
+</script>
+
+// SAIDA:
+
+> <body>...</body>
+
+> <html lang="en">
+> <head>...</head>
+> <body>...</body>
+> </html>
+
+> <html lang="en">
+> <head>...</head>
+> <body>...</body>
+> </html>
+~~~
+
+- Observe que ambos possuem a mesma saida, eles irão apontar para o `html`, tanto é que se igualarmos ambos e mostrarmos no console, vamos receber o valor booleano de `true`.
+
+~~~
+console.log(document.body.parentElement === document.body.parentNode);
+
+// SAIDA:
+
+> true
+~~~
+
+- Vamos criar uma constante chamada html que aponta para o objeto `html lang="en"` que vimos acima, e pedir para ver no console.
+
+~~~
+<script>
+    console.log(document.body);
+    console.log(document.body.parentElement);
+    console.log(document.body.parentNode);
+    console.log(document.body.parentElement === document.body.parentNode);
+
+    const html = document.body.parentElement;   
+
+    console.log(html.parentElement);
+    console.log(html.parentNode);
+</script>
+
+// SAIDA:
+
+> <body>...</body>
+
+> <html lang="en">
+> <head>...</head>
+> <body>...</body>
+> </html>
+
+> <html lang="en">
+> <head>...</head>
+> <body>...</body>
+> </html>
+
+> true
+
+> null
+
+> #document
+
+~~~
+
+- Vejam que na primeira chamada do console, o objeto é `null`, pois o `nó/objeto html` não possue um elemento pai. Porem ele possui um nó pai, que seria do `tipo document`, e um nó do `tipo document` não é um no do `tipo elemento`.
+- Por esse motivo, que o `parentNode` nos trouxe o proprio documento `#document`.
+
+> Existe outro cenário onde podemos ver essa diferença que seria quando estivermos falando sobre `fragmento`, que iremos ver em outra aula.
+> `Fragmento` seria por exemplo, temos um `no` do tipo `fragmento` e ele não é visivel em nenhum lugar na tela. Dentro dele vamos colocando objetos `div, paragrafo..etc`, e podemos trabalhar em cima dele sem que o mesmo afete o browser.
+> Logo, quando estamos trabalhando com o `fragmento` que possui objetos dentro, por exemplo, uma `div` e pedirmos o `parentNode`, será retornado o `fragmento`, porem se pedirmos o `parentElement` irá nos retornar nulo, pois o a `div` não possui um pai do `tipo elemento` e sim do `tipo fragmento`.
+
+- Agora vamos observar o `.nextSibling` e o `.previousSibling`, que servem para navegar entre irmãos.
+- Vamos criar uma constante para selecionarmos o nosso `h2` do html.
+- Vamos ver no console o `.nextSibling` do `h2`
+
+~~~
+<script>
+    const h2 = document.querySelector("h2");
+    console.log(h2);
+    console.log(h2.nextSibling);
+</script>
+
+// SAIDA:
+
+> <h2>Lista</h2>
+> #text
+~~~
+
+- O `.nextSibling` nos mostrou um `texto`, pois temos uma `quebra de linha`, ou seja, simplesmente por termos essa `quebra de linha` foi colocado um `irmao` apos o nosso `h2`. Se tirassemos essa quebra de linha e os espaços, ou seja, colocando a `ul` logo apos o fechamento do `h2` o resultado seria diferente.
+- Para mudarmos esse resultado, em vez de colocarmos `.nextSibling` podemos usar o `.nextElementSibling`.
+
+~~~
+<script>
+    const h2 = document.querySelector("h2");
+    console.log(h2);
+    console.log(h2.nextSibling);
+    console.log(h2.nextElementSibling);
+</script> 
+
+// SAIDA:
+
+> <h2>Lista</h2>
+> #text
+> <ul>...</ul>
+~~~
+
+- Podemos fazer a mesma coisa para o `.previousSibling` e o `.previousElementSibling`.
+
+~~~
+<script>
+    const h2 = document.querySelector("h2");
+    console.log(h2);
+    console.log(h2.nextSibling);
+    console.log(h2.nextElementSibling);
+    console.log(h2.previousSibling);
+    console.log(h2.previousElementSibling);
+</script> 
+
+// SAIDA:
+
+> <h2>Lista</h2>
+> #text
+> <ul>...</ul>
+> #text
+> <p>Teste 2</p>
+~~~
+
+![](./assets/cap4.png)
+
+- Podemos ver o atributo `parentElement` na saida do console, como sendo o `div.container`.
+- Vamos criar uma constante para receber o `h2nextSibling` colocando tbm um estilo `in-line` para fazer uma diferenciação. Ainda iremos falar sobre esse estilo `in-line`. 
+
+~~~ 
+<script>
+    const h2 = document.querySelector("h2");
+    console.log(h2);
+    console.log(h2.nextSibling);
+    console.log(h2.nextElementSibling);
+    console.log(h2.previousSibling);
+    console.log(h2.previousElementSibling);
+
+    const h2nextSibling = h2.nextElementSibling;
+    h2nextSibling.style.background = "yellow";
+</script>
+~~~
+
+![](./assets/cap5.png)
 
 <br>
 <hr>
