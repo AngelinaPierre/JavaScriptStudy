@@ -518,12 +518,378 @@ console.log(document.body.parentElement === document.body.parentNode);
 ## children e childNodes
 <br>
 
+Vamos agora ver como funciona as seguintes propriedades e o metodo `hasChildNodes()`.
+
+~~~
+childNodes
+childrenFirstChild
+firstElementChild
+lastChild
+lastElementChild
+hasChildNodes()
+~~~ 
+
+- Primeiramente para vermos a diferença entre `childNodes` e `childrenFirstChild`, vamos selecionar no nosso html a tag `a`, criando uma constante chamada `link` para referenciar esse elemento.
+- Tbm queremos selecionar nossa primeira `ul` para isso tbm iremos criar uma constante chamada `list`. Mesmo que tenhamos mais de uma `ul`no html, ao usar o `.querySelector()` será selecionado a primeira de todas.
+
+~~~
+<script>
+    const link = document.querySelector("a");
+    const list = document.querySelector("ul");
+</script>
+~~~
+
+- Na verdade, podemos selecionar a segunda `ul` que possui uma estrutura mais simples que a primeira.
+
+~~~
+[HTML]
+
+<div class="container">
+    <p>Teste 1</p>
+    <p>Lorem <a href="#"> Link </a> .</p>
+    <p>Teste 2</p>
+
+    <h2>Lista</h2>
+    <ul>
+        <li>Item 1</li>
+        <li>
+            Item 2
+            <ul>
+                <li>Item 2.a</li>
+                <li>Item 2.b</li>
+                <li>Item 2.c</li>
+            </ul>
+        </li>
+        <li>Item <a href="#">link</a></li>
+    </ul>
+</div>
+
+[JAVASCRIPT]
+<script>
+    const link = document.querySelector("a");
+    const list = document.querySelector("ul ul");
+    console.log(link);
+    console.log(list);
+</script>
+
+// SAIDA:
+
+> <a href="#">Link </a>
+> <ul>...<ul>
+~~~
+
+- Vamos fazer o console.log em `list` passando as propriedades `.childNodes` e `.children` para entendermos uma coisinha...
+
+~~~
+[HTML]
+
+<div class="container">
+    <p>Teste 1</p>
+    <p>Lorem <a href="#"> Link </a> .</p>
+    <p>Teste 2</p>
+
+    <h2>Lista</h2>
+    <ul>
+        <li>Item 1</li>
+        <li>
+            Item 2
+            <ul>
+                <li>Item 2.a</li>
+                <li>Item 2.b</li>
+                <li>Item 2.c</li>
+            </ul>
+        </li>
+        <li>Item <a href="#">link</a></li>
+    </ul>
+</div>
+
+[JAVASCRIPT]
+<script>
+    const link = document.querySelector("a");
+    const list = document.querySelector("ul ul");
+    console.log(link);
+    console.log(list.childNodes);
+    console.log(list.children); 
+</script>
+
+// SAIDA:
+
+> <a href="#"> Link </a>
+> NodeList(7) [text, li, text, li, text, li, text]
+>​ HTMLCollection(3) [li, li, li]
+~~~
+
+- Vejam que `.childNodes` nos mostra uma coleção (`nodeList`) com `7` elementos.
+- Ja o `.children` está nos mostrando uma coleção (`HTMLCollection`) com `3` elementos.
+- Ou seja, `.children` irá sempre retornar os elementos que são elementos mesmo. Os nós que são do `tipo elemento`.
+- Ja o `nodeList` que seria o `.childNodes` irá nos retornar `todos os nós`. Lembrando que os `text` são nossas quebras de linhas...
+
+![nodeList](./assets/cap6.png)
+
+- O mesmo irá acontencer caso a gente selecione a tag `p`, que irá aparecer o `text` porem um desses `text` será em vez de `quebra de linha` o texto que esta dentro do elemento.
+- Para selecionar esse `p`, vamos da constante `link` usar o `.parentElement`
+
+~~~
+[HMTL]
+
+[HTML]
+
+<div class="container">
+    <p>Teste 1</p>
+    p>Lorem <a <href="#"> Link </a> .</p>
+    <p>Teste 2</p>
+
+    <h2>Lista</h2>
+    <ul>
+        <li>Item 1</li>
+        <li>
+            Item 2
+            <ul>
+                <li>Item 2.a</li>
+                <li>Item 2.b</li>
+                <li>Item 2.c</li>
+            </ul>
+        </li>
+        <li>Item <a href="#">link</a></li>
+    </ul>
+</div>
+
+[JAVASCRIPT]
+
+<script>
+    const link = document.querySelector("a");
+    console.log(link);
+    console.log(link.parentElement.childNodes);
+    console.log(link.parentElement.children);
+</script>
+
+// SAIDA: 
+
+> NodeList(3) [text, a, text]
+> HTMLCollection [a]
+~~~
+
+![](./assets/cap7.png)
+
+
+Essa é a diferença entre o `.children` e o `.childNodes`, o `.childNodes` irá nos mostrar `todos os nós`, independente se for elemento ou não. Ja o `.children` irá nos mostrar um `HTMLCollecion` nos trazendo apenas os `nós do tipo elemento`.
+
 <br>
 <hr>
 <br>
 
 ## firstChild, lastChild
 <br>
+
+Como o nome ja nos diz, o `.firstChild` irá nos mostrar o primeiro filho do elemento selecionado, ja o `.lastChild` irá nos mostrar o ultimo filho do elemento selecionado.
+
+~~~
+[HTML]
+
+<div class="container">
+    <p>Teste 1</p>
+    <p>Lorem <a href="#"> Link </a> .</p>
+    <p>Teste 2</p>
+
+    <h2>Lista</h2>
+    <ul>
+        <li>Item 1</li>
+        <li>
+            Item 2
+            <ul>
+                <li>Item 2.a</li>
+                <li>Item 2.b</li>
+                <li>Item 2.c</li>
+            </ul>
+        </li>
+        <li>Item <a href="#">link</a></li>
+    </ul>
+</div>
+
+[JAVASCRIPT]
+<script>
+    const link = document.querySelector("a");
+    console.log(link);
+    console.log(link.parentElement.firstChild);
+    console.log(link.parentElement.firstElementChild);
+</script>
+
+// SAIDA:
+
+> <a href="#"> Link </a>
+> "Lorem "
+> <a href="#"> Link </a>
+~~~
+
+- Logo o `.fistChild` nos retorna o texto `"Lorem "`, e o `firstElementChild` nos retorna a tag `link` pois estamos usando como elemento selecionado, ou seja, de partida a tag `p`.
+- O mesmo se aplica ao `.lastChild` e ao `.lastElementChild`.
+
+~~~
+[HTML]
+
+<div class="container">
+    <p>Teste 1</p>
+    <p>Lorem <a href="#"> Link </a> .</p>
+    <p>Teste 2</p>
+
+    <h2>Lista</h2>
+    <ul>
+        <li>Item 1</li>
+        <li>
+            Item 2
+            <ul>
+                <li>Item 2.a</li>
+                <li>Item 2.b</li>
+                <li>Item 2.c</li>
+            </ul>
+        </li>
+        <li>Item <a href="#">link</a></li>
+    </ul>
+</div>
+
+[JAVASCRIPT]
+<script>
+    const link = document.querySelector("a");
+    console.log(link);
+    console.log(link.parentElement.lastChild);
+    console.log(link.parentElement.lastElementChild);
+</script>
+
+// SAIDA:
+
+> <a href="#"> Link </a>
+> ". "
+> <a href="#"> Link </a>
+~~~
+
+
+- Ja o metodo `hasChildNodes()`, irá verificar se o elemento que estamos buscando, possui `nó` ou não, se tem algum conteudo dentro dele ou não.
+- Para testarmos isso, vamos criar uma tag `li` vazia dentro da nossa segunda `ul`.
+- Atraves dessa `ul` vamos selecionar o ultimo `li` verificar se possui nó ou não.
+
+~~~
+[HTML]
+
+<div class="container">
+    <p>Teste 1</p>
+    <p>Lorem <a href="#"> Link </a> .</p>
+    <p>Teste 2</p>
+
+    <h2>Lista</h2>
+    <ul>
+        <li>Item 1</li>
+        <li>
+            Item 2
+            <ul>
+                <li>Item 2.a</li>
+                <li>Item 2.b</li>
+                <li>Item 2.c</li>
+                <li></li>
+            </ul>
+        </li>
+        <li>Item <a href="#">link</a></li>
+    </ul>
+</div>
+
+[JAVASCRIPT]
+<script>
+    const list = document.querySelector("ul ul");
+    console.log(list.lastElementChild.hasChildNodes());
+</script>
+
+// SAIDA:
+
+> false
+~~~
+
+- Temos o retorno `false` pois não possuimos nada dentro deste elemento.
+- Agora se colocarmos um `texto`, um `espaço`, um `comentario` ou ate mesmo um `enter` ele irá trazer um retorno como `true`.
+- Vamos ver como seria tendo um `comentario`. Veremos que temos um nó do tipo `comentario`.
+
+~~~
+[HTML]
+
+<div class="container">
+    <p>Teste 1</p>
+    <p>Lorem <a href="#"> Link </a> .</p>
+    <p>Teste 2</p>
+
+    <h2>Lista</h2>
+    <ul>
+        <li>Item 1</li>
+        <li>
+            Item 2
+            <ul>
+                <li>Item 2.a</li>
+                <li>Item 2.b</li>
+                <li>Item 2.c</li>
+                <li>
+                    <!-- comentario qualquer -->
+                </li>
+            </ul>
+        </li>
+        <li>Item <a href="#">link</a></li>
+    </ul>
+</div>
+
+[JAVASCRIPT]
+<script>
+    const list = document.querySelector("ul ul");
+    console.log(list.lastElementChild.hasChildNodes());
+    console.log(list.lastElementChild.childNodes);
+</script>
+
+// SAIDA:
+
+> true
+​> NodeList(3) [text, comment, text]
+~~~
+
+![](./assets/cap8.png)
+
+- Se colocarmos o indice dessa nodeList `1 = comment`, e chamar a propriedade `.nodeType` ele irá nos retornar um valor de `8` que seria um codigo para o tipo `comentario`.
+
+~~~
+[HTML]
+
+<div class="container">
+    <p>Teste 1</p>
+    <p>Lorem <a href="#"> Link </a> .</p>
+    <p>Teste 2</p>
+
+    <h2>Lista</h2>
+    <ul>
+        <li>Item 1</li>
+        <li>
+            Item 2
+            <ul>
+                <li>Item 2.a</li>
+                <li>Item 2.b</li>
+                <li>Item 2.c</li>
+                <li>
+                    <!-- comentario qualquer -->
+                </li>
+            </ul>
+        </li>
+        <li>Item <a href="#">link</a></li>
+    </ul>
+</div>
+
+[JAVASCRIPT]
+<script>
+    const list = document.querySelector("ul ul");
+    console.log(list.lastElementChild.hasChildNodes());
+    console.log(list.lastElementChild.childNodes);
+    console.log(list.lastElementChild.childNodes[1].nodeType);
+</script>
+
+// SAIDA:
+
+> true
+​> NodeList(3) [text, comment, text]
+> 8
+~~~
+
 
 <br>
 <hr>
@@ -532,12 +898,375 @@ console.log(document.body.parentElement === document.body.parentNode);
 ## Create DOM
 <br>
 
+Agora que aprendemos como navegar entre os nós no DOM, vamos ver como `criar` elementos no mesmo.
+
+Ja vimos como trabalhar com o `.innerHTML` que é bem mais facil do que trabalharmos com os metodos especificos do DOM. Existe uma pequena diferença sobre quando podemos usar o `.innerHTML` ou não que será mostrada mais para frente no curso, especialmente depois que falarmos sobre eventos.
+
+Por enquanto, será mostrado na teoria os metodos e como utiliza-los, para depois vermos porque usar os metodos ou o `.innerHTML`.
+
+Vamos criar um novo arquivo html e chama-lo de `create_dom.html`.
+
+- O primeiro metodo que iremos ver será o `.createElement`.
+- Vamos criar uma constante chamada `.title` e iremos atribuir a ela o `document.createElement()`.
+- Dentro do metodo, entre aspas, passamos o tipo de elemento que queremos criar, no caso um `h1`.
+- Se olharmos o `console.log()` desta constante, veremos o `h1` criado e esta completamente vazio.
+
+~~~
+
+<script>
+    const title = document.createElement("h1");
+    console.log(title);
+</script>
+
+// SAIDA:
+
+> <h1>...</h1>
+~~~
+
+- Vamos agora criar um atributo para esse elemento.
+- Criamos uma constante chamada `atributo` e a tribuimos a ela o `document.createAttribute()`, passando dentro do parenteses o nome do atributo que queremos criar, no caso um `id`. 
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    console.log(title);
+    const atributo = document.createAttribute("id");
+</script>
+~~~
+
+- Depois de criarmos o `atributo` precisamos atribuir a ele um valor, usando a sintaxe `nome_atributo.value = `.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    console.log(title);
+
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+</script>
+~~~ 
+
+- Agora temos que vincular o nosso atributo do tipo `id` com a nossa constante `title` que representa o elemento `h1`.
+- Basicamente utilizamos um metodo chamado, `.setAttributeNode()`, como parametro desse metodo passamos o `tipo do nó`, no caso um `nó do tipo atributo`.  
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+    console.log(title);
+</script>
+
+// SAIDA:
+
+> <h1 id="title1">...</h1>
+~~~
+
+- Podemos ver agora no console um `h1` com uma `id=title1`.
+- Agora queremos colocar um `texto` dentre deste `h1`. Vamos criar outra constante e chama-la de `text` que irá receber o `document.createTextNode()` passando dentro dos parenteses o texto que queremos que seja adicionado.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    const text = document.createTextNode("Criar nós no DOM");
+    console.log(title);
+</script> 
+~~~
+
+- Apos nosso `no do tipo texto` ter sido criado, precisamos ( igual ao atributo) , colocar esse nó de tipo texto dentro do nosso `title`, nó do tipo elemento.
+- Temos varias maneiras para fazermos isso, o primeiro que iremos ver será o `.appendChild()`, passando como parametro o elemento, no caso `text` que queremos adicionar ao `title`.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+    console.log(title);
+</script>
+
+// SAIDA:
+
+> <h1 id="title1">Criar nós no DOM</h1>
+~~~ 
+
+- Outro metodo para criar atributos seria utilizando o `.setAttribute`, o que é mais comum.
+- Nesse metodo, passamos dois parametros, o primeiro sendo o `tipo de atributo` que queremos, por exemplo `title`, e como segundo parametro passamos o `valor do atributo`.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    title.setAttribute("title", "title inserido dinamicamente");
+    title.setAttribute("style", "color: red;");
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+    console.log(title);
+</script>
+
+// SAIDA:
+
+> <h1 id="title1" title="title inserido dinamicamente" style="color: red;">Criar nós no DOM</h1>
+~~~
+
+- Usando o `.textContent`, o mais utilizando juntamente com o `.setAttribute()`.
+
+~~~ 
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    title.setAttribute("title", "title inserido dinamicamente");
+    title.setAttribute("style", "color: red;");
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+
+    title.textContent = "Inserido com TextContent";
+    console.log(title);
+</script>
+
+// SAIDA:
+
+> <h1 id="title1" title="title inserido dinamicamente" style="color: red;">Inserido com TextContent</h1>
+~~~ 
+
+- Para vermos esse `h1` no nosso documento, da maneira mais facil.
+- Poderiamos utilizar o `.appendChild()` porem o mesmo irá inserir no final do documento.
+
+~~~
+<script>
+        const title = document.createElement("h1");
+        const atributo = document.createAttribute("id");
+        atributo.value = "title1"
+        title.setAttributeNode(atributo);
+
+        title.setAttribute("title", "title inserido dinamicamente");
+        title.setAttribute("style", "color: red;");
+
+        const text = document.createTextNode("Criar nós no DOM");
+        title.appendChild(text);
+
+        title.textContent = "Inserido com TextContent";
+        console.log(title);
+
+        document.body.appendChild(title);
+
+</script>
+~~~
+
+- Em vez de colocarmos no `body` podemos colocar em outros lugares na nossa pagina tbm, por exemplo, dentro da nossa `div container`.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    title.setAttribute("title", "title inserido dinamicamente");
+    title.setAttribute("style", "color: red;");
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+
+    title.textContent = "Inserido com TextContent";
+    console.log(title);
+
+    document.querySelector(".container").appendChild(title);
+
+</script>
+~~~
+
 <br>
 <hr>
 <br>
 
 ## adicionar DOM
 <br>
+
+Vimos na aula passada o `.appendChild()` , que adiciona um filho depois do ultimo filho do elemento.
+
+Temos tbm os metodos `.append()` e `.preppend()`, com a desvantagem de que esses metodos não irão funcionar no IE.
+
+- Vamos adicionar o `title = h1` que criamos em aulas passadas, a partir do `pai = .container`.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    title.setAttribute("title", "title inserido dinamicamente");
+    title.setAttribute("style", "color: red;");
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+
+    title.textContent = "Inserido com TextContent";
+    console.log(title);
+
+    document.querySelector(".container").append(title);
+</script>
+~~~      
+
+- Vemos que foi adicionado depois do ultimo elemento filho o nosso `title`.
+- Podemos tbm utilizar da mesma forma o `.prepend()`, porem, agora o elemento será acionado antes do primeiro elemento filho, se tornando o primeiro filho.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    title.setAttribute("title", "title inserido dinamicamente");
+    title.setAttribute("style", "color: red;");
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+
+    title.textContent = "Inserido com TextContent";
+    console.log(title);
+
+    document.querySelector(".container").prepend(title);
+</script>
+~~~
+
+As vantagens dos metodos `.append()` e `.prepend()` são que eles aceitam mais de um parametro, inclusive parametros do tipo texto.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    title.setAttribute("title", "title inserido dinamicamente");
+    title.setAttribute("style", "color: red;");
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+
+    title.textContent = "Inserido com TextContent";
+    console.log(title);
+
+
+    document.querySelector(".container").prepend(title, "texto novo");
+</script>
+~~~
+
+- O mesmo vale para o `.append()`. Ou seja, odemos passar tanto `texto` quanto `nós`. 
+- Alem desses metodos, tbm temos o metodo `.insertBefore()`, este metodo espera receber 2 parametros, `um novo filho` e um `nó de referencia`.
+- Vamos criar uma nova constante para exemplificarmos melhor, e inserir esse novo elemento antes da nossa primeira `ul`.
+
+~~~
+<script>
+    const title2 = document.createElement("h1");
+    title2.textContent = "Titulo 2";
+    document.querySelector(".container").insertBefore(title2, document.querySelector("ul"));
+</script>
+~~~
+
+- Logicamente poderiamos ter criado uma variavel que referencie a nossa primeira `ul` deixando os parametro do `.insertBefore()` mais "limpos".
+- Esse metodo so aceita nos seus parametro `nós` e não strings.
+
+~~~
+<script>
+    const title2 = document.createElement("h1");
+    title2.textContent = "Titulo 2";
+    const list = document.querySelector("ul");
+    document.querySelector(".container").insertBefore(title2, list);
+</script>
+~~~
+
+  
+- Falamos que o metodo `.prepend()` não funciona no IE11, como fariamos se quisessemos inserir um elemento qualquer no inicio de um elemento dando suporte para o IE11?
+- Para isso, criamos uma constante que irá receber a referencia do pai usando o metodo `.firstChild()`.
+
+~~~
+<script>
+    const title2 = document.createElement("h1");
+    title2.textContent = "Titulo 2";
+    const list = document.querySelector("ul");
+    const container = document.querySelector(".container");
+    //container.insertBefore(title2, list);
+    container.insertBefore(title2,container.firstChild);
+</script>
+~~~
+
+- Logo temos o mesmo efeito que o `.prepend()` mas agora irá funcionar em todos os browsers.
+
+~~~
+<script>
+    const title2 = document.createElement("h1");
+    title2.textContent = "Titulo 2";
+    const list = document.querySelector("ul");
+    const container = document.querySelector(".container");
+    container.insertBefore(title2, list);
+    container.insertBefore(title2,container.firstChild);
+</script>
+~~~
+
+- No codigo acima, temos duas linhas de codigo que inserem o mesmo elemento, porem somente aparece no browser em 1 lugar.
+- Quando a gente manipula um elemento que ja se encontra no DOM, esstamos tecnicamente movendo ele de lugar, ou seja, antes o elemento acima estava sendo inserido antes da nossa `ul`, e na proxima linha de codigo, "movemos" esse elemento para ser inserido depois da `div.container`.
+- Vamos pegar a segunda `ul` e trazer ela para depois do `h2=list` para exemplificarmos melhor.
+- Vamos criar uma constante chamada `sublevel` para salvar a referencia dessa segunda `ul` que temos.
+- Depois iremos criar uma outra constante chamada `h2` para receber o `h2` onde queremos colocar logo apos dele a nossa segunda `ul`.
+- Apos criar as referencias usamos o `.insertBefore()` passando como parametro as constantes e na nossa constante `h2` usamos o metodo `.nextElementSibling` para adicionar apos o mesmo.
+
+~~~
+<script>
+    const sublevel = document.querySelector("ul ul");
+    const h2 = document.querySelector("h2");
+    container.insertBefore(sublevel, h2.nextElementSibling);
+</script>
+~~~
+
+- Podemos ver que nossa `ul` foi movida para logo apos o `h2`.
+- Digamos agora que queremos `clonar` essa `ul` que movemos de lugar, para isso, mudamos a variavel de `const` para `let` para ela poder receber novos valores, e depois chamamos o metodo `.cloneNode()`.
+- Com isso agora temos `2 uls` onde a nossa `ul` original sssesrá preservada, e a clonada será colocada apos o `h2`.
+
+~~~
+<script>
+    let sublevel = document.querySelector("ul ul");
+    sublevel = sublevel.cloneNode();
+    const h2 = document.querySelector("h2");
+    container.insertBefore(sublevel, h2.nextElementSibling);
+</script>
+~~~
+
+![](./assets/cap9.png)
+
+- Podemos ver que nossa `ul` original foi preservada, e o metodo adicionou o clone da nossa `ul` ao lugar que queremos, porem os filhos da `ul` que selecionamos não foram adicionados no processso de clonagem.
+- Para isso temos que passar um parametro `booleano` para o `.cloneNode()`, informando que queremos clonar os filhos tbm.
+
+~~~
+<script>
+let sublevel = document.querySelector("ul ul");
+    sublevel = sublevel.cloneNode(true);
+    const h2 = document.querySelector("h2");
+    container.insertBefore(sublevel, h2.nextElementSibling);
+</script>
+~~~
+
+- Agora temos nossa `ul` original preservada, e o clone da nossa `ul` com seus filhos sendo mostrados depois do elemento de referencia que queremos.
+
 
 <br>
 <hr>

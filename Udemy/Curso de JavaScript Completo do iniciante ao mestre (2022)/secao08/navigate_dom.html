@@ -24,6 +24,9 @@
                     <li>Item 2.a</li>
                     <li>Item 2.b</li>
                     <li>Item 2.c</li>
+                    <li>
+                        <!-- comentario qualquer -->
+                    </li>
                 </ul>
             </li>
             <li>Item <a href="#">link</a></li>
@@ -31,24 +34,43 @@
     </div>
 
     <script>
-        console.log(document.body);
-        console.log(document.body.parentElement);
-        console.log(document.body.parentNode);
-        console.log(document.body.parentElement === document.body.parentNode);
+        // parent/sibling elements/nodes
+        // console.log(document.body);
+        // console.log(document.body.parentElement);
+        // console.log(document.body.parentNode);
+        // console.log(document.body.parentElement === document.body.parentNode);
+        // const html = document.body.parentElement;
+        // console.log(html.parentElement);
+        // console.log(html.parentNode);
+        // const h2 = document.querySelector("h2");
+        // console.log(h2);
+        // console.log(h2.nextSibling);
+        // console.log(h2.nextElementSibling);
+        // console.log(h2.previousSibling);
+        // console.log(h2.previousElementSibling);
+        // const h2nextSibling = h2.nextElementSibling;
+        // h2nextSibling.style.background = "yellow";
 
-        const html = document.body.parentElement;
-        console.log(html.parentElement);
-        console.log(html.parentNode);
+        // children elements/node
 
-        const h2 = document.querySelector("h2");
-        console.log(h2);
-        console.log(h2.nextSibling);
-        console.log(h2.nextElementSibling);
-        console.log(h2.previousSibling);
-        console.log(h2.previousElementSibling);
+        const link = document.querySelector("a");
+        console.log(link);
+        //console.log(link.parentElement.childNodes);
+        //console.log(link.parentElement.children);
+        //console.log(link.parentElement.firstChild);
+        //console.log(link.parentElement.firstElementChild);
+        console.log(link.parentElement.lastChild);
+        console.log(link.parentElement.lastElementChild);
 
-        const h2nextSibling = h2.nextElementSibling;
-        h2nextSibling.style.background = "yellow";
+
+        const list = document.querySelector("ul ul");
+        //console.log(list.childNodes);
+        //console.log(list.children);
+        console.log(list.lastElementChild.hasChildNodes());
+        console.log(list.lastElementChild.childNodes);
+        console.log(list.lastElementChild.childNodes[1].nodeType);
+
+
 
     </script>
 </body>

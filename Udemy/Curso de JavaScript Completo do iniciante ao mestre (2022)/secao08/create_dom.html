@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Teste DOM</h1>
+    <div class="container">
+        <p>Teste 1</p>
+        <p>Lorem <a href="#"> Link </a> .</p>
+        <p>Teste 2</p>
+
+        <h2>Lista</h2>
+        <ul>
+            <li>Item 1</li>
+            <li>
+                Item 2
+                <ul>
+                    <li>Item 2.a</li>
+                    <li>Item 2.b</li>
+                    <li>Item 2.c</li>
+                    <li>
+                        <!-- comentario qualquer -->
+                    </li>
+                </ul>
+            </li>
+            <li>Item <a href="#">link</a></li>
+        </ul>
+    </div>
+
+    <script>
+        const title = document.createElement("h1");
+        const atributo = document.createAttribute("id");
+        atributo.value = "title1"
+        title.setAttributeNode(atributo);
+
+        title.setAttribute("title", "title inserido dinamicamente");
+        title.setAttribute("style", "color: red;");
+
+        const text = document.createTextNode("Criar nós no DOM");
+        title.appendChild(text);
+
+        title.textContent = "Inserido com TextContent";
+        console.log(title);
+
+        document.querySelector(".container").appendChild(title);
+        // document.querySelector(".container").prepend(title, "texto novo");
+
+        const title2 = document.createElement("h1");
+        title2.textContent = "Titulo 2";
+        const list = document.querySelector("ul");
+        const container = document.querySelector(".container");
+        container.insertBefore(title2, list);
+        container.insertBefore(title2,container.firstChild);
+
+        let sublevel = document.querySelector("ul ul");
+        sublevel = sublevel.cloneNode(true);
+        const h2 = document.querySelector("h2");
+        container.insertBefore(sublevel, h2.nextElementSibling);
+
+    </script>
+</body>
+
+</html>
