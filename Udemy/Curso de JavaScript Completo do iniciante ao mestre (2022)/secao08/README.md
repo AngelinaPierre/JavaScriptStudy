@@ -1275,12 +1275,247 @@ let sublevel = document.querySelector("ul ul");
 ## after e before
 <br>
 
+Vamos agora ver dois metodos `.after()` e `.before()`, esses metodos são acessados a partir do filho e tbm não irão funcionar no IE.
+
+- Para começar a demonstração, dentro da nossa `div.container` vamos acessa o segundo paragrafo. Para isso podemos a partir do `.firstChild` usar o `.nextElementSibling`, poderiamos colocar no `p` uma `id`, poderiamos pegar o link `a` e usar o `.parentElement`.
+- Primeiro iremos usar a abordagem do `.firstChild()`. Vamos criar uma constante chamada `segundoParagrafo`.
+
+~~~ 
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    title.setAttribute("title", "title inserido dinamicamente");
+    title.setAttribute("style", "color: red;");
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+
+    title.textContent = "Inserido com TextContent";
+    console.log(title);
+
+    document.querySelector(".container").appendChild(title);
+    // document.querySelector(".container").prepend(title, "texto novo");
+
+    const title2 = document.createElement("h1");
+    title2.textContent = "Titulo 2";
+    const list = document.querySelector("ul");
+    const container = document.querySelector(".container");
+    container.insertBefore(title2, list);
+    container.insertBefore(title2,container.firstChild);
+
+    let sublevel = document.querySelector("ul ul");
+    sublevel = sublevel.cloneNode(true);
+    const h2 = document.querySelector("h2");
+    container.insertBefore(sublevel, h2.nextElementSibling);
+
+    const segundoParagrafo = container.firstElementChild.nextElementSibling;
+    console.log(segundoParagrafo);
+
+</script>
+~~~
+
+- Como inserimos dinamicamente o `h1` estamos recebendo como retorno o paragrafo `Teste 1`.
+- Para selecionar o paragrafo que queremos, usamos o `.nextElementSibling` duas vezes.
+
+~~~
+<script>
+    const title = document.createElement("h1");
+    const atributo = document.createAttribute("id");
+    atributo.value = "title1"
+    title.setAttributeNode(atributo);
+
+    title.setAttribute("title", "title inserido dinamicamente");
+    title.setAttribute("style", "color: red;");
+
+    const text = document.createTextNode("Criar nós no DOM");
+    title.appendChild(text);
+
+    title.textContent = "Inserido com TextContent";
+    console.log(title);
+
+    document.querySelector(".container").appendChild(title);
+    // document.querySelector(".container").prepend(title, "texto novo");
+
+    const title2 = document.createElement("h1");
+    title2.textContent = "Titulo 2";
+    const list = document.querySelector("ul");
+    const container = document.querySelector(".container");
+    container.insertBefore(title2, list);
+    container.insertBefore(title2,container.firstChild);
+
+    let sublevel = document.querySelector("ul ul");
+    sublevel = sublevel.cloneNode(true);
+    const h2 = document.querySelector("h2");
+    container.insertBefore(sublevel, h2.nextElementSibling);
+
+    const segundoParagrafo = container.firstElementChild.nextElementSibling.nextElementSibling;
+    console.log(segundoParagrafo);
+
+</script>
+~~~
+
+- A partir do segundo paragrafo, chamamos o `.after()` e como parametro vamos colocar um texto.
+  
+~~~
+<script>
+    const segundoParagrafo = container.firstElementChild.nextElementSibling.nextElementSibling;
+    console.log(segundoParagrafo);
+    segundoParagrafo.after("texto inserido com after");
+</script>
+~~~
+
+- Ao inspecionar, podemos ver que o texto foi inserido logo apos o paragrafo que selecionamos.
+- Usando o `.before()` o texto será inserido antes do elemento de referencia, no caso, nosso paragrafo.
+
+~~~ 
+<script>
+    const segundoParagrafo = container.firstElementChild.nextElementSibling.nextElementSibling;
+    console.log(segundoParagrafo);
+    segundoParagrafo.after("texto inserido com after");
+    segundoParagrafo.before("texto inserido com before");
+</script>
+~~~
+
+- Ambos os metodos aceitam mais de um parametro, vamos adicionar outro texto que será `concatenado` com o primeiro.
+
+~~~
+<script>
+    const segundoParagrafo = container.firstElementChild.nextElementSibling.nextElementSibling;
+    console.log(segundoParagrafo);
+    segundoParagrafo.after("texto inserido com after", " outro texto do after");
+    segundoParagrafo.before("texto inserido com before", " outro texto do before");
+</script>
+~~~
+
+- Ambos os metodos tambem aceitam alem de `textos` como parametro, `nós`.
+- Vamos criar um elemento do tipo `span` e adicionalo a uma constante chamada `span`.
+
+~~~ 
+<script>
+    const segundoParagrafo = container.firstElementChild.nextElementSibling.nextElementSibling;
+    console.log(segundoParagrafo);
+    segundoParagrafo.after("texto inserido com after", " outro texto do after");
+    segundoParagrafo.before("texto inserido com before", " outro texto do before");
+    const span = document.createElement("span");
+    span.textContent = " span dinamica ";
+    segundoParagrafo.after(span);
+    segundoParagrafo.before(span);
+</script>
+~~~
+
+- No codigo acima, temos o `span` adicionado somente no codigo do `.before` pois ele foi movido de lugar ao ser adicionado no `.after()`, mesmo principio que foi citado acima sobre elementos movidos de locais.
+
 <br>
 <hr>
 <br>
 
 ## Insert
 <br>
+
+Outro metodo bastante dinamica para manipularmos o DOM seriam os `.insertAdjacentHTML`, `.insertAdjacentElement` e `.insertAdjacentText`, são metodos bastantes convenientes de se utilizar.
+
+- Vamos criar uma nova `div` no nosso html para testarmos esses metodos.
+
+~~~
+[HTML] 
+
+<body>
+    <h1>Teste DOM</h1>
+
+    <div class="container2">
+        <p>Paragrafo 1</p>
+        <p>Paragrafo 2</p>
+        <p>Paragrafo 3</p>
+    </div>
+
+    <div class="container">
+        <p>Teste 1</p>
+        <p>Lorem <a href="#"> Link </a> .</p>
+        <p>Teste 2</p>
+
+        <h2>Lista</h2>
+        <ul>
+            <li>Item 1</li>
+            <li>
+                Item 2
+                <ul>
+                    <li>Item 2.a</li>
+                    <li>Item 2.b</li>
+                    <li>Item 2.c</li>
+                    <body>
+                        <h1>Teste DOM</h1>
+                    
+                        <div class="container2">
+                            <p>Paragrafo 1</p>
+                            <p>Paragrafo 2</p>
+                            <p>Paragrafo 3</p>
+                        </d           <li>
+                        <!-- comentario qualquer -->
+                    </li>
+                </ul>
+            </li>
+            <li>Item <a href="#">link</a></li>
+        </ul>
+    </div>
+</body>
+~~~
+
+- Vamos criar uma constante para guardar a referenciaa do `container2`.
+- A partir do nosso elemento pai , temos o metodo`.insertAdjacentHTML()`, como primeira parametro passamos a `posição` e como segundo parametro ` o que queremos inserir`.
+- Na `posição` temos alguns valores possiveis: 
+  - `beforeBegin` - insere antes do elemento de referencia
+  - `afterBegin` - insere antes do primeiro filho do elemento de referencia
+  - `beforeEnd` - insere depois do ultimo filho do elemento de referencia
+  - `afterEnd` - Insere depois do elemento de referencia.
+- Como estamos usando o `.inssertAdjacentHTML`, o html é como se fosse uma string com codigos html.
+
+~~~ 
+<script>
+    const container2 = document.querySelector(".container2");
+    container2.insertAdjacentHTML("beforebegin", "<b> texto inserido adjacente html - beforebegin </b>");
+    container2.insertAdjacentHTML("afterbegin", "<b> texto inserido adjacente html - afterbegin</b>");
+    container2.insertAdjacentHTML("beforeend", "<b> texto inserido adjacente html - beforeend</b>");
+    container2.insertAdjacentHTML("afterend", "<b> texto inserido adjacente html - afterend</b>");
+</script>
+~~~
+
+- Tambem temos o metodo `.insertAdjacentText()`, que é muito parecido com o `.insertAdjacentHTML` porem o mesmo não interpreta codigo html.
+
+~~~
+<script>
+    const container2 = document.querySelector(".container2");
+    container2.insertAdjacentHTML("beforebegin", "<b> texto inserido adjacente html - beforebegin </b>");
+    container2.insertAdjacentHTML("afterbegin", "<b> texto inserido adjacente html - afterbegin</b>");
+    container2.insertAdjacentHTML("beforeend", "<b> texto inserido adjacente html - beforeend</b>");
+    container2.insertAdjacentHTML("afterend", "<b> texto inserido adjacente html - afterend</b>");
+
+    container2.insertAdjacentText("afterbegin", "texto inserido adjacente text - afterbegin");
+</script>
+~~~
+
+- O Outro metodo seria, o `.insertAdjacentElement` com a diferença entre os outros onde temos que criar antes um `nó` para ser inserido.
+- Vamos criar uma constante chamada `em` que irá criar uma elemento `em`.
+
+
+~~~
+<script>
+    const container2 = document.querySelector(".container2");
+    container2.insertAdjacentHTML("beforebegin", "<b> texto inserido adjacente html - beforebegin </b>");
+    container2.insertAdjacentHTML("afterbegin", "<b> texto inserido adjacente html - afterbegin</b>");
+    container2.insertAdjacentHTML("beforeend", "<b> texto inserido adjacente html - beforeend</b>");
+    container2.insertAdjacentHTML("afterend", "<b> texto inserido adjacente html - afterend</b>");
+
+    container2.insertAdjacentText("afterbegin", "texto inserido adjacente text - afterbegin");
+
+    const em  = document.createElement("em");
+    em.textContent = " texto com enfase";
+    container2.insertAdjacentElement("beforeend", em);
+</script>
+~~~
+
 
 <br>
 <hr>
@@ -1289,6 +1524,51 @@ let sublevel = document.querySelector("ul ul");
 ## remove
 <br>
 
+Vamos agora ver metodo de remoção de elemento no DOM, o primeiro que iremos ver será o `.remove()`, utilizado a partir do filho, `.childNoded()`.
+
+- Vamos Remover toda nossa primeira `ul`. Em aulas passadas criamos uma variavel chamada `list` que faz referencia a esse elemento.
+- Lembrando que ese codigo não irá funcionar no IE11
+
+~~~
+<script>
+    list.remove();
+</script>
+~~~
+
+- Outro metodo, que funciona no IE11, seria o `.removeChild()`. Uma diferença que temo nesse metodo é que ele é acessado a partir do pai para remover o filho `parentNode.removeChild(list)`.
+
+~~~
+<script>
+    // list.remove();
+    list.parentElement.removeChild(list);
+</script>
+~~~
+
+- Vejam que temos o mesmo resultado que o do `.remove()`.
+- Temos tambem o metodo `.replaceChild()`, que iremos exemplificar subbstituindo o `h1=Teste DOM` pelo nosso `h2=Titulo 2`.
+- Vamos criar uma constante para guardar a referencia do nossso `body` que seria o pai desses elementos.
+- Esse metodo `.replaceChild()` recebe dois parametro, o primeiro como sendo o `novo elemento` e o segundo como sendo o `antigo elemento`.
+
+~~~ 
+<script>
+    const parent = document.body;
+    const old = document.querySelector("h1");
+    const novo = container.querySelector("h1");
+    parent.replaceChild(novo,old);
+</script>
+~~~
+
+- Como o `titulo 2` ja existia no DOM, ele foi movido de lugar, se quisermos manter o original, basta utilizarmos o `.cloneNode()`.
+
+~~~ 
+<script>
+    const parent = document.body;
+    const old = document.querySelector("h1");
+    const novo = container.querySelector("h1").cloneNode(true);
+    parent.replaceChild(novo,old);
+</script>
+~~~
+
 <br>
 <hr>
 <br>
@@ -1296,12 +1576,106 @@ let sublevel = document.querySelector("ul ul");
 ## Desafio
 <br>
 
+Foi passado o html para o exercicio.
+
+1) Criar uma nova li com texto "item 2" e inclua-na na ul de div com class .alvo
+2) Mova aultima li de orignal para alvo (mas ante da primeira li). Em outras palavras, a ultima li da original deve virar a primeira li de alvo.
+3) Altere o texto da primeira li de .alvo para Item 0.
+4) Clone a ul de .original e inclua-na na primeira li de .alvo
+5) Remova a ultima li (item2) da lista inserida na etapa anterior
+6) Remova as duas li's que sobraram na ul original.
+
+~~~ 
+<script type="text/javascript">
+    // Criar uma nova li com texto "item 2" e inclua-na na ul de div com class .alvo
+    const li = document.createElement("li");
+    const liAtt = document.createAttribute("class");
+    li.setAttribute("class","alvo");
+    li.textContent = "Item 2";
+    const alvoUl = document.querySelector(".alvo ul");
+    alvoUl.appendChild(li);
+
+    // Mova a ultima li de original para alvo (mas ante da primeira li). Em outras palavras, a ultima li da original deve virar a primeira li de alvo.
+    const liOrig = document.querySelector(".original ul").lastElementChild;
+    alvoUl.insertBefore(liOrig, alvoUl.firstChild);
+
+    // Altere o texto da primeira li de .alvo para Item 0.
+    alvoUl.firstChild.textContent = "Item 0";
+
+    // Clone a ul de .original e inclua-na na primeira li de .alvo
+    let ul = document.querySelector(".original ul").cloneNode(true);
+    //ul = ul.cloneNode(true);
+    alvoUl.insertBefore(ul, alvoUl.firstChild);
+
+    // Remova a ultima li (item2) da lista inserida na etapa anterior
+    const ul2 = alvoUl.querySelector("ul ul");
+    ul2.removeChild(ul2.lastElementChild);
+
+    // Remova as duas li's que sobraram na ul original.
+    const ul3 = document.querySelector(".original ul");
+    ul3.parentElement.removeChild(ul3);
+        
+</script>
+~~~
+
 <br>
 <hr>
 <br>
 
 ## Resolução: Desafio
 <br>
+
+1) Criar uma nova li com texto "item 2" e inclua-na na ul de div com class .alvo
+    - Primeiro vamos criar uma constante chamada `li` para criarmos uma nova `li`.
+    - Depois adicionamos o texto a esse novo elemento criado. Podemos utilizar ou o `.textContent` ou o metodo `.createTextNode()`
+    - Adicionar a `li` dentro da `.alvo ul`.
+    - Como iremos usar essa `ul` dentro de `.alvo` em varias partes do exercicio, vamos criar uma constante para referencia-la deixando assim o acesso a mesma mais facil. Fazendo a mesma coisa para a `ul` dentro de `.orignal`.
+~~~
+const ulAlvo = document.querySelector(".alvo ul");
+const ulOriginal = document.querySelector(".original ul");
+
+// crie um nova li com texto "item 2" e a inclua na ul de div com class .alvo
+const li = document.createElement("li");
+li.textContent = "item 2";
+ulAlvo.appendChild(li);
+~~~ 
+
+2) Mova aultima li de orignal para alvo (mas ante da primeira li). Em outras palavras, a ultima li da original deve virar a primeira li de alvo.
+    - Aqui podemos utilizar o metodo `parentElement.insertBefore(element,referencia)`.
+    - Nosso parent = ul em .alvo
+    - O elemento que vamos mover erá o ultimo filho da `ul` original.
+    - Como segundo paremetro (referencia) temoss o primeiro filho da `ul alvo`.
+
+~~~ 
+ulAlvo.insertBefore(ulOriginal.lastElementChild, ulAlvo.firstElementChild);
+~~~
+
+3) Altere o texto da primeira li de .alvo para Item 0.
+    - Podemos pegar a partir do `ulAlvo.firstElementChild.textContent`.
+    - Podemos tbm usar o `ulAlvo.children[0].textContent` passando o indice do elemento que queremos mudar.
+
+~~~ 
+ulAlvo.children[0].textContent = "Item 0";
+~~~ 
+
+4) Clone a ul de .original e inclua-na na primeira li de .alvo
+    - Aqui iremos criar uma constante para receber o clone da `ul original`
+    - Apos clonar, adicionamos na `ulAlvo` usando o `appendChild()`.
+
+~~~ 
+const ulClone = ulOriginal.cloneNode(true);
+    ulAlvo.firstElementChild.appendChild(ulClone);
+~~~ 
+
+5) Remova a ultima li (item 2) da lista inserida na etapa anterior
+    - Criamos uma constante chamada `ulClone`, logo, toda alteração que fizermos nessa constante será refletida no browser. Logo podemos acessar a mesma variavel para manipulação.
+~~~
+ulClone.removeChild(ulClone.lastElementChild);
+~~~
+
+6) Remova as duas li's que sobraram na ul original.
+    - Poderiamos fazer um loop para remover cada `li`, porem vamos fazer de uma maneira mais simples.
+    - Como queremos remover o conteudo dessa ul, a maneira mais simples seria usando o `.innerHTML` dando o valor a ele de uma `string vazia`.
 
 <br>
 <hr>

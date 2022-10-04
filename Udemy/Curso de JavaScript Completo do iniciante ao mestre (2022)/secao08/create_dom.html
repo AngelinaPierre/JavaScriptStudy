@@ -6,10 +6,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        .container2{
+            background: #ccc;
+            padding: 15px;
+        }
+        .container2 p{
+            border: 1px solid red;
+            padding: 10px;
+            margin:15px;
+        }
+    </style>
+
 </head>
 
 <body>
     <h1>Teste DOM</h1>
+
+    <div class="container2">
+        <p>Paragrafo 1</p>
+        <p>Paragrafo 2</p>
+        <p>Paragrafo 3</p>
+    </div>
+
     <div class="container">
         <p>Teste 1</p>
         <p>Lorem <a href="#"> Link </a> .</p>
@@ -62,6 +82,35 @@
         sublevel = sublevel.cloneNode(true);
         const h2 = document.querySelector("h2");
         container.insertBefore(sublevel, h2.nextElementSibling);
+
+        const segundoParagrafo = container.firstElementChild.nextElementSibling.nextElementSibling;
+        console.log(segundoParagrafo);
+        segundoParagrafo.after("texto inserido com after", " outro texto do after");
+        segundoParagrafo.before("texto inserido com before", " outro texto do before");
+        const span = document.createElement("span");
+        span.textContent = " span dinamica ";
+        segundoParagrafo.after(span);
+        segundoParagrafo.before(span);
+
+        const container2 = document.querySelector(".container2");
+        container2.insertAdjacentHTML("beforebegin", "<b> texto inserido adjacente html - beforebegin </b>");
+        container2.insertAdjacentHTML("afterbegin", "<b> texto inserido adjacente html - afterbegin</b>");
+        container2.insertAdjacentHTML("beforeend", "<b> texto inserido adjacente html - beforeend</b>");
+        container2.insertAdjacentHTML("afterend", "<b> texto inserido adjacente html - afterend</b>");
+
+        container2.insertAdjacentText("afterbegin", "texto inserido adjacente text - afterbegin");
+
+        const em  = document.createElement("em");
+        em.textContent = " texto com enfase";
+        container2.insertAdjacentElement("beforeend", em);
+
+        // list.remove();
+        list.parentElement.removeChild(list);
+
+        const parent = document.body;
+        const old = document.querySelector("h1");
+        const novo = container.querySelector("h1").cloneNode(true);
+        parent.replaceChild(novo,old);
 
     </script>
 </body>
