@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Events</title>
+</head>
+<body>
+    <h1>Keyboard Events</h1>
+    <textarea title="msg" name="msg" id="msg" cols="30" rows="10"></textarea>
+
+    <script>
+        const msg = document.getElementById("msg");
+
+        // funções para eventos
+        function keyup(evt){
+            console.log("keyup: " + this.value);
+        }
+        function keypress(evt){
+            console.log("keypress: " + this.value);
+        }
+        function keydown(evt){
+            console.log("keydown: " + this.value);
+        }
+
+        // eventos
+
+        msg.addEventListener("keyup", keyup);
+        msg.addEventListener("keypress", keypress);
+        msg.addEventListener("keydown", keydown);
+
+    </script>
+</body>
+</html>
