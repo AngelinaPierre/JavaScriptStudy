@@ -126,9 +126,7 @@
 
         const actions = {
             checkButton: function(){
-                console.log("checkButton no objeto.");
                 arrTasks[currentLiIndex].completed = !arrTasks[currentLiIndex].completed;
-                console.log(arrTasks[currentLiIndex].completed);
 
                 if(arrTasks[currentLiIndex].completed){
                      currentLi.querySelector(".fa-check").classList.remove("displayNone");
@@ -163,9 +161,7 @@
                 
             },
             deleteButton: function(){
-                console.log("deleteButton no objeto.");
                 arrTasks.splice(currentLiIndex, 1);
-                console.log(arrTasks);
                 renderTasks();
                 // currentLi.remove();
                 // currentLi.parentElement.removeChild(currentLi);
