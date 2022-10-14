@@ -802,6 +802,36 @@
 					"line": 28,
 					"column": 64,
 					"label": ""
+				},
+				{
+					"line": 178,
+					"column": 15,
+					"label": ""
+				},
+				{
+					"line": 262,
+					"column": 35,
+					"label": ""
+				},
+				{
+					"line": 1103,
+					"column": 23,
+					"label": ""
+				},
+				{
+					"line": 1551,
+					"column": 56,
+					"label": ""
+				},
+				{
+					"line": 1869,
+					"column": 60,
+					"label": ""
+				},
+				{
+					"line": 1898,
+					"column": 21,
+					"label": ""
 				}
 			]
 		}
