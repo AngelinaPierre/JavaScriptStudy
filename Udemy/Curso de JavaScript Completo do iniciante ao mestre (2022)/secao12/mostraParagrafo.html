@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+		integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <title>Exercicio: Mostra Paragrafo</title>
+    <style>
+        body{
+            font-family: 'Open Sans', sans-serif;
+        }
+        button{
+            cursor: pointer;
+        }
+        #container{
+            width: 90%;
+            max-width: 600px;
+            margin: auto;
+        }
+        .card{
+            margin: 16px;
+            border: 1px solid #ccc;
+            padding: 16px 32px 32px 16px;
+            position: relative;
+        }
+        .card p {
+            margin: 0;
+        }
+        .card.text-hidden:after{
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 64px;
+            background-image: linear-gradient(transparent, white 80%);
+            pointer-events: none;
+        }
+        .card button{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background-color: transparent;
+            z-index: 1;
+            border: none;
+            font-size: 1.5em;
+        }
+        .card button:hover{
+            color: red;
+        }
+
+        body,html{
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.<b> Dolorem, dolorum eligendi amet           
+                praesentium </b>b>ea voluptate aliquid exercitationem aperiam atque nulla ullam et consequatur fugiat ipsum modi omnis fugit ipsa. Numquam! Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, ad magnam eveniet eum molestias ratione nihil consectetur dignissimos doloremque atque reiciendis quibusdam voluptatem quidem culpa qui, adipisci, inventore dolorem! Voluptas.
+            </p>
+        </div>
+        <div class="card">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        </div>
+        <div class="card">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore 
+                et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur
+            </p>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        // nodelist de elementos contendo os paragrafos
+        const paragrafo = Array.from(document.querySelectorAll(".card p")); // Array com base na nodeList
+        const originTexts = paragrafo.map( p => p.innerText); // criando array a partir da nodelist
+        const maxLength = 100; // quantidade maxima de caracteres
+
+        paragrafo.forEach((p,indice) => {
+            if(p.innerText.length > maxLength){
+                p.textContent = p.innerText.substring(0, maxLength) + "...";
+
+                const btn = document.createElement("button");
+                btn.innerHTML = `
+                    <i class="fas fa-chevron-down"></i>
+                `;
+                p.parentElement.classList.add("text-hidden");
+
+                // btn.addEventListener("click",toggleText);
+                btn.addEventListener("click",function(evt){
+                    toggleText(evt,p,indice);
+                });
+
+
+                p.parentElement.appendChild(btn);
+
+            }
+        });
+
+        function toggleText(evt, p, i){
+            console.log(evt.currentTarget);
+            // console.log(this); // window
+            const card = evt.currentTarget.parentElement;
+            card.classList.toggle("text-hidden");
+            evt.currentTarget.querySelector("i").classList.toggle("fa-chevron-down");
+            evt.currentTarget.querySelector("i").classList.toggle("fa-chevron-up");
+
+            if(card.classList.contains("text-hidden")){
+                p.textContent = originTexts[i].substring(0, maxLength) + "...";
+            }else{
+                // card.querySelector("p").textContent = originTexts[i];
+                p.textContent = originTexts[i];
+            }
+
+        }
+    </script>
+</body>
+</html>

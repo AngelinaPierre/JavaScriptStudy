@@ -834,6 +834,66 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "secao12/README.md",
+			"bookmarks": [
+				{
+					"line": 0,
+					"column": 20,
+					"label": ""
+				},
+				{
+					"line": 4,
+					"column": 62,
+					"label": ""
+				},
+				{
+					"line": 290,
+					"column": 0,
+					"label": ""
+				},
+				{
+					"line": 447,
+					"column": 32,
+					"label": ""
+				},
+				{
+					"line": 475,
+					"column": 12,
+					"label": ""
+				},
+				{
+					"line": 504,
+					"column": 9,
+					"label": ""
+				},
+				{
+					"line": 627,
+					"column": 46,
+					"label": ""
+				},
+				{
+					"line": 710,
+					"column": 21,
+					"label": ""
+				},
+				{
+					"line": 829,
+					"column": 26,
+					"label": ""
+				},
+				{
+					"line": 929,
+					"column": 11,
+					"label": ""
+				},
+				{
+					"line": 967,
+					"column": 49,
+					"label": ""
+				}
+			]
 		}
 	]
 }
