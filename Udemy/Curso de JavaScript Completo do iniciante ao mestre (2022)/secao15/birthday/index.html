@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Daniel">
+    <meta name="description" content="descrição bacanuda">
+    <meta name="keywords" content="html5, tecnologia">
+
+    <link rel="stylesheet" href="css/birthday.css">
+    <title>Birthday CountDown</title>
+</head>
+<body>
+    <div id="principal">
+        <header class="hero">
+            <div class="hero-content">
+                <h1>Curso Javascript Completo</h1>
+                <h2>Insira a data do seu nascimento</h2>
+                <div id="newsLetterForm">
+                    <input type="date" id="txtnascimento">
+                </div>
+                <div id="quantoFalta">
+
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section class="content-section">
+                <div class="card card-1">
+                    <img src="assets/card_01.png" alt="">
+                    <p>Seletores</p>
+                </div>
+                <div class="card card-2">
+                    <img src="assets/card_02.jpg" alt="">
+                    <p>Seletores</p>
+                </div>
+                <div class="card card-3">
+                    <img src="assets/card_03.jpg" alt="">
+                    <p>Seletores</p>
+                </div>
+            </section>
+
+            <section class="content-section">
+                <article>
+                    <header class="content-header">
+                        <h2>TTitulo do Article</h2>
+                    </header>
+                    <p>Paragrafo 1</p>
+                    <p>Paragrafo 2</p>
+                </article>
+            </section>
+        </main>
+
+        <footer class="rodape">
+            <p>Copyright &copy; 2018</p>
+        </footer>
+    </div>
+
+    <script src="js/birthday.js"></script>
+    <script type="text/javascript">
+        // adicionando evento ao input
+        document.getElementById("txtnascimento").addEventListener("change", checkBirthday);
+
+        // função para checar a data de nascimento
+        function checkBirthday(evt){
+            // console.log(typeof evt.target.value, evt.target.value);
+            const container = document.getElementById("quantoFalta");
+            const arr = evt.target.value.split("-"); // seprando a data (string) em um array individual
+            // console.log(typeof arr, arr);
+            // console.log(typeof arr.length, arr.length);
+
+            if(arr.length > 2){
+                container.innerHTML = `
+                    <p>Falta(m) ${quantoFaltaPara(arr[1], arr[2])} dias para o seu aniversario</p>
+                `
+            }else{
+                container.textContent = "  ";
+            }
+
+        }
+    </script>
+</body>
+</html>
