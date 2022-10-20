@@ -2,7 +2,7 @@
 
 <br>
 
-# toPrecision(), toFixed(), toExponential()
+## toPrecision(), toFixed(), toExponential()
 <br>
 
 - A primeira coisa que iremos fazer para exemplificarmos esses metodos será criar uma variavel chamada `numero`.
@@ -212,21 +212,21 @@ string
 <hr>
 <br>
 
-# toString(), toLocateString()
+## toString(), toLocateString()
 <br>
 
 <br>
 <hr>
 <br>
 
-# MAX_VALUE, MIN_VALUE
+## MAX_VALUE, MIN_VALUE
 <br>
 
 <br>
 <hr>
 <br>
 
-# isNaN()
+## isNaN()
 <br>
 
 <br>
