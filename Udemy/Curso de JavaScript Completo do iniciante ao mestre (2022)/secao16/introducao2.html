@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intervalos</title>
+</head>
+<body>
+    <h1>Intervalos</h1>
+    <div></div>
+    <script>
+        const tempoInicio = Date.now();
+        let n = 0;
+
+        
+        setTimeout(function(){
+            console.log("timeout depois de 2000ms");
+            const tempoFinal = Date.now();
+            console.log(tempoFinal - tempoInicio); // 6175 = codigo executado depois de mais de 6 segundos
+        }, 2000); // será executada em 2s
+
+        
+        let str = "";
+        var d = document.querySelector("div");
+
+        setTimeout(function(){
+            for(let i = 0; i < 1000; i++){
+                str += `i: ${i}-- `;
+                d.textContent += str;
+            }
+        }, 3000);
+
+
+        const interval = setInterval(function(){
+            console.log("interval n: " + n++);
+            if(n > 5){ 
+                clearInterval(interval);
+                const tempoFinal = Date.now();
+                console.log(tempoFinal - tempoInicio); // 16001
+            }
+        }, 2000);
+
+
+    </script>
+</body>
+</html>

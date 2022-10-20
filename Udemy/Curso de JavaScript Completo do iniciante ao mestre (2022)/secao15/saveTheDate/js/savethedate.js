@@ -66,7 +66,9 @@
     const secondsLeft = parseInt(left / 1000) ;
     console.log(secondsLeft);
 
-    addLeftTime(daysLeft,hoursLeft,minutesLeft, secondsLeft);
+    setInterval(addLeftTime(daysLeft,hoursLeft,minutesLeft, secondsLeft), 1000);
+
+    // addLeftTime(daysLeft,hoursLeft,minutesLeft, secondsLeft);
 
 
     // agora que temos os valores, vamos criar uma função passando esses parametros
