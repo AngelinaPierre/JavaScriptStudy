@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM - Browser Object Model</title>
+</head>
+<body>
+    <h1>Browser Object Model</h1>
+
+    <a href="history.html">Vai para history.html</a>
+
+    <button>Abre com o metodo open</button>
+
+    <img src="https://marquesfernandes.com/wp-content/uploads/2020/01/1555172.jpg" alt="javascript">
+
+    <hr>
+    <div>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    </div>
+    <script>
+
+        let teste = "variavel de introdução.html";
+
+        function teste2(){
+            console.log("teste2 chamado");
+        }
+
+        console.log(opener); // mostra qual a pagina que abriu a atual
+
+        document.querySelector("button").addEventListener("click", function(){
+            console.log("btn hisory")
+            window.open("history.html", "nome-janela", "width=600,height=300");
+        });
+
+        // evento de load no window
+        window.addEventListener("load", function(){
+            console.log("load");
+        });
+
+        // evento de DOMCOntentLoaded no window
+        window.addEventListener("DOMContentLoaded", function(){
+            console.log("DOMContentLoaded");
+        });
+
+        // evento de Resize no window
+        window.addEventListener("resize", function(){
+            console.log("resize event", innerWidth, innerHeight);
+        });
+
+        // evento de scroll no window
+        window.addEventListener("scroll", function(){
+            console.log("scrolling", pageYOffset);
+        });
+
+        // evento de unload no window
+        window.addEventListener("unload", function(){
+            console.log("unload");
+            alert("unload");
+        });
+
+        // evento de beforeUnload no window
+        window.addEventListener("beforeunload", function(){
+            console.log("beforeUnload");
+            alert("beforeUnload");
+        });
+
+    </script>
+
+</body>
+</html>
+

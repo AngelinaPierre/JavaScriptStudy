@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM - Browser Object Model</title>
+</head>
+<body>
+    <h1>Browser Object Model</h1>
+
+    <a href="history.html">Vai para history.html</a>
+
+    <button>Abre com o metodo open</button>
+
+    <hr>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae iste ducimus, dolore eos excepturi obcaecati soluta suscipit voluptatem aliquam sint nam officia eaque pariatur explicabo temporibus maxime molestias impedit libero.</p>
+
+    <script>
+
+        let teste = "variavel de introdução.html";
+
+        function teste2(){
+            console.log("teste2 chamado");
+        }
+
+        console.log(opener); // mostra qual a pagina que abriu a atual
+
+        document.querySelector("button").addEventListener("click", function(){
+            console.log("btn hisory")
+            window.open("history.html", "nome-janela", "width=600,height=300");
+        })
+    </script>
+
+</body>
+</html>
+
+<!-- 
+    Se colocarmos o seguinte codigo no console
+        scrollTo(0,50)
+    A pagina irá para a posição (0,50) do browser.
+
+    Ja o metodo scrollBy() irá somar ao scroll ja existente.
+        scrollBy(0,50)
+    Se quisermos subir o scroll, basta passarmos valores negativos.
+        scrollBy(0,-50)
+
+    Temos algumas propriedades que dizem respeito a quanto de scroll foi utilizado.
+
+        pageXOffset
+        0
+        pageYOffset
+        0
+        pageYOffset
+        377
+        pageXOffset
+        0
+ -->

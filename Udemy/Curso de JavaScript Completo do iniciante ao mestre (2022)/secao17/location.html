@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location</title>
+</head>
+<body>
+    <h1>Location</h1>
+    <button id="btnBack">Volta</button>
+
+    <br>
+    <br>
+
+    <button id="btnForward">Avança</button>
+
+    <a href="http://google.com">Google</a>
+
+    <br>
+    <br>
+
+    <img src="assets/cap1.png" alt="">
+
+    <script>
+        console.log("location.href: " + location.href); // http://localhost:5501/secao17/location.html
+        console.log("location.hash: " + location.hash); // string vazia pois não temos nenhuma hash na url.
+        // vamos colocar um #javascript na nossa url para observar o hash.
+        // http://localhost:5501/secao17/location.html#javascript
+        // #javascript
+
+        // o mesmo acontece com o .search, como não temos nenhuma busca na url, irá ser mostrado uma string vazia
+        console.log("location.search: " + location.search); // o search nos mostra os parametros passados na url
+
+        // vamos testar o search colocando na nossa url (?teste1 = teste&teste2=ola)
+        //http://localhost:5501/secao17/location.html?teste1=teste&teste2=ola#javascript
+        // location.html?teste1=teste&teste2=ola:22 #javascript
+        // location.html?teste1=teste&teste2=ola:28 ?teste1=teste&teste2=ola
+
+        // como podemos ver no (location.href) esta vindo os parametros que passamos tanto na busca quanto no hash.
+        
+        console.log("location.protocol: " + location.protocol);
+        console.log("location.ancestorOrigins: " + location.ancestorOrigins);
+        console.log("location.assign: "+ location.assign);
+        console.log("location.host: " + location.host);
+        console.log("location.hostname: " + location.hostname);
+        console.log("location.origin: " + location.origin);
+        console.log("location.pathname: " + location.pathname);
+        console.log("location.reload: " + location.reload);
+        console.log("location.replace: " + location.replace);
+        console.log("location.toString: " + location.toString);
+        console.log("location.valueOf: " + location.valueOf);
+        console.log("localStorage.Symbol(Symbol.toPrimitive): " + localStorage.Symbol(Symbol.toPrimitive));
+
+
+
+    </script>
+</body>
+</html>
+
+<!-- 
+
+[INFORMAÇÕES REFERENTES A NOSSA URL]
+
+location.href
+location.hash
+
+
+[Metodos do Objeto Location:  ASSIGN | RELOAD | REPLACE]
+
+
+[ASSIGN]
+Vamos ver no console o que acontece se passarmo o (location.assign("http://google.com.br")).
+    - No history.length temos 12
+Depois de usar o (location.assign()), podemos observar que nosso historico de navegação foi alterado
+    > history
+    >> History {length: 13, scrollRestoration: 'auto', state: null}
+
+[RELOAD]
+Serve simplesmente para recarregar a pagina
+
+[REPLACE]
+Irpa fazer a naveação porem não irá alterar o historico.
+
+ -->

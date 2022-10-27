@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+</head>
+<body>
+    <h1>History</h1>
+    <button id="btnBack">Volta</button>
+
+    <br>
+    <br>
+
+    <button id="btnForward">Avança</button>
+    <br>
+    <br>
+    <button id="btnClose">Fechar</button>
+
+    <a href="http://google.com">Google</a>
+
+    <script>
+
+        console.log(opener); // mostra qual a pagina que abriu a atual
+
+        if(opener){
+            opener.teste2();
+        }
+
+        document.getElementById("btnBack").addEventListener("click",function(){
+            history.back();
+        }); // codigo da erro
+        document.getElementById("btnForward").addEventListener("click",function(){
+            history.forward();
+        }); // codigo da erro
+
+        document.getElementById("btnClose").addEventListener("click", function(){
+            close();
+        })
+    </script>
+</body>
+</html>
+
+<!-- 
+    Ao abrir no browser, podemos ver que o (OPENER), referencia ao objeto window do introdução.html enão do history.html.
+
+    Logo history.html terá acesso ao objeto window da pagina que o history.html foi aberto.
+ -->

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOM - Browser Object Model</title>
+</head>
+<body>
+    <h1>Browser Object Model</h1>
+
+    <a href="history.html">Vai para history.html</a>
+
+    <button>Abre com o metodo open</button>
+
+    <script>
+
+        let teste = "variavel de introdução.html";
+
+        function teste2(){
+            console.log("teste2 chamado");
+        }
+
+        console.log(opener); // mostra qual a pagina que abriu a atual
+
+        document.querySelector("button").addEventListener("click", function(){
+            console.log("btn hisory")
+            window.open("history.html", "nome-janela", "width=600,height=300");
+        })
+    </script>
+
+</body>
+</html>
+
+<!-- 
+    Ao abrir no browser, podemos ver que o (OPENER), referencia ao objeto window do introdução.html enão do history.html
+ -->
+
+
+<!-- 
+
+innerHeight - altura do browser na area util
+innerWidth - largura do browser na area util
+- O zoom afeta o innerHeight e o innerWidth
+outerHeight - altura do browser 
+outerWidth - largura do browser
+
+
+propriedades que dizem respeito a posição do browser na tela
+    screenX
+    screenY
+
+ -->
