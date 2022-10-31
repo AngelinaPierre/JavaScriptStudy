@@ -899,6 +899,388 @@ undefined fala: miau
 ## Apply vs call vs bind
 <br>
 
+Sabemos que a função `miar()` não esta mantendo o mesmo `this`, ou seja, quando executarmos a função `miar()` precisamos passar o contexto do `this`. Para isso, podemos utilizar a função `call()` da seguinte maneira:
+
+~~~ 
+const cat = {
+    name: "mingal",
+    falar(){
+        console.log(this);
+        miar.call(this);
+    }
+}
+cat.falar();
+
+// SAIDA:
+
+❯ node metodo.js
+{ name: 'mingal', falar: [Function: falar] }
+mingal fala: miau
+~~~ 
+
+- Ou seja, quando chamamos a função `miar()` junto com o metodo `call()` passando o `this` como parametro, estamos `alterando o contexto do this` dentro da função `miar()`.
+
+Vamos criar um arquivo novo chamado `call_apply.js` para exemplificarmos melhor os metodos `call()`, `apply()` e `bind()`.
+
+- Vamos criar uma função chamada `teste()` que irá receber dois parametros, uma `string` e um `numero`. Dentro da função iremos ver no console o `this` e a `string e numero`.
+
+~~~
+
+function teste(str, num){
+    console.log(this)
+    console.log(str, num);
+}
+
+teste("string", 10);
+
+// SAIDA:
+
+❯ node call_apply.js
+<ref *1> Object [global] {
+  global: [Circular *1],
+  queueMicrotask: [Function: queueMicrotask],
+  clearImmediate: [Function: clearImmediate],
+  setImmediate: [Function: setImmediate] {
+    [Symbol(nodejs.util.promisify.custom)]: [Getter]
+  },
+  structuredClone: [Function: structuredClone],
+  clearInterval: [Function: clearInterval],
+  clearTimeout: [Function: clearTimeout],
+  setInterval: [Function: setInterval],
+  setTimeout: [Function: setTimeout] {
+    [Symbol(nodejs.util.promisify.custom)]: [Getter]
+  },
+  atob: [Function: atob],
+  btoa: [Function: btoa],
+  performance: Performance {
+    nodeTiming: PerformanceNodeTiming {
+      name: 'node',
+      entryType: 'node',
+      startTime: 0,
+      duration: 54.63088800013065,
+      nodeStart: 2.6119160056114197,
+      v8Start: 4.702583000063896,
+      bootstrapComplete: 40.60464400053024,
+      environment: 23.871194005012512,
+      loopStart: -1,
+      loopExit: -1,
+      idleTime: 0
+    },
+    timeOrigin: 1667223276364.421
+  },
+  fetch: [AsyncFunction: fetch]
+}
+string 10
+~~~
+
+- Vemos que o nosso `this` dentro da função referencia no `node` ao `objeto global`. Vamos ver o que acontece se colocarmos o `this.name`.
+
+~~~
+function teste(str, num){
+    console.log(this.name);
+    console.log(str, num);
+}
+
+teste("string", 10);
+
+// SAIDA:
+
+❯ node call_apply.js
+undefined
+string 10
+~~~
+
+- Recebemos na saida do console o `undefined` pois o `this` é referencia ao `objeto global` e nesse objeto não temos uma propriedade chamada `name`.
+- Se criarmos uma variavel chamada `name` no escopo local tbm não irá funcionar retornando o `undefined`.
+
+~~~
+let name = "angelina";
+
+function teste(str, num){
+    console.log(this.name);
+    console.log(str, num);
+}
+
+teste("string", 10);
+
+// SAIDA:
+
+❯ node call_apply.js
+undefined
+string 10
+~~~
+
+- O mesmo iria acontecer se colocasse-mos o `var` em vez do `let`, isso no `node`, porem vamos testar no `browser` para vermos o que acontece, criando um arquivo chamado `call_apply.html`.
+
+~~~
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call | apply | bind</title>
+</head>
+<body>
+    <h1>Call | Apply | Bind</h1>
+
+    <script src="./call_apply.js"></script>
+</body>
+</html>
+~~~
+
+![](./assets/cap7.png)
+
+- Na imagem acima, o nosso nome não é mostrado pq utilizarmos a palavra `let`, se trocarmos para a `var` irá nos mostrar o nome ttbm...
+
+~~~
+// let name = "angelina";
+var name = "angelina";
+
+function teste(str, num){
+    console.log(this.name);
+    console.log(str, num);
+}
+
+teste("string", 10);
+~~~ 
+
+![](./assets/cap8.png)
+
+- Esta ocorrendo um bug onde, apos criarmos com o `var`e depois alterar novamente para `let` ainda esta sendo mostrado o nome, vamos criar uma outra variavel para vermos o exemplo melhor e retirar esse bug...
+
+~~~
+var name = "pierre";
+let name2 = "angelina";
+
+function teste(str, num){
+    console.log(this.name);
+    console.log(this.name2);
+    console.log(str, num);
+}
+
+teste("string", 10);
+~~~
+
+![](./assets/cap9.png)
+
+- Essa diferença ocorre pois o `let` e o `const` não criam propriedades no `objeto global` apesar de que eles continuam sendo globais, ou seja, podemos ter acesso de qualquer lugar do programa, porem não temos uma forma de acessar atraves do objeto global, no caso do browser o `window`.
+- Como podemos ver na saida do `node` recebemos 2 `undefined` pois essas propriedades não foram colocadas no `objeto global do node`.
+
+~~~
+var name = "pierre";
+let name2 = "angelina";
+
+function teste(str, num){
+    console.log(this);
+    console.log(this.name);
+    console.log(this.name2);
+    console.log(str, num);
+}
+
+teste("string", 10);
+~~~
+
+![](./assets/cap10.png)
+
+- Se abrirmos o objeto global do `browser` e procurarmos as propriedades, so teremos a referencia para o objeto `name`.
+
+![](./assets/cap11.png)
+
+- Logo no `browser` as palavras `let` e `const` não poluem o nosso `objeto global`.
+
+Agora iremos falar para nossa função `teste()` que queremos mudar o `escopo do this`, não querendo que ele referencie ao `escopo global`, e sim ao `objeto local`. 
+
+- Vamos chamar nossa função `teste()` passando o metodo `.call()` e dentro deste metodo vamos passar como parametro um objeto com uma propriedade chamada  `name`.
+
+~~~ 
+// var name = "pierre";
+// let name2 = "angelina";
+
+function teste(str, num){
+    console.log(this);
+    console.log(this.name);
+    console.log(this.name2);
+    console.log(str, num);
+}
+
+// teste("string", 10);
+teste.call({
+    name: "Maria",
+})
+~~~ 
+
+![](./assets/cap12.png)
+
+- Como podemos ver na imagem acima, o `this` agora do primeiro console, se refere ao objeto que passamos como propriedade para a função `call()` e o `this.name` refere-se a propriedade `name` do objeto.
+- Como não passamos uma propriedade chamada `name2`, recebemos o `undefined`. O mesmo vale para o `str,n`.
+- Para passarmos parametros para a função utilizando o metodo `call()` escrevemos o codigo da seguinte maneira:
+
+~~~
+// var name = "pierre";
+// let name2 = "angelina";
+
+function teste(str, num){
+    console.log(this);
+    console.log(this.name);
+    console.log(this.name2);
+    console.log(str, num);
+}
+
+// teste("string", 10);
+teste.call({
+    name: "Maria",
+}, "string", 20); 
+~~~
+
+![](./assets/cap13.png)
+
+- Usando o metodo `call()` podemos executar uma função mudando a referencia do `this`. Da mesma forma teriamos como executar uma função utilizando o metodo `apply()`, porem passando os argumentos/propriedades dentro de um `array` como segundo parametro para a função `apply()` o primeiro sendo o objeto cujo o escopo do `this` queremos referenciar.
+
+~~~ 
+// var name = "pierre";
+// let name2 = "angelina";
+
+function teste(str, num){
+    console.log(this);
+    console.log(this.name);
+    console.log(this.name2);
+    console.log(str, num);
+}
+
+// teste("string", 10);
+teste.call({
+    name: "Maria",
+}, "string", 20);
+
+teste.apply({
+    name: "joao",
+},["string apply",28]);
+~~~
+
+![](./assets/cap14.png)
+
+
+Observem que a partir do ES15, não temos tanta necessidade de ter dois metodos, pois agora podemos utilizar o `spread operator` caso nossos arguementos, no caso, a `string` e o `numero` estejam dentro de um `array` separando assim esses valores da seguinte maneira:
+
+~~~ 
+teste.call({
+    name: "Angelina Pierre",
+}, ...["string apply",28]);
+~~~
+
+- Estamos quebrando o `array` em elementos separados usando o `spread operator` no `metodo call()`, tendo o mesmo resultado do metodo `apply()`.
+
+![](./assets/cap15.png)
+
+
+Basicamente, os metodos `call()` e `apply()` são formas de executar uma função, podendo alterar o `escopo do this` dentro da função no momento da execução da mesma.
+
+Outra maneira de mudar o `escopo do this` seria utilizando o metodo `bind()`. 
+
+- Vamos criar uma constante chamada `teste2` que irá receber o `teste.bind()`, passando como parametro para a função `bind` um objeto.
+- Vamos depois chamar a função passando uma `string` e um `numero`  para vermos o que irá acontecer.
+
+~~~
+// var name = "pierre";
+// let name2 = "angelina";
+
+function teste(str, num){
+    console.log(this);
+    console.log(this.name);
+    console.log(this.name2);
+    console.log(str, num);
+}
+
+// teste("string", 10);
+teste.call({
+    name: "Maria",
+}, "string", 20);
+
+teste.apply({
+    name: "joao",
+},["string apply",28]);
+
+teste.call({
+    name: "Angelina Pierre",
+}, ...["string apply",28]);
+
+const teste2 = teste.bind({
+    name: "Joana",
+});
+
+teste2("Joaquina", 30);
+~~~
+
+![](./assets/cap16.png)
+
+- Como podemos ver temos o mesmo resultado, porem a diferença é que , no `call()` e no `apply()` no momento que estamos `executando` a função, estamos alterando o `this`, logo a responsabilidade de trocar o `this` é do programador na hora de executar a função/chama-la.
+- Ja com o metodo `bind`, executamos a função normalmente, sem passar o `objeto`, ou seja, não precisamos mais nos preocupar em quem será o `this`, chamando ela `teste2()`.
+- O `this` é alterado automaticamente pq o metodo `bind()` retorna um função, ou seja, agora temos duas funções, `teste()` e o `teste2()`.
+
+
+~~~
+function teste(str, num){
+    // console.log(this);
+    console.log(this.name);
+    // console.log(this.name2);
+    console.log(str, num);
+}
+
+const teste2 = teste.bind({
+    name: "Joana",
+});
+
+teste2();
+teste2("Joaquina", 30); 
+~~~
+
+![](./assets/cap17.png)
+
+
+
+- Ou seja, o `bind()` retorna uma função e a armazena dentro da variavel criada que o chama.
+- O `bind()` é muito util quando estivermos falando por exemplo, sobre `botões` e/ou `interface grafica`.
+- Vamos criar um `event Listener` para exemplificarmos melhor:
+
+~~~
+// var name = "pierre";
+// let name2 = "angelina";
+
+function teste(str, num){
+    // console.log(this);
+    console.log(this.name);
+    // console.log(this.name2);
+    console.log(str, num);
+}
+
+
+const teste2 = teste.bind({
+    name: "Joana",
+});
+
+teste2();
+teste2("Joaquina", 30);
+
+document.addEventListener("click", teste2);
+~~~
+
+![](./assets/cap18.png)
+
+- Vejam que nem sabemos quem será o `this` dentro de `teste2()`, mas ao clicarmos no documento, recebemos no console o `joana`, que é a propriedade `name` dentro do objeto, que passamos no `teste.bind()`, e depois foi mostrado o `objeto window` que veio do parametro `str` que não passamos logo virou o `objeto evento` que ja tinhamos visto.
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br>
 <hr>
 <br>

@@ -20,10 +20,10 @@ const cat = {
     name: "mingal",
     falar(){
         console.log(this);
-        miar();
+        miar.call(this);
     }
 }
+cat.falar();
 
 dog.falar();
 dog.falar2();
-cat.falar();
