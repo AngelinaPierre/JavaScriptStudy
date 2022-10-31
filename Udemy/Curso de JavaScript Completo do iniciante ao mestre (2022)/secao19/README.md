@@ -1269,18 +1269,6 @@ document.addEventListener("click", teste2);
 
 - Vejam que nem sabemos quem será o `this` dentro de `teste2()`, mas ao clicarmos no documento, recebemos no console o `joana`, que é a propriedade `name` dentro do objeto, que passamos no `teste.bind()`, e depois foi mostrado o `objeto window` que veio do parametro `str` que não passamos logo virou o `objeto evento` que ja tinhamos visto.
 
-
-
-
-
-
-
-
-
-
-
-
-
 <br>
 <hr>
 <br>
@@ -1288,6 +1276,254 @@ document.addEventListener("click", teste2);
 
 ## Closures
 <br>
+
+Vamos agora falar sobre o `closure` que é a capacidade dee uma função de poder enxergar as variaveis que estavam ao redor dela no momento que ela foi declarada.
+
+Vamos criar um novo documento chamado `closure.js` para exemplificarmos melhor.
+
+- Dentro do nosso documento vamos criar uma constante chamada `teste` que irá receber o retorno de uma `função autoinvocavel`. Dentro desta função iremos simplesmente retornar uma `string`
+
+~~~ 
+const teste = (function(){
+    return "meu retorno";
+})();
+
+console.log(teste);
+
+// SAIDA:
+
+❯ node closure.js
+meu retorno
+~~~
+
+- Como podemos ver, dentro de `teste` esta sendo armazenado o retorno da nossa `função de callback`. Pois no momento que criamos a função ja executamos ela ( `parenteses no final () `), e como ja estamos a executando recebemos o `retorno` e esse `retorno` é armazenado dentro de `teste`.
+- Agora, não queremos retornar uma `string` e sim uma outra `função` que iremos chamar de `testeInterno()`, (poderia ser uma função anonima). Dentro desta função, so vamos usar o `console.log()` por enquanto para vermos o que acontece.
+
+
+~~~ 
+const teste = (function(){
+    return function testeInterno(){
+        console.log("testeInterno chamado");
+    }
+})();
+
+console.log(teste);
+
+// SAIDA:
+
+❯ node closure.js
+[Function: testeInterno]
+~~~ 
+
+- Quando executamos o codigo acima, o que será armazenado dentro de `teste`?
+- Se antes era uma `string` agora o que será armazenado dentro de `teste` será a função `testeInterno` que criamos.
+- Vamos colocar um `return` junto com o `console.log()` para vermos o que acontece...
+
+~~~
+const teste = (function(){
+    return function testeInterno(){
+        console.log("testeInterno chamado");
+        return "retorno de testeInterno";
+    }
+})();
+
+console.log(teste);
+
+// SAIDA:
+
+❯ node closure.js
+[Function: testeInterno]
+~~~
+
+- Agora nossa variavel `teste` armazena uma `função`, logo, se temos dentro da variavel uma `função` podemos executa-la da seguinte maneira:
+
+
+~~~
+const teste = (function(){
+    return function testeInterno(){
+        console.log("testeInterno chamado");
+        return "retorno de testeInterno";
+    }
+})();
+
+console.log(teste);
+console.log(teste());
+
+//  SAIDA:
+
+❯ node closure.js
+[Function: testeInterno]
+testeInterno chamado
+retorno de testeInterno
+~~~
+
+- Como vemos acima, o retorno da chamada da função `teste()` esta sendo passado para o `console.log()`.
+- Poderiamos ate colocar o retorno dentro de outra variavel da seguinte maneira:
+
+~~~ 
+const teste = (function(){
+    return function testeInterno(){
+        console.log("testeInterno chamado");
+        return "retorno de testeInterno";
+    }
+})();
+
+console.log(teste);
+console.log(teste());
+
+let str = teste();
+console.log(str);
+
+// SAIDA:
+❯ node closure.js
+[Function: testeInterno]
+testeInterno chamado
+retorno de testeInterno
+testeInterno chamado
+retorno de testeInterno
+
+
+~~~ 
+
+- Vamos ver o que irá acontecer se criarmos uma variavel chamada `num` dentro da nossa função e concatena-la com a string de retorno.
+- O que esta acontecendo é, dentro da função `testeInterno()` temos acesso as varaiveis que foram declaradas no `closure`. Ou seja, as variaveis que foram declaradas no momento que declaramos a função.
+- Logo, utilizando o conceito de `closure` a função  `testeInterno()` ainda tem acesso ao `num` pois ela lembra do contexto a qual ela foi criada, deefinindo assim o `closure`.
+
+~~~ 
+const teste = (function(){
+    let num = 0;
+    return function testeInterno(){
+        console.log("testeInterno chamado ", num);
+        return "retorno de testeInterno " + num;
+    }
+})();
+
+console.log(teste);
+console.log(teste());
+
+let str = teste();
+console.log(str);
+
+// SAIDA:
+
+❯ node closure.js
+[Function: testeInterno]
+testeInterno chamado 
+retorno de testeInterno 0
+testeInterno chamado 
+retorno de testeInterno 0
+~~~ 
+
+- Vamos alterar um pouco o codigo para vermos melhor isso
+
+~~~
+const teste = (function(){
+    let num = 0;
+    return function testeInterno(){
+        console.log("testeInterno chamado ", ++num);
+        return "retorno de testeInterno " + num;
+    }
+})();
+
+console.log(teste);
+console.log(teste());
+teste();
+teste();
+let str = teste();
+console.log(str);
+let str2 = teste();
+console.log(str2);
+
+
+// SAIDA:
+
+❯ node closure.js
+[Function: testeInterno]
+testeInterno chamado  1
+retorno de testeInterno 1
+testeInterno chamado  2
+testeInterno chamado  3
+testeInterno chamado  4
+retorno de testeInterno 4
+testeInterno chamado  5
+retorno de testeInterno 5
+
+~~~
+
+- Observem tbm que se tivessemos escrevido a variavel `num` dentro  da função `testeInterno()` ela seria sobrescrita.
+
+~~~ 
+const teste = (function(){
+    return function testeInterno(){
+        let num = 0;
+        console.log("testeInterno chamado ", ++num);
+        return "retorno de testeInterno " + num;
+    }
+})();
+
+console.log(teste);
+console.log(teste());
+teste();
+teste();
+let str = teste();
+console.log(str);
+let str2 = teste();
+console.log(str2);
+
+// SAIDA:
+
+❯ node closure.js
+[Function: testeInterno]
+testeInterno chamado  1
+retorno de testeInterno 1
+testeInterno chamado  1
+testeInterno chamado  1
+testeInterno chamado  1
+retorno de testeInterno 1
+testeInterno chamado  1
+retorno de testeInterno 1
+~~~ 
+
+- Usando o conceito de `closure` a função irá lembrar da variavel `num` criada no `escopo de fora` da função anonima.
+
+
+Outra forma de termos o conceito de `closure` é, ao invez de termos criado uma varivel, no caso  `num = 0`, podemos passa-lo por parametro na função anonima e podemos definir tbm um numero inical para esse paramtro.
+
+~~~ 
+// outra maneira de usar o conceito de closure
+const teste = (function(num){
+    // num = 10;
+    return function testeInterno(){
+        console.log("testeInterno chamado ", ++num);
+        return "retorno de testeInterno " + num;
+    }
+})(10);
+
+console.log(teste);
+console.log(teste());
+teste();
+teste();
+let str = teste();
+console.log(str);
+let str2 = teste();
+console.log(str2)
+
+// SAIDA:
+
+❯ node closure.js
+[Function: testeInterno]
+testeInterno chamado  11
+retorno de testeInterno 11
+testeInterno chamado  12
+testeInterno chamado  13
+testeInterno chamado  14
+retorno de testeInterno 14
+testeInterno chamado  15
+retorno de testeInterno 15
+~~~ 
+
+
+
 
 <br>
 <hr>
