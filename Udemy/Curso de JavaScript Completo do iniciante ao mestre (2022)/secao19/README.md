@@ -335,6 +335,399 @@ console.log(testeArrow);
 ## Escopo léxico vs dinamico
 <br>
 
+Agora iremos ver a diferença das `arrows functions` no quesito `escopo`.
+
+O `escopo` é basicamente o lugar onde a `função tem acesso` para mostrar/acessar as varaiveis. Vamos criar um novo documento chamado `escopo.js`
+
+- Sabemos que se criarmos uma função que imprime uma variavel criada no `escopo global` a função terá acesso a essa variavel.
+
+
+~~~
+const str = "global string";
+
+function teste(){
+    console.log(str);
+}
+
+teste();
+
+// SAIDA:
+
+❯ node escopo.js
+global string
+
+~~~
+
+- Porem se tivermos uma variavel dentro do `escopo da função`, somente dentro da função teremos acesso a ela, podendo até mesmo ser criada com o mesmo nome da `variavel global` criada acima.
+
+~~~
+const str = "global string";
+
+function teste(){
+    const str = "local string";
+    console.log(str);
+}
+
+console.log(str);
+teste();
+
+// SAIDA:
+
+❯ node escopo.js
+global string
+local string
+
+~~~
+
+- No caso de passarmos um parametro, a variavel global será sobrescrita na função.
+
+~~~
+const str = "global string";
+
+function teste2(str){
+    console.log(str);
+}
+teste2("parametro"); 
+
+// SAIDA:
+
+❯ node escopo.js
+parametro
+~~~
+
+- Com relação as `arrows functions` essa historia do `escopo` basicamente é importante quando estivermos falando da palavra `this`.
+- Se fizermos um `console.log(this)`, dentro da função, teremos um `objeto global` no `node` e no `browser` seria uma referencia ao `objeto window`.
+
+
+~~~
+
+const str = "global string";
+
+function teste2(str){
+    console.log(this);
+    console.log(str);
+}
+teste2("parametro");
+
+
+// SAIDA:
+
+
+❯ node escopo.js
+<ref *1> Object [global] {
+  global: [Circular *1],
+  queueMicrotask: [Function: queueMicrotask],
+  clearImmediate: [Function: clearImmediate],
+  setImmediate: [Function: setImmediate] {
+    [Symbol(nodejs.util.promisify.custom)]: [Getter]
+  },
+  structuredClone: [Function: structuredClone],
+  clearInterval: [Function: clearInterval],
+  clearTimeout: [Function: clearTimeout],
+  setInterval: [Function: setInterval],
+  setTimeout: [Function: setTimeout] {
+    [Symbol(nodejs.util.promisify.custom)]: [Getter]
+  },
+  atob: [Function: atob],
+  btoa: [Function: btoa],
+  performance: Performance {
+    nodeTiming: PerformanceNodeTiming {
+      name: 'node',
+      entryType: 'node',
+      startTime: 0,
+      duration: 46.88050799816847,
+      nodeStart: 2.077254995703697,
+      v8Start: 4.084166996181011,
+      bootstrapComplete: 38.166314996778965,
+      environment: 23.18207799643278,
+      loopStart: -1,
+      loopExit: -1,
+      idleTime: 0
+    },
+    timeOrigin: 1666976600496.085
+  },
+  fetch: [AsyncFunction: fetch]
+}
+parametro 
+~~~
+
+- No momento que declaramos a função, o `this` era o proprio objeto global, no caso do node.
+- Vamos criar um objeto para vermos a referencia do `this` mudando.
+
+~~~
+
+const str = "global string";
+
+function teste2(str){
+    console.log(this);
+    console.log(str);
+}
+// teste2("parametro");
+
+const obj = {
+    foo: "bar",
+    teste2: teste2,
+}
+obj.teste2("string de objeto");
+
+// SAIDA:
+
+❯ node escopo.js
+{ foo: 'bar', teste2: [Function: teste2] }
+string de objeto
+~~~
+
+- Agora que não estamos mais chamando dentro do `escopo global` o `this` da função referen  cia ao `objeto` que o chama, se tornando dinamico, olhando quem esta executando a função, que no caso, esta sendo executada a partir do objeto `obj`.
+
+> OBS: Em objetos, se temos o nome da propriedade igual ao nome do valor da propriedade, o `valor` pode ser omitido.
+> ~~~
+> const obj = {
+>   foo: "bar",
+>   teste,
+> }
+> ~~~ 
+
+- Vamos criar uma outra função utilizando agora as `arrows functions` para vermos o `escopo` do  `this` usando 'arrow functions`.
+
+~~~
+const str = "global string";
+
+//[1]
+
+function teste(str){
+    console.log(this); 
+    console.log(str);
+}
+// teste2("parametro"); // this = object global
+
+const obj = {
+    foo: "bar",
+    teste // [2]
+}
+obj.teste("string de objeto"); // this  = object obj
+
+
+const teste2 = () => {
+    console.log("arrow function");
+    console.log(this);
+}
+teste2();
+
+❯ node escopo.js
+{ foo: 'bar', teste: [Function: teste] }
+string de objeto
+arrow function
+{}
+
+~~~ 
+
+- Como estamos trabalhando com o `node` o `this` da `arrow function` é um `objeto vazio` que tem haver com `exportação de modulo`. E no caso do `browser` ele iria referenciar o `objeto window` igual a nossa `function expression`.
+
+~~~ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Escopo arrow functions</h1>
+    <button type="button" onclick="teste()">teste()</button>
+
+    <button type="button" onclick="teste2()">teste2()</button>
+    <script src="./escopo.js"></script>
+</body>
+</html>
+~~~ 
+
+![](./assets/cap2.png)
+
+
+- Porem o que queremos ver é a utilização da `arrow function` juntamente com o `obj`.
+
+~~~
+const str = "global string";
+
+//[1]
+
+function teste(str){
+    console.log(this); 
+    console.log(str);
+}
+//[3]
+const teste2 = () => {
+    console.log("arrow function");
+    console.log(this);
+}
+teste2();
+
+const obj = {
+    foo: "bar",
+    teste, // [2]
+    teste2,
+}
+console.log("\n");
+obj.teste("string de objeto função teste()"); // this  = object obj
+obj.teste2();
+
+
+// SAIDA:
+
+❯ node escopo.js
+arrow function
+{}
+
+
+{ foo: 'bar', teste: [Function: teste], teste2: [Function: teste2] }
+string de objeto função teste()
+arrow function
+{}
+~~~
+
+- Como podemos ver na saida do console, independente de chamar uma `arrow function` a partir do `objeto global` ou a partir do `objeto local (obj)` o escopo do `this` será o mesmo. Diferente da `function expression` onde caso seja chamada por um `objeto local` o `this` irá referenciar ao objeto chamado.
+
+- Vamos fazer mais um teste, vamos utilizar o `setTimeOut()` para executar uma função a partir de um determinado tempo, dentro da nossa função de  `teste()`.
+
+
+~~~ 
+
+function teste(str){
+    console.log("-------------- this teste");
+    console.log(this); 
+    console.log(str);
+
+    setTimeout(function(){
+        console.log("--------------");
+        console.log(this);
+    },2000);
+}
+~~~ 
+
+![](./assets/cap3.png)
+
+- O `this` dentro da nossa função teste, refere-se ao nosso objeto, tanto executando no `node` quanto executando no `browser`, porem o `this` dentro da nossa função de `setTimeOut()` irá diferenciar tanto para o `node` quanto para o `browser`, onde no `browser` temos o `this` referenciando ao `objeto window`.
+- Ja no `node` o `this` referencia a um outro objeto chamado `timeOut`. Ou seja, na pratica o nosso `this` sofreu alteração, logo, como fazemos para que o nosso `this` não sofra alteração nem no `node` nem no browser?
+- Podemos em vez de executar uma `declaração de função`, executar uma `arrow function` da seguinte maneira:
+
+
+~~~ 
+function teste(str){
+    console.log("-------------- this teste");
+    console.log(this); 
+    console.log(str);
+
+    setTimeout(() => {
+        console.log("--------------");
+        console.log(this);
+    },2000);
+}
+~~~ 
+
+![](./assets/cap4.png)
+
+- Como podemos ver acima, o `this` agora referencia, tanto no `browser` quanto no node, ao nosso `objeto local`.
+
+Lembre-se disso, sempre que estivermos trabalhando com a palavra reservada `this` e não quisermos que ela sofra alteração, usamos a `arrow function`.
+
+A mesma coisa é valilda quando estivermos falando de `eventos`, por exemplo, vamos criar um `button` e atrelar a ele um evento.
+
+~~~ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuctions scope in node and browser</title>
+</head>
+<body>
+    <h1>Escopo arrow functions</h1>
+    <button type="button" onclick="teste()">teste()</button>
+
+    <button type="button" onclick="teste2()">teste2()</button>
+
+    <button id="btn">Click</button>
+
+    <script src="./escopo.js"></script>
+
+    <script>
+        const btn  = document.getElementById("btn");
+        console.log(btn);
+
+        btn.addEventListener("click", function(){
+            console.log(this);
+        });
+
+        btn.addEventListener("click", () => {
+            console.log(this);
+        });
+    </script>
+
+</body>
+</html>
+~~~ 
+
+![](./assets/cap5.png)
+
+- Como podemos ver na imagem acima, ao clicarmos no botão, o `this` no nossa `function expression` referencia ao nosso `botão`, e na `arrow function` o `this` referencia ao ao `objeto global` pois ele não sofreu alteração, seria o mesmo `this` caso a gente coloque um `console.log()` do lado de fora da função de evento.
+
+~~~
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuctions scope in node and browser</title>
+</head>
+<body>
+    <h1>Escopo arrow functions</h1>
+    <button type="button" onclick="teste()">teste()</button>
+
+    <button type="button" onclick="teste2()">teste2()</button>
+
+    <button id="btn">Click</button>
+
+    <script src="./escopo.js"></script>
+
+    <script>
+        const btn  = document.getElementById("btn");
+        const _this = this;
+        console.log(btn);
+
+        console.log("_this fora das funcões");
+        console.log(_this);
+
+        btn.addEventListener("click", function(){
+            console.log("function declaration");
+            console.log(this);
+
+            console.log("_this dentro da function expression");
+            console.log(_this);
+
+            console.log(this === _this);
+        });
+
+        btn.addEventListener("click", () => {
+            console.log("arrow function");
+            console.log(this);
+            console.log("_this dentro da arrow function");
+            console.log(_this);
+            console.log(this === _this);
+        });
+    </script>
+
+</body>
+</html>
+~~~
+
+![](./assets/cap6.png)
+
+
+
+
 <br>
 <hr>
 <br>
