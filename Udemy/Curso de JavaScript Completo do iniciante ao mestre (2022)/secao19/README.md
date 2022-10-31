@@ -1533,6 +1533,250 @@ retorno de testeInterno 15
 ## Encadeamento de Metodos
 <br>
 
+Vamos criar uma arquivo chamado `chain.js` para exemplificarmos melhor o que seria o encadeamento de metodos.
+
+Ja vimos sobre isso usando os metodos dos javascript como por exemplo:
+
+- Vamos ver o que seria retornado pela função `document.addEventListener("click", () => {});`. Para isso temos que criar um novo documento chamado `chain.html` e adicionar nosso javascript ao `script` desse documento
+
+~~~ 
+
+[JAVASCRIPT]
+let doc = document.addEventListener("click", () => {});
+console.log(doc);
+
+[HTML]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encadeamento de Metodos</title>
+</head>
+<body>
+    <h1>Encadeamento de Metodos</h1>
+
+    <script src="./chain.js"></script>
+</body>
+</html>
+~~~ 
+
+- No caso do `document.addEventListener()` recebemos de retorno o `undefined`.
+- Porem se mudarmos para `document.querySelector("a")` pegando assim todas as tags `a` do nosso `html`
+
+~~~ 
+// let doc = document.addEventListener("click", () => {}); // undefined
+let doc = document.querySelector("a");
+console.log(doc);
+~~~ 
+
+![](./assets/cap19.png)
+
+- Como podemos ver na saida, do `querySelector()` o retorno é o objeto/elemento que criamos no `html` no caso a `tag a`.
+- Logo, podemos fazer algo do tipo, `document.querySelector("a").style`.
+
+![](./assets/cap20.png)
+
+
+Logo, sempre que tivermos um `metodo/função` cujo o retorno é um `objeto` podemos continuar `concatenando/encadeando` com outros `metodos/funções`.
+
+No caso acima concatemos o `objeto a` com o metodo `style`. Uma biblioteca bastante camosa que começou com esse conceito de `encadeamento` foi o `JQuery` onde podiamos fazer varias coisas em uma unica linha pois sempre era retornado o `objeto JQuery`, onde poderiamos escrever varias funções em uma unica linha concatenando/encadeando com varios metodos.
+
+Depois dessa explicação inical, vamos criar um objeto para exemplificarmos melhor.
+
+- Vamos criar um objeto chamado `calc` com uma propriedade chamada `value` e teremos tbm dentro desse objeto alguns metodos.
+- Teremos um metodo `soma e subtrai` que recebem um numero como parametro, e outro metodo chamado `log` que irá nos mostrar o resultado.
+
+~~~ 
+const calc = {
+    value: 0,
+    soma(num){},
+    subtrai(num){},
+    log(){},
+}
+~~~
+
+- Tanto na `soma()` quanto na `subtração` iremos pegar o `this.value` e somar ao `num`.
+
+~~~
+const calc = {
+    value: 0,
+    soma(num){
+        this.value += num;
+    },
+    subtrai(num){
+        this.value -= num;
+    },
+    log(){},
+}
+
+calc.soma(5);
+console.log(calc);
+~~~ 
+
+![](./assets/cap21.png)
+
+- Como podemos ver na saida o nosso objeto ja possui o valor `5` que foi passado.
+- Porem, gostariamos de fazer o seguinte: Primeiro somar 5 e depois somar 2
+
+~~~
+
+const calc = {
+    value: 0,
+    soma(num){
+        // console.log(value); // error
+        console.log(this.value);
+        this.value += num;
+    },
+    subtrai(num){
+        this.value -= num;
+    },
+    log(){},
+}
+
+calc.soma(5).soma(2);
+console.log(calc);
+~~~ 
+
+
+- Como podemos ver temos um erro, pois não temos nenhum `retorno`  na nossa função `soma()`. Ou seja, como não temos um `return` quando chamamos a função `soma()` o retorno dela é `undefined`, e `undefined` não possue nenhum metodo ou propriedade do tipo `soma()` para ser executado sobre.
+
+~~~ 
+const calc = {
+    value: 0,
+    soma(num){
+        // console.log(value); // error
+        console.log(this.value);
+        this.value += num;
+    },
+    subtrai(num){
+        this.value -= num;
+    },
+    log(){},
+}
+
+console.log(calc.soma(5));
+console.log(calc);
+~~~ 
+
+![](./assets/cap22.png)
+
+- Porem , podemos fazer com que o metodo `soma()` retorne o proprio `objeto`, permitindo agora o encadeamento de metodos.
+
+~~~ 
+
+const calc = {
+    value: 0,
+    soma(num){
+        // console.log(value); // error
+        console.log(this.value);
+        this.value += num;
+        // console.log(this);
+        return this;
+    },
+    subtrai(num){
+        this.value -= num;
+    },
+    log(){},
+}
+
+// console.log(calc.soma(5).soma(2)); // objeto
+calc.soma(5).soma(2); // valor
+console.log(calc); // objeto
+~~~
+
+![](./assets/cap23.png)
+
+- Vamos usar tbm com o metodo `subtrai`
+
+~~~ 
+const calc = {
+    value: 0,
+    soma(num){
+        // console.log(value); // error
+        console.log(this.value);
+        this.value += num;
+        // console.log(this);
+        return this;
+    },
+    subtrai(num){
+        this.value -= num;
+        return this;
+    },
+    log(){},
+}
+console.log(calc); // objeto
+console.log(calc.soma(5).soma(2)); // objeto
+calc.soma(5).soma(2); // valor
+calc.soma(5).soma(2).subtrai(3);
+console.log(calc.value);
+~~~ 
+
+
+Vamos agora escrever o metodo `log()` para retonar o valor
+
+~~~
+const calc = {
+    value: 0,
+    soma(num){
+        // console.log(value); // error
+        console.log(this.value);
+        this.value += num;
+        // console.log(this);
+        return this;
+    },
+    subtrai(num){
+        this.value -= num;
+        return this;
+    },
+    log(){
+        console.log(this.value);
+    },
+}
+// console.log(calc.soma(5).soma(2)); // objeto
+calc.soma(5).soma(2); // valor
+calc.soma(5).soma(2).subtrai(3);
+calc.soma(5).soma(2).subtrai(3).soma(2).log();
+// console.log(calc.value);
+console.log(calc); // objeto
+~~~
+
+![](./assets/cap24.png)
+
+
+- Como acima o metodo `log()` não foi escrito para retonar o objeto, se chamarmos qualquer um dos outros metodos (`soma;subtrai`), não irá funcionar, ja que o retorno do `log()` esta como `undefined`, para mudarmos isso bbasta add o `return this` ao metodo `log()`.
+
+~~~
+const calc = {
+    value: 0,
+    soma(num){
+        // console.log(value); // error
+        console.log(this.value);
+        this.value += num;
+        // console.log(this);
+        return this;
+    },
+    subtrai(num){
+        this.value -= num;
+        return this;
+    },
+    log(){
+        console.log(this.value);
+        return this;
+    },
+}
+// console.log(calc.soma(5).soma(2)); // objeto
+calc.soma(5).soma(2); // valor
+calc.soma(5).soma(2).subtrai(3);
+calc.soma(5).soma(2).subtrai(3).soma(2).log();
+calc.soma(5).soma(2).subtrai(3).soma(2).log().soma(5);
+// console.log(calc.value);
+console.log(calc); // objeto
+
+~~~
+
+
 <br>
 <hr>
 <br>
