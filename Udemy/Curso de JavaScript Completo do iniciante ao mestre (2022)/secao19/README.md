@@ -736,6 +736,161 @@ A mesma coisa é valilda quando estivermos falando de `eventos`, por exemplo, va
 ## Metodos de objetos
 <br>
 
+Agora iremos ver como colocar uma `funcção` dentro de uma `propriedade de objeto` para que ela se transforme em um `metodo de objeto`.
+
+Ja fizemos isso antes ao decorrer do curso, porem vamos ver um pequeno detalhe não visto ainda. Vamos criar um novo documento chamado `metodo.js` para exemplificarmos melhor.
+
+- No documento, vamos criar um objeto chamado `dog`, com uma propriedade `name` e um metodo chamado `falar`.
+
+~~~
+const dog = {
+    name: "rex",
+    falar: function(){
+        console.log(this.name, "fala: au au");
+    }
+}
+
+dog.falar()
+
+// SAIDA:
+
+❯ node metodo.js
+rex fala: au au
+
+~~~ 
+
+- Poderiamos tbm fazer da seguinte forma:
+
+~~~ 
+function latir(){
+    console.log(this.name, "fala: au au");
+}
+
+function miar(){
+    console.log(this.name, "fala: miau");
+}
+
+const dog = {
+    name: "rex",
+    falar: latir,
+}
+
+const cat = {
+    name: "mingal",
+    falar: miar,
+}
+
+dog.falar();
+cat.falar();
+
+// SAIDA:
+
+❯ node metodo.js
+rex fala: au au
+mingal fala: miau
+~~~ 
+
+- Vamos mudar um pouco a maneira de escrever a função para vermos que temos mais de uma maneira:
+
+~~~ 
+function latir(){
+    console.log(this.name, "fala: au au");
+}
+
+function miar(){
+    console.log(this.name, "fala: miau");
+}
+
+const dog = {
+    name: "rex",
+    falar(){
+        console.log(this.name, "fala: au au");
+    },
+    falar2(){
+        console.log("falar2");
+    }
+}
+
+const cat = {
+    name: "mingal",
+    falar: miar,
+}
+
+dog.falar();
+dog.falar2();
+cat.falar();
+
+// SAIDA:
+
+❯ node metodo.js
+rex fala: au au
+falar2
+mingal fala: miau
+~~~
+
+- Uma outra observação, eh que não podemos escrever a função da seguinte maneira, vamos mudar o objeto `cat` para vermos...
+
+~~~
+function latir(){
+    console.log(this.name, "fala: au au");
+}
+
+function miar(){
+    console.log(this.name, "fala: miau");
+}
+
+const dog = {
+    name: "rex",
+    falar(){
+        console.log(this.name, "fala: au au");
+    },
+    falar2(){
+        console.log("falar2");
+    }
+}
+
+const cat = {
+    name: "mingal",
+    falar(){
+        miar();
+    }
+}
+
+dog.falar();
+dog.falar2();
+cat.falar();
+
+// SAIDA:
+
+❯ node metodo.js
+rex fala: au au
+falar2
+undefined fala: miau
+~~~
+
+- Temos o `undefined` pois ao chamarmos a função `miar()` o `this` não é mais o objeto `cat`, teriamos que falar para a função `miar()` que o `this` é o `objeto ` que queremos.
+- Quando chamamos o `metodo` da maneira acima, perdermos o escopo do objeto, para recuperarmos o escopo do objeto, teriamos que utilizar os metodos `call()` ou `apply()` que são assuntos que iremos ver mais a frente.
+
+~~~ 
+
+const cat = {
+    name: "mingal",
+    falar(){
+        console.log(this);
+        miar();
+    }
+}
+
+// SAIDA:
+
+❯ node metodo.js
+rex fala: au au
+falar2
+{ name: 'mingal', falar: [Function: falar] }
+undefined fala: miau
+~~~
+
+
 <br>
 <hr>
 <br>
