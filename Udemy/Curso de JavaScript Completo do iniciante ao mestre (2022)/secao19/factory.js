@@ -9,7 +9,7 @@ function criarCachorro(name){
             posicao += distancia;
             console.log(this.name, " andou ", distancia, " m");
         },
-        pegaPosicao(){
+        get posicao(){
             console.log(`A posicao atual de ${this.name} é: ${posicao}`); // this.posicao = undefined
 
             return posicao;
@@ -18,11 +18,13 @@ function criarCachorro(name){
 }
 
 const rex = criarCachorro("Rex");
-rex.andar(10);
-rex.andar(5);
-rex.pegaPosicao();
-
+// rex.andar(10);
+// rex.andar(5);
+// rex.posicao;
+// console.log(rex.posicao);
+console.log(rex);
 const toto = criarCachorro("Toto");
-toto.andar(20);
-toto.andar(-3);
-toto.pegaPosicao();
+// toto.andar(20);
+// toto.andar(-3);
+// toto.posicao;
+console.log(toto);

@@ -2357,21 +2357,6 @@ A posicao atual de Toto é: 17
 
 Esse é o conceito de `factory function`.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <br>
 <hr>
 <br>
@@ -2380,13 +2365,201 @@ Esse é o conceito de `factory function`.
 ## Iniciando com Getters
 <br>
 
+Observem que na aula passada, toda vez que precisavamos recuperar a `posicao` do cachorro, tinhamos que executar um metodo chamado `pegaPosicao()`. O que gostariamos de fazer é ver esse metodo como um `propriedade` entrando assim em um conceito chamado `getters and setters`.
+
+Ao invez de fazermos algo tipo `rex.pegaPosicao()` queremos fazer algo do tipo, `rex.posicao`, porem essa `posicao` não é uma propriedade do objeto `rex` e sim uma `variavel` que esta dentro da `factory function`. Caso a gente rode o codigo abaixo, teremos um `undefined`.
+
+~~~ 
+function criarCachorro(name){
+    let posicao = 0;
+    return {
+        name,
+        latir(){
+            console.log(this.name, " esta latindo!");
+        },
+        andar(distancia){
+            posicao += distancia;
+            console.log(this.name, " andou ", distancia, " m");
+        },
+        pegaPosicao(){
+            console.log(`A posicao atual de ${this.name} é: ${posicao}`); // this.posicao = undefined
+
+            return posicao;
+        }
+    }
+}
+
+const rex = criarCachorro("Rex");
+rex.andar(10);
+rex.andar(5);
+rex.pegaPosicao();
+console.log(rex.posicao);
+
+const toto = criarCachorro("Toto");
+toto.andar(20);
+toto.andar(-3);
+toto.pegaPosicao();
+
+// SAIDA:
+
+❯ node factory.js
+Rex  andou  10  m
+Rex  andou  5  m
+A posicao atual de Rex é: 15
+undefined
+Toto  andou  20  m
+Toto  andou  -3  m
+A posicao atual de Toto é: 17
+~~~ 
+
+- Recebemos o `undefined` pois não temos uma `propriedade` posicao dentro do `objeto` rex, o que temos é uma variavel dentro da `factory function`.
+- Queremos criar uma `função/metodo` chamada `posicao()`
+
+~~~ 
+function criarCachorro(name){
+    let posicao = 0;
+    return {
+        name,
+        latir(){
+            console.log(this.name, " esta latindo!");
+        },
+        andar(distancia){
+            posicao += distancia;
+            console.log(this.name, " andou ", distancia, " m");
+        },
+        posicao(){
+            console.log(`A posicao atual de ${this.name} é: ${posicao}`); // this.posicao = undefined
+
+            return posicao;
+        }
+    }
+}
+
+const rex = criarCachorro("Rex");
+rex.andar(10);
+rex.andar(5);
+rex.posicao();
+console.log(rex.posicao());
+
+const toto = criarCachorro("Toto");
+toto.andar(20);
+toto.andar(-3);
+toto.posicao();
+
+// SAIDA:
+
+❯ node factory.js
+Rex  andou  10  m
+Rex  andou  5  m
+A posicao atual de Rex é: 15
+A posicao atual de Rex é: 15
+15
+Toto  andou  20  m
+Toto  andou  -3  m
+A posicao atual de Toto é: 17
+~~~
+
+- Porem, no codigo acima, estamos chamando como um `metodo` quando na verdade queremos chamar como uma `propriedade do objeto`. Para isso, basta colocarmos na frente do metodo `posicao()` uma palavra reservada chamada `get`.
+- Quando usamos essa palavra o `posicao()` continuar sendo um metodo porem fazemos a chamada dele como se fosse uma propriedade.
+
+~~~ 
+function criarCachorro(name){
+    let posicao = 0;
+    return {
+        name,
+        latir(){
+            console.log(this.name, " esta latindo!");
+        },
+        andar(distancia){
+            posicao += distancia;
+            console.log(this.name, " andou ", distancia, " m");
+        },
+        get posicao(){
+            console.log(`A posicao atual de ${this.name} é: ${posicao}`); // this.posicao = undefined
+
+            return posicao;
+        }
+    }
+}
+
+const rex = criarCachorro("Rex");
+rex.andar(10);
+rex.andar(5);
+rex.posicao;
+console.log(rex.posicao);
+
+const toto = criarCachorro("Toto");
+toto.andar(20);
+toto.andar(-3);
+toto.posicao;
+
+// SAIDA:
+
+❯ node factory.js
+Rex  andou  10  m
+Rex  andou  5  m
+A posicao atual de Rex é: 15
+A posicao atual de Rex é: 15
+15
+Toto  andou  20  m
+Toto  andou  -3  m
+A posicao atual de Toto é: 17
+~~~ 
+
+- Para vermos melhor o uso do `get` basta chamar o objeto e veremos agora que em vez de `function` temos o `getter` indicando no objeto.
+
+~~~
+function criarCachorro(name){
+    let posicao = 0;
+    return {
+        name,
+        latir(){
+            console.log(this.name, " esta latindo!");
+        },
+        andar(distancia){
+            posicao += distancia;
+            console.log(this.name, " andou ", distancia, " m");
+        },
+        get posicao(){
+            console.log(`A posicao atual de ${this.name} é: ${posicao}`); // this.posicao = undefined
+
+            return posicao;
+        }
+    }
+}
+
+const rex = criarCachorro("Rex");
+console.log(rex);
+
+const toto = criarCachorro("Toto");
+console.log(toto);
+
+// SAIDA:
+
+❯ node factory.js
+{
+  name: 'Rex',
+  latir: [Function: latir],
+  andar: [Function: andar],
+  posicao: [Getter]
+}
+{
+  name: 'Toto',
+  latir: [Function: latir],
+  andar: [Function: andar],
+  posicao: [Getter]
+}
+~~~ 
+
 <br>
 <hr>
 <br>
 
 
-## COnstructor
+## Constructor
 <br>
+
+
 
 <br>
 <hr>
