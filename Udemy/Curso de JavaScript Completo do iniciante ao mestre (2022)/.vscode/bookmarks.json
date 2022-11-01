@@ -974,6 +974,31 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "secao20/README.md",
+			"bookmarks": [
+				{
+					"line": 4,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 7,
+					"column": 30,
+					"label": ""
+				},
+				{
+					"line": 15,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 26,
+					"column": 43,
+					"label": ""
+				}
+			]
 		}
 	]
 }
