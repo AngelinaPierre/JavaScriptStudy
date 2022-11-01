@@ -909,6 +909,56 @@
 					"label": ""
 				}
 			]
+		},
+		{
+			"path": "secao19/README.md",
+			"bookmarks": [
+				{
+					"line": 4,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 13,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 334,
+					"column": 28,
+					"label": ""
+				},
+				{
+					"line": 735,
+					"column": 21,
+					"label": ""
+				},
+				{
+					"line": 898,
+					"column": 24,
+					"label": ""
+				},
+				{
+					"line": 1276,
+					"column": 11,
+					"label": ""
+				},
+				{
+					"line": 1532,
+					"column": 26,
+					"label": ""
+				},
+				{
+					"line": 1784,
+					"column": 16,
+					"label": ""
+				},
+				{
+					"line": 2069,
+					"column": 22,
+					"label": ""
+				}
+			]
 		}
 	]
 }

@@ -16,7 +16,7 @@
 
         if(elementsAddScroll.length === 0){
             window.removeEventListener("scroll", addClassOnScroll);
-            console.log("funcionando removedor de event")
+            console.log("funcionando removedor de event");
         }
 
         elementsAddScroll.forEach(el => {
