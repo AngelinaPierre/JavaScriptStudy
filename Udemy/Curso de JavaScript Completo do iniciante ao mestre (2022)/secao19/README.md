@@ -2675,6 +2675,102 @@ A posicação atual é: -14 m
 ## rest operator
 <br>
 
+O `rest operator` é muito parecido com o `spread operator`, porem o `spread` irá, digamos assim receber uma `estrutura de interaveis` como se fosse um `array` e irá separar em elementos individuais. Ja o `rest operator` irá fazer o oposto, como se passasemos argumentos separados como parametro de uma função por exemplo, e ao utilizar o `rest operator` ele irá `agrupar` esses valores dentrod e uma estrutura como se fosse um `array`.
+
+Para exemplificarmos vamos criar um novo documento e chama-lo de `rest_operator.js`. Iremos criar uma função chamda `teste()` e vamos executa-la passando os parametros  `1,2,3,4,5`.
+
+~~~
+function teste(){}
+
+teste(1,2,3,4,5);
+~~~ 
+
+- Para termos acesso a esses parametros na função teste poderiamos fazer da seguinte maneira: `teste(n1,n2,n3,n4,n5)`.
+- Porem, digamos que a gente queira receber somente dois parametros `teste(n1,n2)` e os outros parametros queremos que venham agrupados em um `array`. para isso usamos o `rest operator`.
+
+
+~~~ 
+function teste(n1,n2, ...ns){
+    console.log(typeof n1, n1);
+    console.log(typeof n2, n2);
+    console.log(typeof ns, ns);
+}
+
+teste(1,2,3,4,5);
+
+// SAIDA:
+
+❯ node rest_operator.js
+number 1
+number 2
+object [ 3, 4, 5 ]
+~~~
+
+- Da maneira acima, todos os parametros excedentes irão entrar na função como se fosse um `array like`.
+- Como vemos na saida, o `terceiro parametro = ns` é mostrado dentro de um `array` porem seu tipo é de um `objeto do tipo array`.
+- Vamos ver se podemos utilizar o metodo `.map()` no nosso terceiro parametro `ns`.
+
+~~~
+function teste(n1,n2, ...ns){
+    console.log(typeof n1, n1);
+    console.log(typeof n2, n2);
+    console.log(typeof ns, ns);
+
+    console.log(ns.map);
+}
+
+teste(1,2,3,4,5);
+
+// SAIDA:
+
+❯ node rest_operator.js
+number 1
+number 2
+object [ 3, 4, 5 ]
+[Function: map]
+
+~~~
+
+- Como podemos ver na saida, podemos usar o metodo de arrays `.map` pois o `rest operator` coloca os elementos dentro de um `objeto do tipo array`.
+
+> OBS: Para usar o `rest operator` temos que coloca-lo como ultimo parametro na função. Se colocarmos outro parametro depois do `rest operator` ou ate mesmo coloca-lo no começo, iremos receber um erro.
+> ~~~
+> 
+>    function teste(n1,n2, ...ns,n3){
+>        console.log(typeof n1, n1);
+>        console.log(typeof n2, n2);
+>        console.log(typeof ns, ns);
+>
+>        console.log(ns.map);
+>    }
+>
+>    teste(1,2,3,4,5);
+>
+>    // SAIDA:
+>
+>    ❯ node rest_operator.js
+>    /home/angelina/Documents/ESTUDOS/GitHub Repos/JavaScriptStudy/Udemy/Curso de JavaScript Completo do iniciante ao mestre (2022)/secao19/rest_operator.js:1
+>    function teste(n1,n2, ...ns,n3){
+>                            ^
+>
+>    SyntaxError: Rest parameter must be last formal parameter
+>        at Object.compileFunction (node:vm:360:18)
+>        at wrapSafe (node:internal/modules/cjs/loader:1049:15)
+>        at Module._compile (node:internal/modules/cjs/loader:1084:27)
+>        at Module._extensions..js (node:internal/modules/cjs/loader:1174:10)
+>        at Module.load (node:internal/modules/cjs/loader:998:32)
+>        at Module._load (node:internal/modules/cjs/loader:839:12)
+>        at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)
+>        at node:internal/main/run_main_module:17:47
+>
+>    Node.js v18.7.0
+>~~~ 
+> >
+>
+
+
+- 
+
 <br>
 <hr>
 <br>
