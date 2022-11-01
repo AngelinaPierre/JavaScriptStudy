@@ -2559,6 +2559,112 @@ console.log(toto);
 ## Constructor
 <br>
 
+Vamos agora ver um outro conceito que é similar ao `factory function` que seria a idea de `função construtora`. Na realidade o `objetivo` é o mesmo das `factory functions`, termos uma função que nos retorna um objeto, tendo assim um `molde` do objeto se tornando mais facil fazer alterações.
+
+A grande diferença entre a `factory function` e as `funções construtoras` é a necessidade de quando formos usar a `função construtora` temos que utilizar `obrigatoriamente` o `operador new`.
+
+Vamos criar um novo documento chamado `constructor.js` para exemplificarmos melhor isso.
+
+- Vamos fazer a criação do mesmo objeto da aula passada, porem agora a `escrita` quando criamos uma função construtora tem uma peculiaridade que é `começar com letra maiuscula`.
+- Quando precisarmos criar um novo cachorro, temos que usar `obrigatoriamente` o `operador new`
+
+~~~ 
+function Cachorro(name){
+
+}
+
+const rex = new Cachorro("Rex");
+const toto = new Cachorro("Toto");
+~~~ 
+
+- Dentro da função construtora, nao vamos colocar nenhum retorno. O que colocamos na função é tudo dentro do `this`. 
+- Ou seja, quando utilizamos o `operador new` o que acontece por baixo dos panos no `operador new` é a criação de um `objeto limpo/vazio`.
+- Dentro da função, tudo que tiver com `this` faz referencia ao `objeto criado`.
+
+~~~
+function Cachorro(name){
+    this.name = name;
+    console.log(this);
+}
+
+const rex = new Cachorro("Rex");
+console.log(rex);
+const toto = new Cachorro("Toto");
+
+// SAIDA:
+
+❯ node constructors.js
+Cachorro { name: 'Rex' }
+Cachorro { name: 'Rex' }
+Cachorro { name: 'Toto' }
+~~~
+
+- Vejam pela saida do console que o `this` interno é igual ao console do `rex` externo.
+- Agora iremos colocar dentro da função os metodos que criamos anteriormente.
+
+~~~ 
+function Cachorro(name){
+    this.name = name;
+    let posicao = 0;
+    console.log(this);
+
+    this.latir = function(){
+        console.log(this.name, " esta latindo!");
+    };
+
+    this.andar = function(distancia){
+        posicao += distancia;
+        console.log(this.name, "andou", distancia, "m");
+        console.log("A posicação atual é:", posicao, "m");
+    }
+}
+
+const rex = new Cachorro("Rex");
+const toto = new Cachorro("Toto");
+
+
+console.log(rex);
+rex.latir();
+rex.andar(5);
+rex.andar(10);
+
+console.log(toto);
+toto.andar(3);
+
+const laica = new Cachorro("Laica");
+laica.andar(2);
+laica.andar(-16);
+
+
+
+// SAIDA:
+❯ node constructors.js
+Cachorro { name: 'Rex' }
+Cachorro { name: 'Toto' }
+Cachorro {
+  name: 'Rex',
+  latir: [Function (anonymous)],
+  andar: [Function (anonymous)]
+}
+Rex  esta latindo!
+Rex andou 5 m
+A posicação atual é: 5 m
+Rex andou 10 m
+A posicação atual é: 15 m
+Cachorro {
+  name: 'Toto',
+  latir: [Function (anonymous)],
+  andar: [Function (anonymous)]
+}
+Toto andou 3 m
+A posicação atual é: 3 m
+Cachorro { name: 'Laica' }
+Laica andou 2 m
+A posicação atual é: 2 m
+Laica andou -16 m
+A posicação atual é: -14 m
+
+~~~ 
 
 
 <br>
