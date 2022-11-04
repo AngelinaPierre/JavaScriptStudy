@@ -2301,6 +2301,194 @@ const mingal = new Gato("mingal");
 ## Métodos Estáticos
 <br>
 
+Agora iremos falar sobre `metodos estaticos` que nada mais são do que `metodos` que não fazem parte das `instancias do objeto`. Ou melhor das `instancias das classes do objeto`.
+
+`Metodos Estaticos` fazem parte da `função construtora` ou da `classe`.
+
+- Para demonstrar, antes de vermos no codigo, temos uma classe `nativa` do javascript que seria o `Math`.
+
+![](./assets/cap65.png)
+
+Observem que as funções desse objeto `Math` estão direto no objeto `Math`, oq ue é um pouco diferente do que ja tinhamos visto até entao. Vimos que os `metodos` ficavam no `prototype`, porem no caso do objeto `Math` é um pouco diferente.
+
+Isso acontece pq na verdade esses metodos são `metodos estaticos`, não fazem parte das `instancias/objeto`, tanto é que não podemos criar uma `variavel n` e atribuir a ela o `new Math`, isso irá nos gerar um erro que fala que `Math` não é um `construtor`.
+
+![](./assets/cap66.png)
+
+Ou seja, a `classe Math` so pode ser utilizada diretamente, e não a partir de uma `instancia/objeto`. Por isso quando usamos em aulas passadas o `Math.random()` usamos o objeto `Math` diretamente, sem criar um objeto.
+
+- Vamos agora criar um novo documento chamado `static.js` para exemplificarmos isso melhor.
+- Como vimos acima, um `metodo estatico` nada mais é do que um metodo que faz parte da `função construtora` ou da `classe`.
+- Vamos criar primeiramente utilizando o `ES5`, uma função chamada `Animal` onde iremos colocar em seu `prototype` um metodo chamado `whoAmI()` e tbm um `metodo estatico` chamado de `categoria`.
+- Ou seja, todo `Anima` irá possuir uma `categoria` que seria um  `ser vivo`, logo, não faz parte das instancias de cada `Animal` gerado.
+
+~~~
+// ES5  
+
+function Animal(){};
+
+Animal.prototype.whoAmI = function(){
+    return this;
+}
+
+Animal.categoria = "ser vivo";
+~~~
+
+- Poderiamos criar uma constante chamada `dog` que irá receber o `new Animal()` e dentro de `Animal` teremos a categoria.
+
+~~~
+// ES5  
+
+function Animal(){};
+
+Animal.prototype.whoAmI = function(){
+    return this;
+}
+
+Animal.categoria = "ser vivo";
+
+const dog  = new Animal(); 
+~~~
+
+![](./assets/cap67.png)
+
+- Observem que `categoria` so pertence a `classe Animal` e não do `objeto em si`. Logo quando escrevemos `dog.categoria` recebemos como retorno o `undefined`. Pois não temos uma propriedade chamada `categoria` dentro do nosso objeto, éssa propriedade esta guardada na propria `função construtora Animal`.
+
+Vamos agora utilizar o `ES6`, criando uma outra classe chamada `Cachorro`.
+
+- Vamos colocar uma propriedade chamada `nome` ja que todo cachorro possui um nome, e criar um `metodo estatico` chamado `comer()` para isso, temos que colocar antes do nome do metodo a palavra-chave `static`.
+
+~~~ 
+
+// ES6
+
+class Cachorro { 
+    constructor(nome){
+        this.nome = nome;
+    }
+
+    // metodo estatico
+    static comer(){
+        console.log(`${this.nome} esta comendo!`);
+    }
+
+}
+~~~
+
+- Quando usamos a palavra `static` antes de um metodo, ela nos indica que o `metodo` não irá fazer parte do `objeto/instancia` mas sim irá fazer parte do `Cachorro`. 
+- Observe tbm que se colocarmos um console.log com `this` dentro da função `comer()` não teremos mais acesso ao objeto. Ja que esse `this` não faz mais referencia para o `objeto` gerado a partir de `Cachorro` mas sim, ao `Cachorro()` em si.
+
+~~~ 
+
+// ES6
+
+class Cachorro { 
+    constructor(nome){
+        this.nome = nome;
+    };
+
+    // metodo estatico
+    static comer(){
+        console.log(this);
+        console.log(`${this.nome} esta comendo!`);
+        
+    };
+
+}
+
+const todinho = new Cachorro("todinho");
+~~~
+
+![](./assets/cap68.png)
+
+- Observem na imagem acima que não temos acesso ao `nome`, ja que o `this` não faz referencia ao objeto e sim a `classe Cachorro`.
+- Podemos tbm a partir de um `metodo estatico` chamar outro `metodo estatico` usando a palavra `this`, pois ela se refere ao `Cachorro`..
+
+~~~ 
+
+// ES6
+
+class Cachorro { 
+    constructor(nome){
+        this.nome = nome;
+    };
+
+    // metodo estatico
+    static comer(){
+        console.log(this);
+        // console.log(`${this.nome} esta comendo!`); // não possui acesso ao nome
+        console.log("esta comendo");
+        this.beber();
+        
+    };
+
+    static beber(){
+        console.log("esta bebendo");
+    }
+
+}
+
+const todinho = new Cachorro("todinho");
+~~~
+
+- Porem, se dentro do nosso `constructor` da classe a gente queira chamar algum `metodo estatico` não podemos utilizar o `this`, pois dentro do `constructor` o `this` será o `proprio objeto`  e não a `classe Cachorro`.
+- Logo se quisermos usar um `metodo estatico` dentro do nosso `constructor` teriamos que fazer `Cachorro.beber()`.
+
+~~~ 
+
+// ES6
+
+class Cachorro { 
+    constructor(nome){
+        this.nome = nome;
+        console.log("chamando metodo estatico de dentro do constructor");
+        Cachorro.beber();
+    };
+
+    // metodo estatico
+    static comer(){
+        console.log(this); //  classe cachorro
+        // console.log(`${this.nome} esta comendo!`); // não possui acesso ao nome
+        console.log("esta comendo");
+        this.beber();
+        
+    };
+
+    static beber(){
+        console.log("esta bebendo");
+    }
+
+}
+
+const dog2 = new Cachorro("todinho");
+~~~
+
+![](./assets/cap69.png)
+
+- Como o `constructor()` é executado sempre que o `operador new` é usado, no console, temos a saida direta ao atualizar a pagina.
+- 
+
+![](./assets/cap70.png)
+
+- Vejam na imagem abaixo que não temos acesso pelo `objeto dog2` aos `metodos estaticos`.
+- E o `this` seria o proprio `Cachorro`.
+
+![](./assets/cap71.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <br>
 <hr>
 <br>
