@@ -1156,6 +1156,422 @@ console.log(migal);
 ## Porque metodos ficam no protótipo?
 <br>
 
+Vamos fazer uma pequnea modificação no nossa arquivo, no `constructor` da classe `Cachorro`. Por enquato, veremos no console nosso `objeto dog` e `mingal`.
+
+~~~
+// ES5
+function Animal(tipo){
+    if(this instanceof Animal){
+        if(tipo){
+            this.tipo = tipo;
+        }
+    }else{
+        throw new Error("Animal must be created with new operator"); 
+    }
+}
+
+// Cachorre extendendo de animal 
+function Cachorro(nome){
+    this.nome = nome;
+    Animal.call(this, "mamifero");
+    this.constructor = Cachorro;
+}
+Cachorro.prototype = new Animal("mamifero"); 
+let dog = new Cachorro("dog");
+
+Animal.prototype.obterTipo = function(){
+    return this.tipo;
+}
+
+Animal.prototype.tipo = "desconhecido";
+
+// ES6
+
+class AnimalC {
+    constructor(tipo){
+        if(tipo) this.tipo = tipo;
+        // this.tipo = tipo;
+    }
+
+    obterTipo(){
+        return this.tipo;
+    }
+
+}
+
+class GatoC extends AnimalC{
+    constructor(nome){
+        super("mamifero");
+        this.nome = nome;
+    }
+}
+
+AnimalC.prototype.tipo = "desconhecido";
+
+let animal = new AnimalC("anfibio");
+let sapo = new AnimalC();
+
+let migal = new GatoC("mingal");
+console.log(migal);
+console.log(dog);
+
+~~~
+
+- Na saida do console temos dois objetos, o gerado a partir de `GatoC` que tem as propriedades `tipo e nome`. E o segundo objeto gerado a partir de cachorro que possui as propriedades `tipo, nome e constructor`.
+
+~~~
+// Cachorre extendendo de animal 
+function Cachorro(nome){
+    this.nome = nome;
+    Animal.call(this, "mamifero");
+    this.constructor = Cachorro;
+}
+~~~
+
+![](./assets/cap44.png)
+
+- Se executarmos a seguinte linha de codigo no console `mingal.constructor`, vemos uma `função/classe` criada para gerar o objeto `mingal`. A ligação entre `mingal.constructor` vem do seguinte lugar na cadeia de prototipos, `mingal.__proto__`.
+- Onde iremos ter um objeto gerado a partir da `classe AnimalC` onde dentro dela temos uma propriedade chamada `constructor`
+
+![](./assets/cap45.png)
+
+- Vamos simular esse mesmo comportamento para que o `constructor`não seja visivel. Fazendo a `ligação` do constructor, não no objeto em si, mas sim no prototipo da seguinte maneira:
+
+~~~
+Cachorro.prototype.constructor = Cachorro;
+~~~
+
+![](./assets/cap46.png)
+
+- Como podemos ver, agora so vemos as duas propriedades `nome e tipo`, e a propriedade do `constructor` esta sendo vinculada a função/classe `Animal`.
+- Como esta mostrando no console `Animal = função` e `AnimalC = classe`, porem ambos são considerados com funções como vimos em aulas passadas.
+
+Apos feita essas modificações, vamos voltar ao assunto principal da aula. O que queremos reforça é, pq quando usamos metodos e funções no `ES6` elas ficam sempre "penduradas" no `prototype`?
+
+- Vamos pegar a nossa função construtora de `Cachorro`, podemos tanto colcoar funções diretamente no `prototype de Cachorro` , como fizemos quando criamos o metodo `obterTipo` para a função construtora de `Animal`.
+- Logo poderiamos fazer a mesma coisa para a nossa função construtora de `Cachorro` criando um metodo chamado `latir()`.
+
+~~~
+[COLOCANDO METODO LATIR DENTRO DO PROTOTYPE]
+// Cachorre extendendo de animal 
+function Cachorro(nome){
+    this.nome = nome;
+    Animal.call(this, "mamifero");
+    // this.constructor = Cachorro;
+}
+
+Cachorro.prototype.constructor = Cachorro;
+Cachorro.prototype.latir = function(){
+    console.log(`${this.nome} está latindo!`);
+}
+
+Cachorro.prototype = new Animal("mamifero"); 
+let dog = new Cachorro("dog");
+~~~
+
+- Podemos tbm colocar os metodos dentro do nosso `objeto` e não no prototype.
+- Para exemplificarmos vamos criar uma nova função chamada `comer` dentro da nossa função construtora que criar o objeto `Cachorro`.
+
+~~~
+// Cachorre extendendo de animal 
+function Cachorro(nome){
+    this.nome = nome;
+    Animal.call(this, "mamifero");
+    // this.constructor = Cachorro;
+    this.comer = function(){
+         console.log(`${this.nome} está comendo`)
+    }
+}
+
+Cachorro.prototype = new Animal("mamifero"); 
+Cachorro.prototype.constructor = Cachorro;
+Cachorro.prototype.latir = function(){
+    console.log(`${this.nome} está latindo!`);
+}
+
+let dog = new Cachorro("dog");
+~~~
+
+- Agora se vermos no console, nosso `objeto dog`possui as propriedaes `tipo e nome` e o metodo `comer()`.
+- Podemos tbm usar o metodo `latir()` que esta vinculado ao `prototype de Cachorro` usando a seguinte linha de codigo: `dog.latir()`.
+- Para vermos que a função `latir()` esta vinculada ao `prototype` da função construtora basta colocar no console o `dog.__proto__`, onde será mostrado a função `latir() e o constructor`.
+
+![](./assets/cap47.png)
+
+
+- Por que nao colocamos metodos dentro da função construtora que gera o objeto?
+  - Se tivermos mais de um objeto a partir de cachorro, ou seja, 10 ou 20 objetos do tipo `Cachorro`, teremos 20 posições na memoria armazenando a mesma função.
+  - Que é o que acontece com a função `Comer()`  que foi criada dentro da função condtrutora geradora do `objeto dog`.
+- Por isso que usamos o `prototype`, acabamos ocupando menos posições na memoria da maquina. A função `latir()` vinculada ao prototype, so existe em um espaço de memoria e pode ser chamada por qualquer objeto gerado a partir de suas funções construtoras.
+- É por isso tbm que quando utilizamos a sintaxe mais moderna do `ES6`, colocando os metodos dentro da `classe`, esses metodos são salvos dentro do `prototype`, não ficam dentro do `objeto` gerado pela `classe`. 
+- Porem poderiamos utilizar o `constructor da classe`para fazer algo como:
+
+~~~ 
+class AnimalC {
+    constructor(tipo){
+        if(tipo) this.tipo = tipo;
+        // this.tipo = tipo;
+    }
+
+    obterTipo(){
+        return this.tipo;
+    }
+
+}
+
+
+class GatoC extends AnimalC{
+    constructor(nome){
+        super("mamifero");
+        this.nome = nome;
+        this.comer = function(){
+            console.log(`${this.nome} está comendo`);
+        }
+    }
+}
+~~~
+
+- Quando pedimos agora para ver o `migal` que é o objeto gerado pela classe `GatoC`, podemos ver que ele possui como propriedade a função `Comer()`, logo se tivessemos 20 objetos criados por essa classe, teriamos 20 funções `comer()` iguais salvas em lugares diferentes da memoria, ocupando asism mais espaço do que necessario.
+- Por essa razão colocamos todos os metodos dentro do `prototype`, economizanod recurso e deixando o codigo mais performatico.
+
+ ![](./assets/cap48.png)
+
+ - Vejam no codigo e imagem acima que, quando criamos o metodo fora do `constructor` da classe, ele é salvo no `prototype` e não no objeto em si.
+
+Se tivessemos trabalhando com `factory functions` teriamos o mesmo problema. Vamos criar uma outra `factory function` para exemplificarmos isso melhor.
+
+- Vamos copiar e colocar a `facttory function ` que fizemos em aulas passadas chamada `criarCachorro()`
+- Vamos criar dois objetos usando essa `factory function` chamados de `dog1,dog2`.
+
+~~~ 
+function criarCachorro(name){
+    let posicao = 0;
+    return {
+        name,
+        latir(){
+            console.log(this.name, "está latindo");
+        },
+        andar(distancia){
+            posicao += distancia;
+            console.log(this.name, "andou", distancia, " m");
+        },
+        get posicao(){
+            console.log(`a posição atual de ${this.name} é ${posicao}`);
+        }
+    }
+}
+let dog1 = criarCachorro("dog1");
+let dog2 = criarCachorro("dog2");
+~~~
+
+- Ao testarmos no browser, podemos ver que os dois objetos possuem suas proprias funções `latir() e andar()`. Ou seja, estamos ocupando muito espaço na memoria.
+- Uma maneira de resolvermos isso usando os conceitos de `prototype` que aprendemos.
+  - Em vez de retornarmos o objeto diretamente no `return` vamos criar uma constante chamada `obj` que será o objeto retornado pela `factory function`. 
+  - Dentro deste objeto, vamos ter somente a propriedade `nome` e o `get posicao()`, que pode permanecer no objeto.
+- Vamos testar o codigo refatorado abaixo no console para vermos oq ue temos.
+
+~~~
+function criarCachorro(name){
+    let posicao = 0;
+
+    const obj = {
+        name,
+        get posicao(){
+            console.log(`a posição atual de ${this.name} é ${posicao}`);
+            return posicao;
+        }
+    }
+    return obj;
+}
+
+let dog1 = criarCachorro("dog1");
+let dog2 = criarCachorro("dog2");
+~~~
+
+![](./assets/cap49.png)
+
+- Como podemos ver na imagem acima o `prototype` desses objetos criados pela `factory function` é o proprio objeto global `Object`. Ou seja, temos que vincular as funções que queremos na nossa `factory function` com o objeto global `Object`.
+- Vejam tbm que quando colocamos no console `dog1.posicao()`, temos acesso a essa função  devido a palavra `get`, que esta dentro do objeto, porem esta mostrando como `não listado`.
+- Para fazer o vinculo do `objeto` antes de retornarmos ele na `factory function` temos que criar o `vinculo`. 
+  - Para criar esse `vinculo` usamos um metodo especifico do `objeto Object` chamado de `setPrototypeOf()`, onde passamos `dois objetos como parametro`.
+  - `Primeiro Parametro` = objeto que queremos fazer a ligação. Ou seja, colocamos um outro objeto dentro do `prototype` do objeto `Object`.
+  - `Segundo parametro` = Passamos um `objeto {}` com as funções que queremos, no caso `latir() e andar()`.
+
+~~~ 
+// factory functions
+
+function criarCachorro(name){
+    let posicao = 0;
+
+    const obj = {
+        name,
+        get posicao(){
+            console.log(`a posição atual de ${this.name} é ${posicao}`);
+            return posicao;
+        }
+    }
+
+    // vinculando ao prototype de Object
+    Object.setPrototypeOf(obj, {
+        latir(){
+            console.log(`${this.name} está latindo!`);
+        },
+        andar(distancia){
+            posicao += distancia;
+            console.log(`${this.name} andou ${this.distancia} m`);
+        }
+    });
+
+    return obj;
+}
+
+let dog1 = criarCachorro("dog1");
+let dog2 = criarCachorro("dog2");
+~~~
+
+- Agora ao testarmos esse codigo no browser, podemos ver que as funções `latir() e andar()` estão dentro do `prototype` que faz parte de `Object`, como podemos ver na imagem abaixo.
+
+![](./assets/cap50.png)
+
+- Precisamos tomar cuidado pois toda vez que chamamos a `factory function criarCachorro()` estamos criando um outro objeto (onde temos as funções) e o vinculando ao `prototype`, porem irão ser objetos diferentes.
+- Vamos fazer um teste no console.
+
+![](./assets/cap51.png)
+
+- Como podemos ver o `__proto__` não são iguais, logo apesar de parecer que melhoramos nosso codigo ele ainda criando outros objetos, que parecem ser iguais porem não são, ocupando assim outra posição na memoria, onde temos como prova o `retorno sendo como false`.
+- Para melhorar isso, vamos criar uma constante chamada `cachorroProto` que irá receber o `obejto com as funções`, porem temos que criar essa constante fora da `factory function` para assim toda vez que a gente chamar essa função, não seja criada esse novo objeto.
+
+~~~ 
+// factory functions
+
+// objeto que guarda as funções
+const cachorroProto = {
+    latir(){
+        console.log(`${this.name} está latindo!`);
+    },
+    andar(distancia){
+        posicao += distancia;
+        console.log(`${this.name} andou ${this.distancia} m`);
+    }
+}
+
+function criarCachorro(name){
+    let posicao = 0;
+
+    const obj = {
+        name,
+        get posicao(){
+            console.log(`a posição atual de ${this.name} é ${posicao}`);
+            return posicao;
+        }
+    }
+
+    // vinculando ao prototype de Object
+    Object.setPrototypeOf(obj,cachorroProto );
+
+    return obj;
+}
+
+let dog1 = criarCachorro("dog1");
+let dog2 = criarCachorro("dog2");
+~~~
+
+- Agora como podemos ver na imagem abaixo, tanto `dog1.__proto__` quanto `dog2.__proto__` são o mesmo objeto.
+
+![](./assets/cap52.png)
+
+
+- Porem ainda temos uma pequena pegadinha, temos um objeto chamado `cachorroProto` que será vinculado ao `Object` quando chamarmos a factory function `criarCachorro()`. Nesse objeto `cachorroProto` não temos mais acesso a `variavel posicao`.
+- Poderiamos tirar o metodo `andar()` para não termos mais esse problema ou podemos criar alem do `get posicao` um `set posicao()`, pois assim na função `andar()` ao invez de `posicao` receber o valor `posicao +  distancia`, usamos o `this`.
+
+~~~
+// factory functions
+
+// objeto que guarda as funções
+const cachorroProto = {
+    latir(){
+        console.log(`${this.name} está latindo!`);
+    },
+    andar(distancia){
+        this.posicao += distancia;
+        console.log(`${this.name} andou ${this.distancia} m`);
+    }
+}
+
+function criarCachorro(name){
+    let posicao = 0;
+
+    const obj = {
+        name,
+        get posicao(){
+            console.log(`a posição atual de ${this.name} é ${posicao}`);
+            return posicao;
+        }
+    }
+
+    // vinculando ao prototype de Object
+    Object.setPrototypeOf(obj,cachorroProto );
+
+    return obj;
+}
+
+let dog1 = criarCachorro("dog1");
+let dog2 = criarCachorro("dog2");
+~~~
+
+
+- Porem o `get posicao()` somente recupera uma função e não define um valor, se testarmos o codigo acima, vemos que ele não irá funcionar corretamente.
+
+![](./assets/cap53.png)
+
+- O retorno de `dog1.posicao` não esta sendo atualizado, pois o `get`  não nos permite fazer a escrita `this.posicao`. 
+- Para resolvermos isso, alem do `get` vamos precisar construir a função `set`.
+
+~~~ 
+// factory functions
+
+// objeto que guarda as funções
+const cachorroProto = {
+    latir(){
+        console.log(`${this.name} está latindo!`);
+    },
+    andar(distancia){
+        this.posicao += distancia;
+        console.log(`${this.name} andou ${this.distancia} m`);
+    }
+}
+
+function criarCachorro(name){
+    let posicao = 0;
+
+    const obj = {
+        name,
+        get posicao(){
+            console.log(`a posição atual de ${this.name} é ${posicao}`);
+            return posicao;
+        },
+        set posicao(newPosition){
+            console.log(`a nova posição atual de ${this.name} é ${newPosition}`);
+            posicao = newPosition;
+        }
+    }
+
+    // vinculando ao prototype de Object
+    Object.setPrototypeOf(obj,cachorroProto );
+
+    return obj;
+}
+
+let dog1 = criarCachorro("dog1");
+let dog2 = criarCachorro("dog2");
+~~~
+
+- Agora apos criada a função `set` podemos ver que o codigo volta a funcionar.
+
+![](./assets/cap54.png)
+
+- Tudo voltou a funcionar pois externalizamos uma forma de fora da factory function `criarCachorro` termos acesso a variavel `posicao`, atraves da função `set posicao()`. 
+- E no objeto prototype `cachorroProto` acessamos usando o `this.posicao` como se fosse uma propriedade, porem é uma função que esta atrelada no `set`.
 
 
 <br>
@@ -1165,6 +1581,224 @@ console.log(migal);
 ## Exercicio Proposto: Criar um polyfill para String
 <br>
 
+A ideia é que a gente crie no `prototype` da função construtora `String`, uma função chamada `replaceAll()` caso essa função não exista.
+
+Esse metodo irá receber uma `expressão regular` que não vimos ainda, e temos uma sintaxe da seguinte maneira:
+
+~~~
+const newStr = str.replaceAll(regexp|substr, newSubstr|function);
+~~~
+
+- Esse metodo irá receber dois parametros, o primeiro é ou uma `expressão regular || substring`, e como segundo parametro recebe ou uma `string || função`.
+
+Antes de seguirmos para o desafio vamos criar um novo arquivo chamado `teste_instance.js` para exemplificarmos algumas teorias.
+
+- No console do browser, vamos mostrar algumas formas de criarmos numeros.
+
+![](./assets/cap55.png)
+
+
+- Outra coisa interessante da gente perceber é quando, fazemos o `n.construtor`, onde o console irá nos mostrar o construtor de `n`.
+
+![](./assets/cap56.png)
+
+- Pela imagem acima, podemos ver que quando usamos o `n.constructor` nos é mostrado a função construtora `Number` mesmo a gente tendo usado uma `escrita literal (n = 10)` para definirmos o valor de `n`. Na imagem acima vemos que `n` e `nObj` possuem o mesmo construtor.
+- Porem, se fizermos `n instanceOf Number` iremos receber o retorno como `false`. Ja o `nObj  instanceOf Number` irá nos retornar `true`.
+
+> Valores primitivos retornam `false` quando olhamos com o `instanceOf`.
+
+~~~ 
+n = 10;
+
+nObj = new Number(10);
+
+console.log(n instanceof Number);
+console.log(nObj instanceof Number);
+
+console.log(n.constructor);
+console.log(nObj.constructor);
+
+
+// SAIDA:
+
+❯ node teste_instance.js
+false
+true
+[Function: Number]
+[Function: Number]
+~~~ 
+
+- Vamos testar agora usando `Arrays`, de maneira literal e usando o construtor.
+
+~~~
+n = 10;
+
+nObj = new Number(10);
+
+console.log(n instanceof Number);
+console.log(nObj instanceof Number);
+
+console.log(n.constructor);
+console.log(nObj.constructor);
+
+
+console.log("----------------");
+
+const arr1 = [];
+const arr2 = new Array();
+
+console.log(arr1 instanceof Array);
+console.log(arr2 instanceof Array);
+
+console.log(arr1.constructor);
+console.log(arr2.constructor);
+
+// SAIDA:
+
+❯ node teste_instance.js
+false
+true
+[Function: Number]
+[Function: Number]
+----------------
+true
+true
+[Function: Array]
+[Function: Array]
+%  
+~~~
+
+- Podemos ver que o resultado irá sair ligeiramente diferente tendo `true` para ambos os `isntanceOF`.
+
+Logo quando não estamos `armazenando valores primitivos` o `instanceOf` irá nos retornar o valor correto.
+
+- Estamos exemplificando isso pois, apesar de não termos ainda visto sobre `expressões regulares`, elas da mesma forma que os `Arrays` podem ser criadas de forma `literal` ou usando o `operador new`.
+
+~~~ 
+// expressões regulares literais
+const regex1 = /a/g;
+// expressões regulares operador new
+const regex2 = new RegExp();
+
+console.log(regex1 instanceof RegExp);
+console.log(regex2 instanceof RegExp);
+console.log(regex1.constructor);
+console.log(regex2.constructor);
+
+// SAIDA:
+----------------
+true
+true
+[Function: RegExp]
+[Function: RegExp]
+
+~~~
+
+- Logo conseguimos verificar se uma `variavel/parametro` é `instanceOf` de `RegExp`, seja utilizando a `sintaxe formal ou literal`.
+- Se quisermos saber se alguma coisa é uma `função`, basta usamos o `typeof`.
+
+~~~
+// verificando se eh uma função
+console.log(typeof function(){});
+const fn = () => {};
+console.log(typeof fn);
+
+// SAIDA:
+
+function
+function
+~~~
+
+- Podemos tbm usar o `typeof`para verificarmos se um determinado elemento é de um determinado tipo, por exemplo, vamos ver se o `n` que criamos eh do tipo `number`.
+
+~~~
+console.log(n instanceof Number);
+console.log(n instanceof Number || typeof n === "number");
+console.log(nObj instanceof Number);
+
+// SAIDA:
+
+❯ node teste_instance.js
+false
+true
+true
+~~~
+
+
+- Da mesma maneira podemos verificar se é uma função.
+
+~~~
+n = 10;
+
+nObj = new Number(10);
+
+console.log(n instanceof Number);
+console.log(n instanceof Number || typeof n === "number");
+console.log(nObj instanceof Number);
+
+console.log(n.constructor);
+console.log(nObj.constructor);
+
+
+console.log("----------------");
+
+const arr1 = [];
+const arr2 = new Array();
+
+console.log(arr1 instanceof Array);
+console.log(arr2 instanceof Array);
+
+console.log(arr1.constructor);
+console.log(arr2.constructor);
+
+console.log("----------------");
+
+
+// expressões regulares literais
+const regex1 = /a/g;
+// expressões regulares operador new
+const regex2 = new RegExp();
+
+console.log(regex1 instanceof RegExp);
+console.log(regex2 instanceof RegExp);
+
+
+console.log(regex1.constructor);
+console.log(regex2.constructor);
+
+// verificando se eh uma função
+console.log(typeof function(){});
+const fn = () => {};
+console.log(typeof fn);
+
+console.log(typeof fn === "function");
+
+// SAIDA:
+
+❯ node teste_instance.js
+false
+true
+true
+[Function: Number]
+[Function: Number]
+----------------
+true
+true
+[Function: Array]
+[Function: Array]
+----------------
+true
+true
+[Function: RegExp]
+[Function: RegExp]
+function
+function
+true
+%                                                                        
+~~~
+
+Voltando para o desafio, a ideia é criarmos o `polyfill`. No caso, podemos fazer de variavas formas, com `loops`, `indexOf`.. etc.
+
 <br>
 <hr>
 <br>
@@ -1172,12 +1806,493 @@ console.log(migal);
 ## Resolução: Criar um polyfill para String
 <br>
 
+Vamos criar um novo documento chamado de `replaceAll.js`.
+
+- A primeira coisa que temos que fazer quando estamos desenvolvendo um `polyfill` é verificar se esse `metodo ja existe`. Para isso verificamos no `prototype` da função construtora  `String`, o metodo `replaceAll()`.
+
+~~~
+if(!String.prototype.replaceAll){
+    String.prototype.replaceAll = function(){}
+}else{
+    console.log("Metodo existe.");
+}
+~~~
+
+- Lembrando que essa função `replaceAll()` recebe dois parametros, ou uma `expressão regular = regexp` ou uma `String = substrr`, e, ou uma `nova substring = newSubstr` ou uma `funcção = function`. Vamos somente fazer a verificação da `string`.
+  - `buscaStr` = string que será buscada.
+  - `trocaStr` = string que será trocada pela buscada.
+
+~~~ 
+if(!String.prototype.replaceAll){
+    String.prototype.replaceAll = function(buscaStr, trocaStr){}
+}else{
+    console.log("Metodo existe.");
+}
+~~~ 
+
+- Temos varias formas de fazer essa `troca`, porem o jetio mais facil seria utilizando os `metodos de Array`, ou seja, podemos utilizar o `metodo split()` para converter uma `string em array` e depois utilizar o `metodo join()` para retornar uma `string a partir de um array`.
+- Porem antes de fazermos isso, vamos ver no console quem seria o `this` e o `this.valueOf`.
+
+~~~ 
+if(!String.prototype.replaceAll){
+    String.prototype.replaceAll = function(buscaStr, trocaStr){
+        console.log(this);
+        console.log(this.valueOf);
+    }
+}else{
+    console.log("Metodo existe.");
+}
+~~~
+
+> OBS: Como a função `replaceAll()` existe em `String`, o codigo acima irá `substituir` a função `nativa` existe. Essa pratica não é comum e nem recomendada.
+
+~~~
+if(!String.prototype.replaceAll){
+    String.prototype.replaceAll = function(buscaStr, trocaStr){
+        console.log(this);
+        console.log(this.valueOf);
+    }
+}else{
+    console.log("Metodo existe.");
+}
+
+let str1 = "String 1 para 2";
+let str2 = "String 2 para 1";
+
+console.log(str1.replaceAll(str1,str2));
+console.log(str1.replaceAll(str2,str1));
+~~~
+
+- Vamos observar no console do browser o que o codigo acima irá gerar.
+
+
+![](./assets/cap57.png)
+
+- Como vemos na imagem acima o `this` refere-se ao `objeto do tipo String` e o nosso `this.valueOf` é o `valor primitivo` do objeto.
+- Logo, para constrir esse `polyfill` da maneira mais facil:
+
+1) `this.valueOf()` = pega o valor primitivo da String.
+2) `.split()` = trnasforma a string em array.
+   1) `split(buscarStr)` = Passa como argumento a string que será buscada e transformada em array.
+3) `.join()` = pegar o array e retorna uma string.
+   1) `.join(trocaStr)` = Passa como argumento a string que será trocada dentro do array e transforma em string.
+
+~~~ 
+if(!String.prototype.replaceAll1){
+    String.prototype.replaceAll1 = function(buscaStr, trocaStr){
+        console.log(this);
+        console.log(this.valueOf);
+
+        return this.valueOf().split(buscaStr).join(trocaStr);
+    }
+}else{
+    console.log("Metodo existe.");
+}
+
+
+let str = "Testando o repllaceAll1()";
+let str1 = "a";
+let str2 = "b";
+
+console.log(str);
+console.log(str1);
+console.log(str.replaceAll1(str1,str2));
+console.log(str2)
+console.log(str.replaceAll1(str2,str1));
+
+
+
+// SAIDA:
+❯ node replaceAll.js
+Testando o repllaceAll1()
+a
+[String: 'Testando o repllaceAll1()']
+[Function: valueOf]
+Testbndo o repllbceAll1()
+b
+[String: 'Testando o repllaceAll1()']
+[Function: valueOf]
+Testando o repllaceAll1()
+
+
+~~~
+
+- Para testarmos o codigo acima, ou usamos o `browser` ou renomeamos a função para `replaceAll1()`.
+
+Outra coisa que poderiamos fazer dentro do nosso `polyfill` seria algumas verificações.
+
+- Como exemplo de verificação, poderiamos verificar se a função esta recebendo parametro ou não, mostrando algum erro na tela.
+
+~~~ 
+if(!String.prototype.replaceAll1){
+    String.prototype.replaceAll1 = function(buscaStr, trocaStr){
+        console.log(this);
+        console.log(this.valueOf);
+
+        if(buscaStr instanceof RegExp){
+            throw Error("first parameter must be a string");
+            // throw new Error("first parameter must be a string"); // igual acima
+        }
+
+
+        return this.valueOf().split(buscaStr).join(trocaStr);
+    }
+}else{
+    console.log("Metodo existe.");
+}
+
+
+let str = "Testando o repllaceAll1()";
+let str1 = "a";
+let str2 = "b";
+
+console.log(str);
+console.log(str1);
+console.log(str.replaceAll1(str1,str2));
+console.log(str2)
+console.log(str.replaceAll1(str2,str1));
+
+~~~
+
+- Poderiamos usar no lugar de `buscaStr instanceOf RegExp`, poeriamos verificar se é ou não do tipo string.
+
+
+~~~
+if(!String.prototype.replaceAll1){
+    String.prototype.replaceAll1 = function(buscaStr, trocaStr){
+        console.log(this);
+        console.log(this.valueOf);
+
+        if(!(buscaStr instanceof String || typeof buscaStr === "string")){
+            throw Error("first parameter must be a string");
+            // throw new Error("first parameter must be a string"); // igual acima
+        }
+
+
+        return this.valueOf().split(buscaStr).join(trocaStr);
+    }
+}else{
+    console.log("Metodo existe.");
+}
+
+
+let str = "Testando o repllaceAll1()";
+let str1 = "a";
+let str2 = "b";
+
+console.log(str);
+console.log(str1);
+console.log(str.replaceAll1(str1,str2));
+console.log(str2)
+console.log(str.replaceAll1(str2,str1));
+~~~ 
+
+- Se o nossa `buscaStr` for uma string primitiva, receberemos `true`, quando uma das verfiicações é true, a avaliação será `true`, porem como queremos a negação usamos `!`, trazendo o `false`.
+- Replicamos o mesmo para o parametro `trocaStr`.
+
+~~~
+if(!String.prototype.replaceAll1){
+    String.prototype.replaceAll1 = function(buscaStr, trocaStr){
+        console.log(this);
+        console.log(this.valueOf);
+
+        if(!(buscaStr instanceof String || typeof buscaStr === "string")){
+            throw Error("first parameter must be a string");
+            // throw new Error("first parameter must be a string"); // igual acima
+        };
+
+        if(!(trocaStr instanceof String || typeof trocaStr === "string")){
+            throw Error("second parameter must be a string");
+            // throw new Error("first parameter must be a string"); // igual acima
+
+        }
+
+
+        return this.valueOf().split(buscaStr).join(trocaStr);
+    }
+}else{
+    console.log("Metodo existe.");
+}
+
+
+let str = "Testando o repllaceAll1()";
+let str1 = "a";
+let str2 = "b";
+
+console.log(str);
+console.log(str1);
+console.log(str.replaceAll1(str1,str2));
+console.log(str2)
+console.log(str.replaceAll1(str2,str1));
+~~~
+
 <br>
 <hr>
 <br>
 
 ## Classes Abstratas
 <br>
+
+Vamos agora voltar a falar um pouco mais sobre classes. Vamos criar um novo documento e chama-lo de `abstractClass.js && abstractClass.html` usando o `class.html` da aula passada.
+
+Vamos ver agora o que seria uma `classe Abstrata`, que nada mais é do que uma `classe` que não pode ser utilizada diretamente, é uma classe que so pode ser `extendida`. Vamos a partir de agora usar o `ES6` diretamente.
+
+- Vamos criar uma classe chamada `Animal` que será uma `classe Abstrata`, logo não podemos `instancia-la` usando `const animal = new Animal()`.
+- Por enquanto poderemos escrever como esta abaixo, mas jaja iremos bloquear isso.
+- Uma observação é que caso a gente não passe nenhum parametro para a classe, o `constructor()` pode ser omitido. Pois ele sempre é chamada quando utilizamos o `operador new`, a gente tendo programado ele ou nao.
+
+~~~ 
+class Animal {}
+
+const animal = new Animal();
+~~~
+
+
+
+~~~
+class Animal {
+    constructor(){}
+}
+
+const animal = new Animal();
+~~~
+
+- A classe `Anima()`irá receber uma parametro chamado de `tipo`, logo no `constructor` temos que colocar esse parametro.
+
+~~~
+class Animal {
+    constructor(tipo){
+        if(tipo){
+            this.tipo = tipo;
+        }
+    }
+}
+
+const animal = new Animal("mamifero"); 
+~~~
+
+- Vamos tbm criar uma metodo chamada `comer` para essa class `Animal`.
+
+~~~
+class Animal {
+    constructor(tipo){
+        if(tipo){
+            this.tipo = tipo;
+        }
+    };
+
+    comer(){
+        console.log(`${this.tipo} esta comendo`);
+    }
+}
+
+const animal = new Animal("mamifero"); 
+~~~
+
+![](./assets/cap58.png)
+
+- Agora a ideia é que não queremos ter o objeto `animal` em si, mas sim um `cachorro`, `gato` etc.
+- Logo vamos criar uma outra classe chamada `Gato` que irá `extender` da classe `Animal`.
+
+~~~
+class Animal {
+    constructor(tipo){
+        if(tipo){
+            this.tipo = tipo;
+        }
+    };
+
+    comer(){
+        console.log(`${this.tipo} esta comendo`);
+    }
+}
+
+class Gato extends Animal{
+    constructor(nome){
+        super("mamifero");
+        this.nome = nome;
+    };
+}
+
+const animal = new Animal("mamifero");
+const mingal = new Gato("mingal"); 
+~~~
+
+![](./assets/cap59.png)
+
+- Não queremos que a função comer seja chamada de `Animal`, ou seja, queremos que toda classe que `extenda` da classe `Animal` seja `obrigado` a implementar a função `comer()`.
+- Para isso, no nosso metodo `comer()` que esta dentro de animal, vamos lançar um `erro`.
+
+~~~
+class Animal {
+    constructor(tipo){
+        if(tipo){
+            this.tipo = tipo;
+        }
+    };
+
+    comer(){
+        // console.log(`${this.tipo} esta comendo`);
+        throw new Error("Method 'comer()' must be implemented!");
+    }
+}
+
+class Gato extends Animal{
+    constructor(nome){
+        super("mamifero");
+        this.nome = nome;
+    };
+}
+
+const animal = new Animal("mamifero");
+const mingal = new Gato("mingal");
+~~~
+
+![](./assets/cap60.png)
+
+- Como podemos ver na imagem acima, ao chamarmos o metodo `comer()` o erro é mostrado. Isso nos obriga a implementar o metodo `comer()`, dentro da nossa classe `Gato`.
+
+~~~
+class Animal {
+    constructor(tipo){
+        if(tipo){
+            this.tipo = tipo;
+        }
+    };
+
+    comer(){
+        // console.log(`${this.tipo} esta comendo`);
+        throw new Error("Method 'comer()' must be implemented!");
+    }
+}
+
+class Gato extends Animal{
+    constructor(nome){
+        super("mamifero");
+        this.nome = nome;
+    };
+    comer(){
+        console.log(`${this.nome} está comendo!`);
+    }
+}
+
+const animal = new Animal("mamifero");
+const mingal = new Gato("mingal"); 
+~~~
+
+![](./assets/cap61.png)
+
+- Porem ainda temos um problema, atualmente temos um objeto que é o proprio `animal`, porem não queremos isso, queremos que a `classe Animal` so possa ser `extendida` e não que ela possa ser `instanciada`.
+- Para isso, podemos fazer uma verificação no `constructor` da classe `Animal`. Primeiro vamos observar no console o que temos no `this.constructor`.
+
+~~~
+class Animal {
+    constructor(tipo){
+        console.log(this.constructor);
+        if(tipo){
+            this.tipo = tipo;
+        }
+    };
+
+    comer(){
+        // console.log(`${this.tipo} esta comendo`);
+        throw new Error("Method 'comer()' must be implemented!");
+    }
+}
+
+class Gato extends Animal{
+    constructor(nome){
+        super("mamifero");
+        this.nome = nome;
+    };
+    comer(){
+        console.log(`${this.nome} está comendo!`);
+    }
+}
+
+const animal = new Animal("mamifero");
+const mingal = new Gato("mingal");
+~~~
+
+![](./assets/cap62.png)
+
+- Lembre-se que esse construtor sempre é chamado quando usamos `operador new` estando escrito ou nao na classe. Tanto é que se comentarmos a linha onde `instanciamos um animal`, mesmo chamando o metodo `super()` na classe `Gato` quando testarmos no console, so irá nos mostrar `1 construtor` que seria da classe `Gato`.
+
+~~~
+class Animal {
+    constructor(tipo){
+        console.log(this.constructor);
+        if(tipo){
+            this.tipo = tipo;
+        }
+    };
+
+    comer(){
+        // console.log(`${this.tipo} esta comendo`);
+        throw new Error("Method 'comer()' must be implemented!");
+    }
+}
+
+class Gato extends Animal{
+    constructor(nome){
+        super("mamifero");
+        this.nome = nome;
+    };
+    comer(){
+        console.log(`${this.nome} está comendo!`);
+    }
+}
+
+// const animal = new Animal("mamifero");
+const mingal = new Gato("mingal"); 
+~~~
+
+![](./assets/cap63.png)
+
+- Vamos voltar para o exemplo onde temos dois cosntrutores, como na imagem abaixo.
+
+![](./assets/cap62.png)
+
+- Então agora como chamamos o `operador new` ao criarmos uma `instancia de Animal`, o console do `this.constructor` quando executado na primeira vez nos mostra a `class Animal`.
+- Logo, para que essa classe não possa ser usada diretamente, ou seja, so possa ser `extendida` por outra classe, fazemos um verificação.
+
+~~~
+class Animal {
+    constructor(tipo){
+        console.log(this.constructor);
+        if(this.constructor === Animal){
+            throw new Error("Animal is an abstract class, can not be instanciated!");
+        }
+        if(tipo){
+            this.tipo = tipo;
+        }
+    };
+
+    comer(){
+        // console.log(`${this.tipo} esta comendo`);
+        throw new Error("Method 'comer()' must be implemented!");
+    }
+}
+
+class Gato extends Animal{
+    constructor(nome){
+        super("mamifero");
+        this.nome = nome;
+    };
+    comer(){
+        console.log(`${this.nome} está comendo!`);
+    }
+}
+
+const animal = new Animal("mamifero");
+const mingal = new Gato("mingal"); 
+~~~
+
+![](./assets/cap64.png)
+
+ - Agora quando tentarmos criar uma `instancia` da classe `Animal` iremos receber um erro.
+ - Podendo somente agora usar a `classe Animal` para `extender` outras classes.
+
 
 <br>
 <hr>
