@@ -2477,18 +2477,6 @@ const dog2 = new Cachorro("todinho");
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 <br>
 <hr>
 <br>
@@ -2496,13 +2484,125 @@ const dog2 = new Cachorro("todinho");
 ## Desafio: Classe Abstrata ContaBancaria
 <br>
 
+Vamos criar algumas classes que simulam uma `conta bancaria`. Para isso, vamos criar um novo arquivo chamado `Conta01.js`.
+
+- A ideia do desafio é a seguinte:
+
+~~~ 
+
+1) Criar conta abstrata ContaBancaria
+   1) Cliente
+   2) numero
+   3) saldo
+   4) depositar(value) - recebem valor
+   5) sacar(value) - recebe valor
+
+~~~ 
+
+
+
 <br>
 <hr>
 <br>
 
 ## Resolução Desafio: Classe Abstrata ContaBancaria
 <br>
-<br>
+
+Vamos agora desenvolver a `classe Abstrata contaBancaria`.
+
+~~~
+[CONTA BANCARIA ABSTRATA  - ANGELINA]
+class ContaBancaria{
+    constructor(cliente, numero, saldo){
+        if(this.constructor === ContaBancaria){
+            throw new Error("ContaBancaria is an Abstract Class. Can not be Instanciated");
+        }
+        if(cliente && numero && saldo){
+            this.cliente = cliente;
+            this.numero = numero;
+            this.saldo = saldo;
+        }
+    };
+
+    // metodo pode ser acessado pelo objeto
+    depositar(value){
+        this.saldo += value;
+    };
+    // metodo precisa ser implementado pelo objeto
+    sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+};
+~~~
+
+- Dentro do `constructor` iremos passar somente as propriedades `cliente e numero`, pois a propriedade `saldo` irá começar em `0`. 
+- Se precisarmos começar com um `saldo inicial` vamos criar um metodo chamado `depositar()` quando isso ocorrer.
+
+~~~ 
+class ContaBancariaProf{
+    constructor(cliente, numero){
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    }
+}
+~~~
+
+> A propriedade numero em um exemplo real poderia ser gerada `dinamicamente e aleatoriamente`. Porem vamos simplificar para somente vermos questçoes que envolvem POO.
+
+- Vamos agora fazer os dois metodos pedidos `depositar()` e `sacar()`.
+- No metodo `depositar()`, podemos escolher algumas abordagens:
+  - Ou deixamos o `metodo` sendo implementado pelas `classes` que irão `extender` a `contaBancaria`. Pois ela é uma `classe abstrata`, logo poderiamos utilizar uma abordagem que não permite que `objetos` que `extendam` a classe não possam usar os metodos sem `declarar/criar` os metodos.
+  - Ou podemos fazer com que os `objetos` não precisem implementar os  `metodos`.
+- Para o metodo `depositar()` vamos deixar que os objetos possam usa-lo sem implementar, porem para o metodo `sacar()` vamos fazer com que cas `classes` que extendem de `contaBancaria` tenham que implementar seu proprio metodo de `saca()`.
+
+~~~
+class ContaBancariaProf{
+    constructor(cliente, numero){
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+
+}
+~~~
+
+- A unica coisa que ficou faltando é que precisamos `impedir` que a `classe Abstrata contaBancaria` seja usada com o `operador new`.
+
+~~~ 
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+}
+~~~
+
+![](./assets/cap72.png)
+
+
 
 <br>
 <hr>
@@ -2511,12 +2611,431 @@ const dog2 = new Cachorro("todinho");
 ## Desafio: Classes Concretas ContaPoupança e ContaCorrente
 <br>
 
+Vamos agora criar um outro arquivo chamado `Conta02.js` a partir do arquivo antigo, para podermos ir objservando a evolução do nosso codigo.
+
+O desafio agora é criar duas `classes` que `herdam` de `contaBancaria` chamadas de `ContaCorrente` e `contaPoupanca`.
+
+`ContaCorrente` terá uma propriedade a mais chamada `limite` e `contaPoupanca` tera outra propriedade chamada `aniversario`.
+
+
 <br>
 <hr>
 <br>
 
 ## Resolução Desafio: Classes Concretas ContaPoupança e ContaCorren
 <br>
+
+~~~ 
+[CLASSES CONCRETAS - ANGELINA]
+class ContaCorrente extends ContaBancaria{
+    constructor(cliente,numero, saldo){
+        super("Angelina", 2, 1000);
+        this.limite = 0;
+    };
+
+    // metodo sacar precisa ser implementado
+    sacar(value){};
+}
+
+class ContaPoupanca extends ContaBancaria{
+    constructor(cliente, numero, saldo){
+        super("Pierre", 2, 500);
+        this.aniversario = Date.now;
+    };
+
+    // metodo sacar precisa ser implementado
+    sacar(value){
+
+    }
+}
+
+~~~ 
+
+- Vamos criar as `classes concretas` lembrando que a `classe abstrata` recebe dois parametros que terão que ser passados para os `construtores` das `classes concretas` sendo eles `cliente e numero`.
+
+~~~
+
+// classes abstratas professor
+class ContaPoupancaProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Daniel", 1);
+    }
+}
+class ContaCorrenteProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Ferreira", 2);
+    }
+} 
+~~~
+
+- Vamos agora colocar as `propriedades` individuais de cada `classe concreta`. O `limite` irá começar em `0` e o `aniversario` irá receber a data de hoje usando o `Date.now()`, lembrando que o `now()` é um `metodo estatico` do `objeto Date()`.
+
+~~~
+
+// classes abstratas professor
+class ContaPoupancaProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Daniel", 1);
+        this.aniversario = Date.now();
+    }
+}
+class ContaCorrenteProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Ferreira", 2);
+        this.limite = 0;
+    }
+}
+~~~
+
+
+- Vamos criar um `html` para testar nosso codigo no browser em vez do `node`.
+
+![](./assets/cap73.png)
+
+- Como podemos ver na imagem acima, as nossas contas estão funcionando, vamos testar os metodos das mesmas.
+
+![](./assets/cap74.png)
+
+![](./assets/cap75.png)
+
+~~~
+class ContaBancaria{
+    constructor(cliente, numero, saldo){
+        if(this.constructor === ContaBancaria){
+            throw new Error("ContaBancaria is an Abstract Class. Can not be Instanciated");
+        }
+        if(cliente && numero && saldo){
+            this.cliente = cliente;
+            this.numero = numero;
+            this.saldo = saldo;
+        }
+    };
+
+    // metodo pode ser acessado pelo objeto
+    depositar(value){
+        this.saldo += value;
+    };
+    // metodo precisa ser implementado pelo objeto
+    sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+};
+
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+}
+
+class ContaCorrente extends ContaBancaria{
+    constructor(cliente,numero, saldo){
+        super("Angelina", 2, 1000);
+        this.limite = 0;
+    };
+
+    // metodo sacar precisa ser implementado
+    sacar(value){};
+}
+
+class ContaPoupanca extends ContaBancaria{
+    constructor(cliente, numero, saldo){
+        super("Pierre", 2, 500);
+        this.aniversario = Date.now;
+    };
+
+    // metodo sacar precisa ser implementado
+    sacar(value){
+
+    }
+}
+
+
+// classes abstratas professor
+class ContaPoupancaProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Daniel", 1);
+        this.aniversario = Date.now();
+    }
+}
+class ContaCorrenteProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Ferreira", 2);
+        this.limite = 0;
+    }
+}
+
+const contaP = new ContaPoupanca("Angelina", 1, 1000);
+const contaC = new ContaCorrente("Pierre", 2, 2000);
+const contaPP = new ContaPoupancaProf("Daniel", 3);
+const contaCP = new ContaCorrenteProf("Ferreira", 4);
+
+console.log(contaP);
+console.log(contaC);
+console.log(contaPP);
+console.log(contaCP);
+
+contaP.depositar(1000);
+contaC.depositar(2000);
+contaPP.depositar(3000);
+contaCP.depositar(4000);
+
+console.log("Depositando nas contas");
+
+console.log(contaP);
+console.log(contaC);
+console.log(contaPP);
+console.log(contaCP);
+
+
+~~~ 
+
+![](./assets/cap76.png)
+
+- Vamos agora determinar um `limite` para nossa `contaCorrente`.
+
+~~~
+const contaP = new ContaPoupanca("Angelina", 1, 1000);
+const contaC = new ContaCorrente("Pierre", 2, 2000);
+const contaPP = new ContaPoupancaProf("Daniel", 3);
+const contaCP = new ContaCorrenteProf("Ferreira", 4);
+
+
+
+console.log(contaP);
+console.log(contaC);
+console.log(contaPP);
+console.log(contaCP);
+
+contaC.limite = 1000;
+contaCP.limite = 2000;
+
+contaP.depositar(1000);
+contaC.depositar(2000);
+contaPP.depositar(3000);
+contaCP.depositar(4000);
+
+console.log("Depositando nas contas");
+
+console.log(contaP);
+console.log(contaC);
+console.log(contaPP);
+console.log(contaCP);
+
+~~~ 
+
+![](./assets/cap77.png)
+
+
+- Agora o metodo `sacar()` precisa ser `obrigatoriamente` implementado pelas `classes extendidas`. Vamos implementa-lo nas duas `classes concretas`.
+- Dentro da `classe contaCorrente` vamos criar uma variavel chamada `disponivel` que irá receber o `saldo + o limite`.
+  - Vamos fazer uma verificação para ver se o valor de saque passado por parametro é maior que o o valor `disponivel`. Para que não se possa sacar mais do que se tem.
+
+~~~
+class ContaCorrenteProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Ferreira", 2);
+        this.limite = 0;
+    }
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(disponivel < value){
+            throw new Error("Saldo Insuficiente!");
+        }
+        this.saldo -= value;
+    }
+}
+~~~
+
+- Vamos ver o `saque`no console.
+
+~~~
+console.log("Sacando das contas");
+
+console.log(contaC);
+contaC.sacar(500);
+console.log(contaC);
+console.log(contaCP); // saldo + limite  = 6000
+contaCP.sacar(7000);
+console.log(contaCP);
+
+~~~
+
+![](./assets/cap78.png)
+
+- Se vermos na imagem acima, ao tentarmos sacar um valor acima do `disponivel` temos um `erro` jogado no console. Porem se sacarmos acima do saldo mas nao do `saldo + limite` teremos um valor negativo no `saldo`.
+
+~~~
+console.log("Sacando das contas");
+
+console.log(contaC);
+contaC.sacar(500);
+console.log(contaC);
+contaC.sacar(3000);
+console.log(contaC);
+console.log(contaCP); // saldo + limite  = 6000
+contaCP.sacar(7000);
+console.log(contaCP);
+
+~~~
+
+![](./assets/cap79.png)
+
+- Falta agora implementarmos o metodo de `saque()` nas `contasPoupança` para encerrarmos o desafio.
+
+~~~ 
+class ContaBancaria {
+    constructor(cliente, numero, saldo){
+        if(this.constructor === ContaBancaria){
+            throw new Error("ContaBancaria is an Abstract Class. Can not be Instanciated");
+        }
+        if(cliente && numero && saldo){
+            this.cliente = cliente;
+            this.numero = numero;
+            this.saldo = saldo;
+        }
+    };
+
+    // metodo pode ser acessado pelo objeto
+    depositar(value){
+        console.log(`[Deposito: ${value}]\n\nCliente: ${this.cliente}\nSaldo Atual: ${this.saldo}\nSaldo Final: ${this.saldo += value}`);
+        // this.saldo += value;
+    };
+    // metodo precisa ser implementado pelo objeto
+    sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+};
+
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        console.log(`[DepositoP: ${value}]\n\nCliente: ${this.cliente}\nSaldo Atual: ${this.saldo}\nSaldo Final: ${this.saldo += value}`);
+        // this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+}
+
+class ContaCorrente extends ContaBancaria{
+    constructor(cliente,numero, saldo){
+        super("Angelina", 2, 1000);
+        this.limite = 0;
+    };
+
+    // metodo sacar precisa ser implementado
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(value > disponivel){
+            throw new Error("Saldo insuficiente");
+        };
+        console.log(`[Saque: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo + Limite: [${this.saldo + this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+        // this.saldo -= value;
+    };
+}
+
+class ContaPoupanca extends ContaBancaria{
+    constructor(cliente, numero, saldo){
+        super("Pierre", 2, 500);
+        this.aniversario = Date.now;
+    };
+
+    // metodo sacar precisa ser implementado
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(value > disponivel){
+            throw new Error("Saldo insuficiente");
+        };
+        console.log(`[Saque: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+    }
+}
+
+
+// classes abstratas professor
+
+class ContaPoupancaProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Daniel", 1);
+        this.aniversario = Date.now();
+    }
+
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(value > disponivel){
+            throw new Error("Saldo insuficiente");
+        };
+        console.log(`[SaqueP: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+    }
+}
+class ContaCorrenteProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super("Ferreira", 2);
+        this.limite = 0;
+    }
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(disponivel < value){
+            throw new Error("Saldo Insuficiente!");
+        }
+        console.log(`[SaqueP: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+        // this.saldo -= value;
+    }
+}
+
+const contaP = new ContaPoupanca("Angelina", 1, 1000);
+const contaC = new ContaCorrente("Pierre", 2, 2000);
+const contaPP = new ContaPoupancaProf("Daniel", 3);
+const contaCP = new ContaCorrenteProf("Ferreira", 4);
+
+
+
+contaP.depositar(1000);
+contaP.sacar(200);
+
+contaC.depositar(2000);
+contaC.limite = 1000;
+contaC.sacar(500);
+
+contaPP.depositar(2000);
+contaPP.sacar(400);
+
+contaCP.depositar(300);
+contaCP.limite = 200;
+contaCP.sacar(400);
+
+
+~~~
+
+
+![](./assets/cap80.png)
+
+
 
 <br>
 <hr>
@@ -2525,12 +3044,27 @@ const dog2 = new Cachorro("todinho");
 ## Desafio: Composição
 <br>
 
+Vamos agora criar uma outra classe chamada `Cliente` que irá ser utilizada dentro das `classes concretas`. Essa classe `cliente` terá duas propriedades `nome e numeroDocumento`.
+
+
+
+
 <br>
 <hr>
 <br>
 
 ## Enunciado: Composição
 <br>
+
+~~~
+3. criar classe Cliente e compor as classes concretas
+
+  - nome
+
+  - documento
+~~~
+
+
 
 <br>
 <hr>
@@ -2539,6 +3073,111 @@ const dog2 = new Cachorro("todinho");
 ## Resolução Desafio: Composição
 <br>
 
+~~~
+class Cliente {
+    constructor(nome, numeroDocumento){
+        this.nome = nome;
+        this.numeroDocumento = numeroDocumento;
+    }
+} 
+~~~
+
+- Agora no lugar onde `instanciamos` nossa contas, passamos um `objeto do tipo Cliente`.
+
+~~~ 
+// classes professor
+
+class Cliente {
+    constructor(nome, numeroDocumento){
+        this.nome = nome;
+        this.numeroDocumento = numeroDocumento;
+    }
+}
+
+
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        // console.log(`\n[DepositoP: ${value}]\n\nCliente: ${this.cliente}\nSaldo Atual: ${this.saldo}\nSaldo Final: ${this.saldo += value}`);
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+}
+
+
+class ContaPoupancaProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super(cliente, numero);
+        this.aniversario = Date.now();
+    }
+
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(value > disponivel){
+            throw new Error("Saldo insuficiente");
+        };
+        // console.log(`\n[SaqueP: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+        this.saldo -= value;
+    }
+}
+class ContaCorrenteProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super(cliente, numero);
+        this.limite = 0;
+    }
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(disponivel < value){
+            throw new Error("Saldo Insuficiente!");
+        }
+        // console.log(`\n[SaqueP: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+        // this.saldo -= value;
+    }
+}
+
+const angelina = new Cliente("Angelina", 123);
+const pierre  = new Cliente("Pierre", 423);
+
+const conta1 = new ContaPoupancaProf(angelina, 1);
+const conta2 = new ContaCorrenteProf(angelina, 2);
+const conta3 = new ContaPoupancaProf(pierre, 3);
+const conta4 = new ContaCorrenteProf(pierre, 5);
+
+
+conta1.depositar(2000);
+conta1.sacar(400);
+
+conta1.depositar(300);
+conta1.limite = 200;
+conta1.sacar(50);
+
+console.log(conta1);
+console.log(conta2);
+console.log(conta3);
+console.log(conta4);
+
+~~~
+
+
+![](./assets/cap81.png)
+
+- Estamos agora passando um objeto do tipo cliente para nossas classes `contaPoupanca e contaCorrente`.
+- Como podemos ver na imagem acima, se abrirmor o objeto `ContaCorrente ou ContaPoupanca` vemos que temos como propriedade desses objetos, um outro `objeto Cliente`.
+
+
 <br>
 <hr>
 <br>
@@ -2546,13 +3185,11 @@ const dog2 = new Cachorro("todinho");
 ## Desafio: Cliente agora é Classe Abstrata
 <br>
 
-<br>
-<hr>
-<br>
+Continuando, a idea é que agora tenhamos mais uma `classe abstrata` ou seja, a `classe Cliente` não terá somente uma `string com nome`, pois podemos ter clientes como `pessoa fisica` e `pessoa juridica`.
 
-## resolução Desafio: Cliente agora é Classe Abstrata
-<br>
-<br>
+Logo vamos transformar a classe concreta `Cliente` em uma `classe abstrata` e criaremos mais duas outras classes chamadas `PessoaFisica` e `PessoaJuridica`.
+
+No momento que criamos os clientes, não iremos mais instanciar `Cliente` e sim `PessoaFisica` ou `PessoaJuridica`.
 
 <br>
 <hr>
@@ -2560,21 +3197,476 @@ const dog2 = new Cachorro("todinho");
 
 ## Enunciado: Cliente agora é Classe Abstrata
 <br>
-<br>
+
+~~~
+ 4. Agora surgiu a necessidade de Cliente ser Pessoa Física ou Juridica.
+
+   Pessoa Física tem documento CPF e Juridica tem documento CNPJ
+~~~
+
 
 <br>
 <hr>
 <br>
 
-## Resolução Desafio: Classe Abstrata Cliente
+## resolução Desafio: Cliente agora é Classe Abstrata
 <br>
+
+Vamos agora transformar nossa `classe Cliente` que é uma classe concreta em uma `classe Abstrata` e criar mais duas classes `PessoaFisica e PessoaJuridica`.
+
+~~~
+class PessoaFisica extends Cliente{
+    constructor(nome,numeroDocumento) {
+        super(nome);
+        if(numCPF){
+            this.numCPF = numeroDocumento;
+        }
+    }
+}
+
+class PessoaJuridica extends Cliente{
+    constructor(nome,numeroDocumento){
+        super(nome);
+        if(numCNPJ){
+            this.numCNPJ = numeroDocumento;
+        }
+    }
+}
+
+~~~
+
+- No `super()` poderiamos fazer algo do tipo acima, colocando somente o `nome`. Porem temos um problema nessa abordagem!
+- Precisamos saber se somos uma `PessoaJuridica` ou uma `PessoaFisica`para termos acesso ao documento de maneira diferente.
+- A maneira mais correta, seria passar o `documento` tbm no `super()`. Ou seja, passa tanto o `nome` quanto o `numDocumento` para a classe `Cliente`.
+
+~~~
+class Cliente {
+    constructor(nome, numeroDocumento){
+        if(this.constructor === Cliente) {
+            throw new Error("Cliente is an Abstract class. Can not be instanciated!")
+        }
+
+        if(nome && numeroDocumento){
+            this.nome = nome;
+            this.numeroDocumento = numeroDocumento;
+        }
+    }
+}
+
+class PessoaFisica extends Cliente{
+    constructor(nome,numeroDocumento) {
+        super(nome,numeroDocumento);
+        if(numeroDocumento){
+            this.CPF = numeroDocumento;
+        }
+    }
+}
+
+class PessoaJuridica extends Cliente{
+    constructor(nome,numeroDocumento){
+        super(nome,numeroDocumento);
+        if(numeroDocumento){
+            this.CNPJ = numeroDocumento;
+        }
+    }
+}
+
+
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        // console.log(`\n[DepositoP: ${value}]\n\nCliente: ${this.cliente}\nSaldo Atual: ${this.saldo}\nSaldo Final: ${this.saldo += value}`);
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    }
+}
+
+
+class ContaPoupancaProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super(cliente, numero);
+        this.aniversario = Date.now();
+    }
+
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(value > disponivel){
+            throw new Error("Saldo insuficiente");
+        };
+        // console.log(`\n[SaqueP: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+        this.saldo -= value;
+    }
+}
+class ContaCorrenteProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super(cliente, numero);
+        this.limite = 0;
+    }
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(disponivel < value){
+            throw new Error("Saldo Insuficiente!");
+        }
+        // console.log(`\n[SaqueP: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+        this.saldo -= value;
+    }
+}
+
+const angelina = new PessoaFisica("angelina", "14.031.904-29");
+const pierre = new PessoaJuridica("Pierre LTDA", "860.402.225/0001-01");
+console.log(angelina);
+console.log(pierre);
+
+
+const conta1 = new ContaPoupancaProf(angelina, 1);
+const conta2 = new ContaCorrenteProf(angelina, 2);
+const conta3 = new ContaPoupancaProf(pierre, 3);
+const conta4 = new ContaCorrenteProf(pierre, 5);
+
+
+conta1.depositar(2000);
+conta1.sacar(400);
+
+conta1.depositar(300);
+conta1.limite = 200;
+conta1.sacar(50);
+
+console.log(conta1);
+console.log(conta2);
+console.log(conta3);
+console.log(conta4);
+
+
+
+~~~
+
+![](./assets/cap82.png)
+
+- Os dois primeiros objetos mostrados no console são nossas classes concretas `PessoaFisisca e PessoaJuridica`. Nessas classes conseguimos ver 3 propriedades, `cpf, nome, numeroDocumento`. Onde temos os valores `duplicados`, ja que utilizamos tanto no `super()`, quanto no `constructor` quando fizemos `this.cpf = numeroDocumento`. Por enquanto vamos deixar esses valores duplicados.
+
+Vamos verificar agora qual a importancia de deixarmos tudo dentro de `numDocumento`. 
+
+- Na nossa classe `ContaBancaria` vamos criar um metodo chamado, `dadosCliente` usando a palavra-chave `get`. Que fará com que `dadosCliente` se comporte como uma propriedade quando na verdade é uma função.
+
+~~~
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        // console.log(`\n[DepositoP: ${value}]\n\nCliente: ${this.cliente}\nSaldo Atual: ${this.saldo}\nSaldo Final: ${this.saldo += value}`);
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    };
+
+    get dadosCliente(){
+        return `${this.cliente.nome}, documento: ${this.cliente.numeroDocumento}`
+    }
+}
+~~~
+
+- A ideia é a seguinte, como na nossa classe abstrata `ContaBancaria` não sabemos se o `cliente` é uma `pessoaFisica ou uma pessoaJuridica`, porem pelo fato de termos armazenado o `cliente` com uma propriedade chamada `documento` tanto em `PessoaFisica` quanto em `PessoaJuridica` temos a facilidade de verificar, a partir de um metodo, uma `propriedade` que esta na `classe Cliente`. 
+- Nao tendo a necessidade de sabermos se o `this.cliente.documento` é uma pessoa `Fisica` ou `Juridica`.
+- Se não tivessemos guardado o nosso `documento` dentro de uma propriedade `comum` chamada `numDocumento` iriamos precisar criar dentro do metodo `dadosCliente()` uma verificaçao.
+- Pois se não tivessemos trabalhado com uma `propriedade comum` iriamos precisar ficar comparado os `construtores` com a verficação.
+
+~~~ 
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        // console.log(`\n[DepositoP: ${value}]\n\nCliente: ${this.cliente}\nSaldo Atual: ${this.saldo}\nSaldo Final: ${this.saldo += value}`);
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    };
+
+    get dadosCliente(){
+        console.log(this.cliente.constructor);
+        // return `${this.cliente.nome}, documento: ${this.cliente.numeroDocumento}`
+        if(this.cliente.constructor === PessoaFisica){
+            return `${this.cliente.nome}, documento: ${this.cliente.CPF}`
+        }else{
+        return `${this.cliente.nome}, documento: ${this.cliente.CNPJ}`
+        }
+    }
+}
+
+~~~
+
+- Basicamente o melhor é deixar na `propriedade comum`.
+- 
+
 
 <br>
 <hr>
 <br>
+
 
 ## Refatoração: Mostrar tipo de documento
 <br>
+
+Antes de irmos para o enunciado do proximo desafio, vamos fazer uma rapida `modificação` no nosso codigo.
+
+Digamos que a partir dos objetos gerados pelas classes `PessoaFisica` e `PessoaJuridica`, queiramos ter acesso ao `tipo do documento`.
+
+- Vamos para isso, criar uma nova propriedade na nossa classe abstrata `Cliente` chamada de `tipoDocumento`.
+
+~~~ 
+class Cliente {
+    constructor(nome, numeroDocumento, tipoDocumento){
+        if(this.constructor === Cliente) {
+            throw new Error("Cliente is an Abstract class. Can not be instanciated!")
+        }
+
+        if(nome && numeroDocumento && tipoDocumento){
+            this.nome = nome;
+            this.numeroDocumento = numeroDocumento;
+            this.tipoDocumento = tipoDocumento;
+        }
+    }
+}
+~~~
+
+- No momento que chamamos o `super()`, iremos tbm passar o `tipo`. 
+
+
+~~~ 
+class PessoaFisica extends Cliente{
+    constructor(nome,numeroDocumento) {
+        super(nome,numeroDocumento, "CPF");
+        if(numeroDocumento){
+            this.CPF = numeroDocumento;
+        }
+    }
+}
+
+class PessoaJuridica extends Cliente{
+    constructor(nome,numeroDocumento){
+        super(nome,numeroDocumento, "CNPJ");
+        if(numeroDocumento){
+            this.CNPJ = numeroDocumento;
+        }
+    }
+}
+~~~
+
+- Na nossa função, `get dadosCliente()` tbm iremos passar o `tipoDocumento`.
+
+~~~
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        // console.log(`\n[DepositoP: ${value}]\n\nCliente: ${this.cliente}\nSaldo Atual: ${this.saldo}\nSaldo Final: ${this.saldo += value}`);
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    };
+
+    get dadosCliente(){
+        console.log(this.cliente.constructor);
+        return `${this.cliente.nome}, ${this.cliente.tipoDocumento}: ${this.cliente.numeroDocumento}`
+        // if(this.cliente.constructor === PessoaFisica){
+        //     return `${this.cliente.nome}, ${this.cliente.tipoDocumento}: ${this.cliente.CPF}`
+        // }else{
+        // return `${this.cliente.nome},  ${this.cliente.tipoDocumento}: ${this.cliente.CNPJ}`
+        // }
+    }
+}
+~~~
+
+- Agora que ja sabemos qual o `tipo de documento` podemos remover nas nossas classes as propriedades `this.CPF` e `this.CNPJ`. Que estão com valores duplicados.
+
+~~~ 
+class PessoaFisica extends Cliente{
+    constructor(nome,numeroDocumento) {
+        super(nome,numeroDocumento, "CPF");
+        
+    }
+}
+
+class PessoaJuridica extends Cliente{
+    constructor(nome,numeroDocumento){
+        super(nome,numeroDocumento, "CNPJ");
+        
+    }
+}
+~~~
+
+Codigo final:
+
+~~~ 
+class Cliente {
+    constructor(nome, numeroDocumento, tipoDocumento){
+        if(this.constructor === Cliente) {
+            throw new Error("Cliente is an Abstract class. Can not be instanciated!")
+        }
+
+        if(nome && numeroDocumento && tipoDocumento){
+            this.nome = nome;
+            this.numeroDocumento = numeroDocumento;
+            this.tipoDocumento = tipoDocumento;
+        }
+    }
+}
+
+class PessoaFisica extends Cliente{
+    constructor(nome,numeroDocumento) {
+        super(nome,numeroDocumento, "CPF");
+        
+    }
+}
+
+class PessoaJuridica extends Cliente{
+    constructor(nome,numeroDocumento){
+        super(nome,numeroDocumento, "CNPJ");
+        
+    }
+}
+
+
+class ContaBancariaProf{
+    constructor(cliente, numero){
+
+        if(this.constructor === ContaBancariaProf){
+            throw new Error("ContaBancariaProf is an Abstract class. Can not be instanciated!");
+        }
+
+        this.cliente = cliente;
+        this.numero = numero;
+        this.saldo = 0;
+    };
+
+    depositar(value){
+        // console.log(`\n[DepositoP: ${value}]\n\nCliente: ${this.cliente}\nSaldo Atual: ${this.saldo}\nSaldo Final: ${this.saldo += value}`);
+        this.saldo += value;
+    };
+
+    static sacar(value){
+        throw new Error("Method sacar() needs to be implemented!");
+    };
+
+    get dadosCliente(){
+        // console.log(this.cliente.constructor);
+        return `${this.cliente.nome}, ${this.cliente.tipoDocumento}: ${this.cliente.numeroDocumento}`
+        // if(this.cliente.constructor === PessoaFisica){
+        //     return `${this.cliente.nome}, ${this.cliente.tipoDocumento}: ${this.cliente.CPF}`
+        // }else{
+        // return `${this.cliente.nome},  ${this.cliente.tipoDocumento}: ${this.cliente.CNPJ}`
+        // }
+    }
+}
+
+
+class ContaPoupancaProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super(cliente, numero);
+        this.aniversario = Date.now();
+    }
+
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(value > disponivel){
+            throw new Error("Saldo insuficiente");
+        };
+        // console.log(`\n[SaqueP: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+        this.saldo -= value;
+    }
+}
+class ContaCorrenteProf extends ContaBancariaProf{
+    constructor(cliente, numero){
+        super(cliente, numero);
+        this.limite = 0;
+    }
+    sacar(value){
+        let disponivel = this.saldo + this.limite;
+        if(disponivel < value){
+            throw new Error("Saldo Insuficiente!");
+        }
+        // console.log(`\n[SaqueP: ${value}]\n\nCliente: [${this.cliente}]\nSaldo Atual: [${this.saldo}]\nLimite: [${this.limite}]\nSaldo Final: [${this.saldo -= value}]`);
+        this.saldo -= value;
+    }
+}
+
+const angelina = new PessoaFisica("angelina", "14.031.904-29");
+const pierre = new PessoaJuridica("Pierre LTDA", "860.402.225/0001-01");
+// console.log(angelina);
+// console.log(pierre);
+
+
+const conta1 = new ContaPoupancaProf(angelina, 1);
+console.log(conta1.dadosCliente);
+const conta2 = new ContaCorrenteProf(angelina, 2);
+console.log(conta2.dadosCliente);
+const conta3 = new ContaPoupancaProf(pierre, 3);
+console.log(conta3.dadosCliente);
+const conta4 = new ContaCorrenteProf(pierre, 5);
+console.log(conta4.dadosCliente);
+
+
+
+conta1.depositar(2000);
+conta1.sacar(400);
+
+conta1.depositar(300);
+conta1.limite = 200;
+conta1.sacar(50);
+
+// console.log(conta1);
+// console.log(conta2);
+// console.log(conta3);
+// console.log(conta4);
+~~~ 
+
+![](./assets/cap83.png)
+
 
 <br>
 <hr>
@@ -2582,6 +3674,54 @@ const dog2 = new Cachorro("todinho");
 
 ## Polimorfismo
 <br>
+
+Agora temos o ultimo passo do desafio da nossa `contaBancaria`. Onde veremos um conceito muito importante na POO que seria o `polimorfismo`.
+
+`Polimorfismo` é a capacidade de passarmos uma `instancia de uma classe que herda de uma classe abstrata` e chamarmos um metodo que existe nessa classe abstrata. 
+
+~~~
+5. Polimorfismo
+   Criar uma classe especializada em transferir.
+   Essa classe tera um unico metodo execute(contaOrigem, contaDestino, valor) .
+   Tanto contaOrigem quanto contaDestino precisam ser instancias de ContaBancaria.
+   Tanto CC quanto CP tem o metodo sacar(), que tem implementações diferentes.
+   Mas como sabemos que contaOrigem e contaDestino possuem o metodo sacar, independente
+   se for CC ou CP podemos chamar esse metodo.
+~~~
+
+- Vamos criar a classe `Transferir` que tera somente um unico metodo.
+
+~~~
+class Transferir {
+    static execute(contaOrigem, contaDestino, value){
+        if(!contaOrigem instanceof ContaBancariaProf || ! contaDestino instanceof ContaBancariaProf){
+            throw new Error("Accounts needed to inherit from ContaBancaria");
+        }
+
+        try {
+            contaOrigem.sacar(value);
+            contaDestino.depositar(value);
+        } catch (error) {
+            console.log("Error: ", error.message);
+        }
+    }
+
+}
+~~~
+
+- Como vemos acima, temos uma `classe estatica` com somente um `metodo estatico` chamado `execute`.
+
+![](./assets/cap84.png)
+
+- Vamos agora testar nosso metodo tranferindo o valor de `contaP1` para `contaC1`.
+
+![](./assets/cap85.png)
+
+- Vejam agora que nosso metodo esta funcionando.
+
+![](./assets/cap86.png)
+
+- Como podemos ver acima, caso não tenha `saldo` na conta para que a transferencia seja realizada, recebemos um `erro`.
 
 <br>
 <hr>
